@@ -77,6 +77,21 @@ python src/explanation_example.py
 python src/maintenance_evolution_example.py
 ```
 
+Para executar tudo de uma vez, gerar arquivos JSON de resultados e um PDF de execução:
+
+```bash
+python src/run_all_analyses.py
+```
+
+Esse comando cria a pasta `output/` com:
+
+- `all_responses.json`: saídas agregadas de todos os scripts.
+- `test_results.json`: resultado de cada teste/comando executado (`PASS`/`FAIL` + detalhes).
+- `explainability.json`: rastreabilidade das contribuições na fórmula `Rel_prag`.
+- `execution_report.pdf`: relatório textual consolidado da execução.
+
+No console, a saída final é apresentada em linguagem natural (texto legível), sem imprimir o JSON bruto.
+
 ---
 
 ## 4) Simulação dos exemplos (resumo)

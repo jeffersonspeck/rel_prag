@@ -23,6 +23,7 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 OUTPUT_DIR = BASE_DIR / "output"
 JSON_OUTPUT = OUTPUT_DIR / "all_responses.json"
 EXPLAINABILITY_OUTPUT = OUTPUT_DIR / "explainability.json"
+TEST_RESULTS_OUTPUT = OUTPUT_DIR / "test_results.json"
 PDF_OUTPUT = OUTPUT_DIR / "execution_report.pdf"
 
 SCRIPT_COMMANDS = [
@@ -52,25 +53,28 @@ def run_all_scripts() -> tuple[Dict[str, object], List[Dict[str, str]]]:
     for cmd in SCRIPT_COMMANDS:
         completed = subprocess.run(cmd, cwd=BASE_DIR, capture_output=True, text=True, check=False)
         script_name = Path(cmd[-1]).name
+        command_str = " ".join(cmd)
 
-        checks.append(
-            {
-                "command": " ".join(cmd),
-                "status": "PASS" if completed.returncode == 0 else "FAIL",
-                "details": completed.stderr.strip() or completed.stdout.strip()[:240],
-            }
-        )
+        check_item = {
+            "command": command_str,
+            "status": "PASS" if completed.returncode == 0 else "FAIL",
+            "details": "",
+        }
+        checks.append(check_item)
 
         if completed.returncode != 0:
             outputs[script_name] = {"error": completed.stderr.strip(), "stdout": completed.stdout.strip()}
+            check_item["details"] = completed.stderr.strip() or "O script retornou erro sem mensagem."
             continue
 
         stdout = completed.stdout.strip()
         if script_name in JSON_SCRIPT_NAMES:
             try:
                 outputs[script_name] = json.loads(stdout)
+                check_item["details"] = "O script gerou JSON válido e o resultado foi exportado."
             except json.JSONDecodeError:
                 outputs[script_name] = {"raw_output": stdout, "error": "Non-JSON output."}
+                check_item["details"] = "O script executou, mas não retornou JSON válido."
                 checks.append(
                     {
                         "command": f"json-parse:{script_name}",
@@ -80,6 +84,8 @@ def run_all_scripts() -> tuple[Dict[str, object], List[Dict[str, str]]]:
                 )
         else:
             outputs[script_name] = {"text_output": stdout}
+            first_line = stdout.splitlines()[0] if stdout else "Script executado sem saída textual."
+            check_item["details"] = first_line[:180]
 
     return outputs, checks
 
@@ -123,21 +129,25 @@ def build_explainability() -> Dict[str, object]:
 
 
 def _format_console_summary(checks: List[Dict[str, str]]) -> str:
+    passed = sum(1 for item in checks if item["status"] == "PASS")
+    failed = sum(1 for item in checks if item["status"] == "FAIL")
+
     summary_lines = [
-        "Execução finalizada.",
+        "A execução completa foi concluída.",
         "",
-        "Artefatos gerados:",
-        f"- Respostas JSON: {JSON_OUTPUT.relative_to(BASE_DIR)}",
-        f"- Explainability JSON: {EXPLAINABILITY_OUTPUT.relative_to(BASE_DIR)}",
-        f"- Relatório PDF: {PDF_OUTPUT.relative_to(BASE_DIR)}",
+        (
+            "Os artefatos foram salvos na pasta output com os seguintes arquivos: "
+            f"{JSON_OUTPUT.name}, {EXPLAINABILITY_OUTPUT.name}, {TEST_RESULTS_OUTPUT.name} e {PDF_OUTPUT.name}."
+        ),
         "",
-        "Status dos scripts:",
+        f"No total, {passed} verificações passaram e {failed} falharam.",
+        "Resumo por script:",
     ]
     for item in checks:
-        icon = "✅" if item["status"] == "PASS" else "❌"
-        summary_lines.append(f"{icon} {item['command']}")
+        status_label = "passou" if item["status"] == "PASS" else "falhou"
+        summary_lines.append(f"O comando '{item['command']}' {status_label}.")
         if item["details"]:
-            summary_lines.append(f"   ↳ {item['details']}")
+            summary_lines.append(f"Detalhes: {item['details']}")
     return "\n".join(summary_lines)
 
 
@@ -201,6 +211,12 @@ def main() -> None:
 
     outputs, checks = run_all_scripts()
     JSON_OUTPUT.write_text(json.dumps(outputs, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    test_results_payload = {
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "checks": checks,
+    }
+    TEST_RESULTS_OUTPUT.write_text(json.dumps(test_results_payload, indent=2, ensure_ascii=False), encoding="utf-8")
 
     explainability = build_explainability()
     EXPLAINABILITY_OUTPUT.write_text(json.dumps(explainability, indent=2, ensure_ascii=False), encoding="utf-8")
