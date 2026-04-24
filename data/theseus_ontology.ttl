@@ -1,0 +1,212 @@
+@prefix : <https://example.org/theseus#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:TheseusOntology a owl:Ontology ;
+    rdfs:label "Ontologia epistêmico-pragmática do Navio de Teseu"@pt ;
+    rdfs:comment "Ontologia simplificada para representar a distinção entre estrutura ontológica estável e ponderação epistêmico-pragmática por agente e contexto."@pt .
+
+:W_Historiador_Preservacao a :WeightVector ;
+    rdfs:label "W(A_hist, C_hist)"@pt ;
+    :aboutInstance :TheseusShip ;
+    :hasWeightAssignment :W_Historiador_Preservacao_p_estrutura,
+        :W_Historiador_Preservacao_p_flutuar,
+        :W_Historiador_Preservacao_p_material,
+        :W_Historiador_Preservacao_p_origem,
+        :W_Historiador_Preservacao_p_papel_monumento,
+        :W_Historiador_Preservacao_p_valor_historico ;
+    :inContext :ContextoPreservacaoHistorica ;
+    :interpretedBy :Historiador .
+
+:W_Marinheiro_Navegacao a :WeightVector ;
+    rdfs:label "W(A_mar, C_nav)"@pt ;
+    :aboutInstance :TheseusShip ;
+    :hasWeightAssignment :W_Marinheiro_Navegacao_p_estrutura,
+        :W_Marinheiro_Navegacao_p_flutuar,
+        :W_Marinheiro_Navegacao_p_material,
+        :W_Marinheiro_Navegacao_p_origem,
+        :W_Marinheiro_Navegacao_p_papel_monumento,
+        :W_Marinheiro_Navegacao_p_valor_historico ;
+    :inContext :ContextoNavegacao ;
+    :interpretedBy :Marinheiro .
+
+:aboutInstance a owl:ObjectProperty ;
+    rdfs:label "sobre instância"@pt ;
+    rdfs:domain :WeightVector ;
+    rdfs:range :OntologicalInstance .
+
+:elementValue a owl:DatatypeProperty ;
+    rdfs:label "valor do elemento"@pt ;
+    rdfs:domain :OntologicalElement ;
+    rdfs:range xsd:decimal .
+
+:forElement a owl:ObjectProperty ;
+    rdfs:label "para elemento"@pt ;
+    rdfs:domain :WeightAssignment ;
+    rdfs:range :OntologicalElement .
+
+:hasElement a owl:ObjectProperty ;
+    rdfs:label "tem elemento"@pt ;
+    rdfs:domain :OntologicalInstance ;
+    rdfs:range :OntologicalElement .
+
+:hasWeightAssignment a owl:ObjectProperty ;
+    rdfs:label "tem atribuição de peso"@pt ;
+    rdfs:domain :WeightVector ;
+    rdfs:range :WeightAssignment .
+
+:inContext a owl:ObjectProperty ;
+    rdfs:label "em contexto"@pt ;
+    rdfs:domain :WeightVector ;
+    rdfs:range :Context .
+
+:interpretedBy a owl:ObjectProperty ;
+    rdfs:label "interpretado por"@pt ;
+    rdfs:domain :WeightVector ;
+    rdfs:range :Agent .
+
+:weightValue a owl:DatatypeProperty ;
+    rdfs:label "valor do peso"@pt ;
+    rdfs:domain :WeightAssignment ;
+    rdfs:range xsd:decimal .
+
+:ContextoNavegacao a :Context ;
+    rdfs:label "Contexto de navegação"@pt .
+
+:ContextoPreservacaoHistorica a :Context ;
+    rdfs:label "Contexto de preservação histórica"@pt .
+
+:Historiador a :Agent ;
+    rdfs:label "Historiador"@pt ;
+    rdfs:comment "Agente que interpreta o navio prioritariamente como objeto de preservação histórica."@pt .
+
+:Marinheiro a :Agent ;
+    rdfs:label "Marinheiro"@pt ;
+    rdfs:comment "Agente que interpreta o navio prioritariamente como embarcação funcional."@pt .
+
+:MaterialEntity a owl:Class ;
+    rdfs:label "Entidade material"@pt ;
+    rdfs:comment "Classe simplificada compatível com a leitura de entidade material/continuante independente."@pt ;
+    rdfs:subClassOf :OntologicalInstance .
+
+:Role a owl:Class ;
+    rdfs:label "Papel"@pt ;
+    rdfs:comment "Condição ou função contextualmente atribuída a uma entidade sem alterar sua base ontológica."@pt ;
+    rdfs:subClassOf :OntologicalElement .
+
+:Ship a owl:Class ;
+    rdfs:label "Navio"@pt ;
+    rdfs:subClassOf :MaterialEntity .
+
+:W_Historiador_Preservacao_p_estrutura a :WeightAssignment ;
+    :forElement :p_estrutura ;
+    :weightValue 0.4 .
+
+:W_Historiador_Preservacao_p_flutuar a :WeightAssignment ;
+    :forElement :p_flutuar ;
+    :weightValue 0.1 .
+
+:W_Historiador_Preservacao_p_material a :WeightAssignment ;
+    :forElement :p_material ;
+    :weightValue 0.9 .
+
+:W_Historiador_Preservacao_p_origem a :WeightAssignment ;
+    :forElement :p_origem ;
+    :weightValue 1.0 .
+
+:W_Historiador_Preservacao_p_papel_monumento a :WeightAssignment ;
+    :forElement :p_papel_monumento ;
+    :weightValue 0.9 .
+
+:W_Historiador_Preservacao_p_valor_historico a :WeightAssignment ;
+    :forElement :p_valor_historico ;
+    :weightValue 1.0 .
+
+:W_Marinheiro_Navegacao_p_estrutura a :WeightAssignment ;
+    :forElement :p_estrutura ;
+    :weightValue 0.8 .
+
+:W_Marinheiro_Navegacao_p_flutuar a :WeightAssignment ;
+    :forElement :p_flutuar ;
+    :weightValue 1.0 .
+
+:W_Marinheiro_Navegacao_p_material a :WeightAssignment ;
+    :forElement :p_material ;
+    :weightValue 0.2 .
+
+:W_Marinheiro_Navegacao_p_origem a :WeightAssignment ;
+    :forElement :p_origem ;
+    :weightValue 0.1 .
+
+:W_Marinheiro_Navegacao_p_papel_monumento a :WeightAssignment ;
+    :forElement :p_papel_monumento ;
+    :weightValue 0.0 .
+
+:W_Marinheiro_Navegacao_p_valor_historico a :WeightAssignment ;
+    :forElement :p_valor_historico ;
+    :weightValue 0.1 .
+
+:TheseusShip a :Ship ;
+    rdfs:label "Navio de Teseu"@pt ;
+    rdfs:comment "Instância material cuja estrutura ontológica estável é interpretada por diferentes agentes e contextos."@pt ;
+    :hasElement :p_estrutura,
+        :p_flutuar,
+        :p_material,
+        :p_origem,
+        :p_papel_monumento,
+        :p_valor_historico .
+
+:Agent a owl:Class ;
+    rdfs:label "Agente"@pt ;
+    rdfs:comment "Entidade que interpreta, consulta, consome ou opera sobre a ontologia."@pt .
+
+:Context a owl:Class ;
+    rdfs:label "Contexto"@pt ;
+    rdfs:comment "Cenário de uso em que certos aspectos da entidade se tornam mais ou menos relevantes."@pt .
+
+:OntologicalInstance a owl:Class ;
+    rdfs:label "Instância ontológica"@pt .
+
+:p_estrutura a :OntologicalElement ;
+    rdfs:label "Organização estrutural"@pt ;
+    rdfs:comment "Aspecto relativo à configuração formal e organização do navio."@pt ;
+    :elementValue 1.0 .
+
+:p_flutuar a :OntologicalElement ;
+    rdfs:label "Disposição para flutuar e navegar"@pt ;
+    rdfs:comment "Disposição realizável associada à capacidade de flutuação e navegação."@pt ;
+    :elementValue 1.0 .
+
+:p_material a :OntologicalElement ;
+    rdfs:label "Composição material"@pt ;
+    rdfs:comment "Aspecto relativo às partes físicas e ao substrato material do navio."@pt ;
+    :elementValue 1.0 .
+
+:p_origem a :OntologicalElement ;
+    rdfs:label "Origem e procedência"@pt ;
+    rdfs:comment "Aspecto relativo à origem, procedência e continuidade histórica da entidade."@pt ;
+    :elementValue 1.0 .
+
+:p_papel_monumento a :Role ;
+    rdfs:label "Papel de monumento"@pt ;
+    rdfs:comment "Papel contextualmente atribuído ao navio em práticas de preservação histórica."@pt ;
+    :elementValue 1.0 .
+
+:p_valor_historico a :OntologicalElement ;
+    rdfs:label "Valor histórico"@pt ;
+    rdfs:comment "Aspecto relativo à relevância histórica, simbólica e memorial da entidade."@pt ;
+    :elementValue 1.0 .
+
+:WeightVector a owl:Class ;
+    rdfs:label "Vetor de ponderação"@pt ;
+    rdfs:comment "Vetor W(A,C) que representa a ponderação epistêmico-pragmática definida por agente e contexto."@pt .
+
+:OntologicalElement a owl:Class ;
+    rdfs:label "Elemento ontologicamente ancorado"@pt ;
+    rdfs:comment "Componente descritivo da instância, como qualidade, disposição, função, origem histórica ou papel contextual."@pt .
+
+:WeightAssignment a owl:Class ;
+    rdfs:label "Atribuição de peso"@pt ;
+    rdfs:comment "Associação entre um elemento ontológico e seu peso de relevância para um agente em um contexto."@pt .
+
