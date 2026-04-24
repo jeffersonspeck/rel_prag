@@ -1,8 +1,8 @@
-"""
-common.py
+"""Módulo compartilhado para exemplos epistêmico-pragmáticos.
 
-Shared module for epistemic-pragmatic examples based on the Ship of Theseus ontology.
-All element structures and profile weights are loaded from data/theseus_ontology.ttl.
+A ontologia (data/theseus_ontology.ttl) contém apenas a base estável S(I_navio).
+Perfis interpretativos ficam no código de aplicação e sempre referenciam os
+mesmos elementos carregados da ontologia.
 """
 
 from __future__ import annotations
@@ -20,30 +20,6 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 TTL_PATH = BASE_DIR / "data" / "theseus_ontology.ttl"
 EX = Namespace("https://example.org/theseus#")
 
-ENGLISH_ELEMENT_LABELS = {
-    "p_material": ("Material composition", "Physical parts and material substrate of the ship."),
-    "p_estrutura": ("Structural organization", "Configuration, form, and structural stability."),
-    "p_flutuar": ("Floating and navigation disposition", "Realizable capability related to floating and navigation."),
-    "p_origem": ("Origin and provenance", "Origin, provenance, and historical continuity."),
-    "p_valor_historico": ("Historical value", "Historical, symbolic, and memorial relevance."),
-    "p_papel_monumento": ("Monument role", "Contextual role in historical preservation practices."),
-}
-
-PROFILE_METADATA = {
-    "W_Marinheiro_Navegacao": {
-        "name": "sailor",
-        "agent": {"id": "theseus:Sailor", "label": "Sailor"},
-        "context": {"id": "theseus:NavigationContext", "label": "Navigation"},
-        "interpretive_role": "Functional navigation object",
-    },
-    "W_Historiador_Preservacao": {
-        "name": "historian",
-        "agent": {"id": "theseus:Historian", "label": "Historian"},
-        "context": {"id": "theseus:HistoricalPreservationContext", "label": "Historical preservation"},
-        "interpretive_role": "Historical and symbolic preservation object",
-    },
-}
-
 
 @dataclass(frozen=True)
 class OntologicalElement:
@@ -60,6 +36,35 @@ ENTITY = {
     "description": "Material entity analyzed through ontologically grounded elements.",
 }
 
+PROFILE_DEFINITIONS = {
+    "sailor": {
+        "agent": {"id": "theseus:Sailor", "label": "Sailor"},
+        "context": {"id": "theseus:NavigationContext", "label": "Navigation"},
+        "interpretive_role": "Functional navigation object",
+        "weights": {
+            "p_material": 0.2,
+            "p_estrutura": 0.8,
+            "p_flutuar": 1.0,
+            "p_origem": 0.1,
+            "p_valor_historico": 0.1,
+            "p_papel_monumento": 0.0,
+        },
+    },
+    "historian": {
+        "agent": {"id": "theseus:Historian", "label": "Historian"},
+        "context": {"id": "theseus:HistoricalPreservationContext", "label": "Historical preservation"},
+        "interpretive_role": "Historical and symbolic preservation object",
+        "weights": {
+            "p_material": 0.9,
+            "p_estrutura": 0.4,
+            "p_flutuar": 0.1,
+            "p_origem": 1.0,
+            "p_valor_historico": 1.0,
+            "p_papel_monumento": 0.9,
+        },
+    },
+}
+
 
 def _load_graph() -> Graph:
     if not TTL_PATH.exists():
@@ -73,52 +78,49 @@ def _load_graph() -> Graph:
 def _build_elements(graph: Graph) -> List[OntologicalElement]:
     elements: List[OntologicalElement] = []
     for element in graph.objects(EX.TheseusShip, EX.hasElement):
-        element_id = element.split("#")[-1]
-        value = next(graph.objects(element, EX.elementValue), 1.0)
-        label, description = ENGLISH_ELEMENT_LABELS.get(
-            element_id,
-            (element_id.replace("_", " ").title(), "Ontology element loaded from TTL."),
-        )
+        element_id = str(element).split("#")[-1]
+        value = float(next(graph.objects(element, EX.elementValue), 1.0))
+        label = str(next(graph.objects(element, RDFS.label), element_id))
+        description = str(next(graph.objects(element, RDFS.comment), "Ontology element loaded from TTL."))
         elements.append(
             OntologicalElement(
                 id=element_id,
                 label=label,
                 description=description,
-                ontological_value=float(value),
+                ontological_value=value,
             )
         )
 
     return sorted(elements, key=lambda e: e.id)
 
 
-def _extract_weights(graph: Graph, vector_name: str) -> Dict[str, float]:
-    weights: Dict[str, float] = {}
-    vector = EX[vector_name]
-    for assignment in graph.objects(vector, EX.hasWeightAssignment):
-        element = next(graph.objects(assignment, EX.forElement), None)
-        weight = next(graph.objects(assignment, EX.weightValue), None)
-        if element is None or weight is None:
-            continue
-        element_name = element.split("#")[-1]
-        weights[element_name] = float(weight)
-    return weights
-
-
-def _build_profiles(graph: Graph) -> Dict[str, Dict[str, Any]]:
+def _build_profiles() -> Dict[str, Dict[str, Any]]:
+    element_ids = {element.id for element in ELEMENTS}
     profiles: Dict[str, Dict[str, Any]] = {}
-    for vector_name, metadata in PROFILE_METADATA.items():
-        profiles[metadata["name"]] = {
-            "agent": metadata["agent"],
-            "context": metadata["context"],
-            "interpretive_role": metadata["interpretive_role"],
-            "weights": _extract_weights(graph, vector_name),
+
+    for profile_name, profile_data in PROFILE_DEFINITIONS.items():
+        weights = profile_data["weights"]
+        missing = element_ids - set(weights.keys())
+        unknown = set(weights.keys()) - element_ids
+        if missing or unknown:
+            raise ValueError(
+                f"Profile '{profile_name}' inconsistent with ontology elements. "
+                f"Missing={sorted(missing)} Unknown={sorted(unknown)}"
+            )
+
+        profiles[profile_name] = {
+            "agent": profile_data["agent"],
+            "context": profile_data["context"],
+            "interpretive_role": profile_data["interpretive_role"],
+            "weights": weights,
         }
+
     return profiles
 
 
 _GRAPH = _load_graph()
 ELEMENTS: List[OntologicalElement] = _build_elements(_GRAPH)
-PROFILES: Dict[str, Dict[str, Any]] = _build_profiles(_GRAPH)
+PROFILES: Dict[str, Dict[str, Any]] = _build_profiles()
 
 
 def get_profile(profile_name: str) -> Dict[str, Any]:
@@ -161,7 +163,16 @@ def build_base_response(profile_name: str) -> Dict[str, Any]:
         "agent": profile["agent"],
         "context": profile["context"],
         "interpretive_role": profile["interpretive_role"],
+        "formula": "Rel_prag(I,A,C) = Σ(w_i(A,C) * v(p_i))",
         "ranking": calculate_ranking(profile_name),
+    }
+
+
+def run_simulation() -> Dict[str, Any]:
+    """Executa a simulação dos perfis disponíveis usando a ontologia como base."""
+    return {
+        profile_name: build_base_response(profile_name)
+        for profile_name in sorted(PROFILES.keys())
     }
 
 

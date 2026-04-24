@@ -7,19 +7,17 @@ def explain(profile_name: str):
     response = build_base_response(profile_name)
     top = response["ranking"][:3]
 
-    explanation_parts = [
-        f"{item['element']} received weight {item['weight']} and relevance {item['relevance']}"
-        for item in top
-    ]
+    explanation_parts = [f"{item['element']} recebeu peso {item['weight']} e relevância {item['relevance']}" for item in top]
 
     return {
         "application": "explanation",
+        "formula": response["formula"],
         "agent": response["agent"],
         "context": response["context"],
         "interpretive_role": response["interpretive_role"],
         "explanation": (
-            f"The entity was interpreted as {response['interpretive_role']} because "
-            f"the most influential elements were: {'; '.join(explanation_parts)}."
+            f"A entidade foi interpretada como {response['interpretive_role']} porque "
+            f"os elementos mais influentes foram: {'; '.join(explanation_parts)}."
         ),
         "evidence": top,
     }

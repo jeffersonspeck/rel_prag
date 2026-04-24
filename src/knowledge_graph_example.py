@@ -31,6 +31,7 @@ def highlight_graph(profile_name: str):
 
     return {
         "application": "knowledge_graph_visualization",
+        "formula": "edge_relevance = w_i(A,C) linked to ontology element p_i",
         "agent": profile["agent"],
         "context": profile["context"],
         "interpretive_role": profile["interpretive_role"],

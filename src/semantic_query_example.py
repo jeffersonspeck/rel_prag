@@ -1,11 +1,9 @@
-"""
-semantic_query_example.py
-
-Example 1: semantic query.
-Organizes the response based on the selected interpretive profile.
-"""
+"""Example 1: semantic query organized by interpretive profile."""
 
 from common import build_base_response, print_json
+
+
+QUERY_TEXT = "Which aspects of the Ship of Theseus are most relevant in this context?"
 
 
 def semantic_query(profile_name: str):
@@ -15,7 +13,7 @@ def semantic_query(profile_name: str):
     response.update(
         {
             "application": "semantic_query",
-            "query": "Which aspects of the Ship of Theseus are most relevant in this context?",
+            "query": QUERY_TEXT,
             "answer": {
                 "summary": (
                     f"For agent {response['agent']['label']} in context "
@@ -23,6 +21,7 @@ def semantic_query(profile_name: str):
                     f"{response['interpretive_role']}."
                 ),
                 "most_relevant_elements": top_elements,
+                "interpretation_rule": "Higher w_i(A,C) means higher priority over the same ontological base.",
             },
         }
     )
