@@ -2,7 +2,7 @@
 
 Este projeto implementa, em Python, uma representação simples do modelo formulado no texto sobre o Paradoxo do Navio de Teseu e os desafios epistêmicos e pragmáticos da modelagem ontológica.
 
-O projeto contém:
+O projeto base contém:
 
 - `data/theseus_ontology.ttl`: ontologia em Turtle com a estrutura estável do navio, agentes, contextos, papéis e vetores de ponderação.
 - `src/create_theseus_ontology.py`: script que gera novamente o arquivo TTL.
@@ -39,4 +39,34 @@ Rel_prag(I,A,C) = soma(w_i(A,C) * v(p_i))
 ```
 
 No exemplo, os valores `v(p_i)` são inicialmente definidos como 1.0 para todos os elementos ontológicos presentes na instância. Assim, a diferença entre as interpretações decorre dos pesos atribuídos por agente e contexto.
-# rel_prag
+
+
+# Exemplos `rel_prag`
+
+Este pacote contém exemplos em Python para os usos citados na discussão do artigo.
+Todos os scripts usam a mesma base conceitual: o Navio de Teseu, com os perfis do marinheiro e do historiador.
+
+## Arquivos
+
+- `src/common.py`: entidade, elementos ontológicos e perfis de ponderação.
+- `src/semantic_query_example.py`: exemplo de consulta semântica.
+- `src/recommendation_example.py`: exemplo de sistema de recomendação.
+- `src/knowledge_graph_example.py`: exemplo de grafo de conhecimento.
+- `src/decision_support_example.py`: exemplo de apoio à decisão.
+- `src/explanation_example.py`: exemplo de explicação de resultados.
+- `src/maintenance_evolution_example.py`: exemplo de manutenção/evolução.
+- `data/theseus_ontology.ttl`: ontologia mínima de referência em Turtle.
+
+## Como executar
+
+```bash
+cd src
+python semantic_query_example.py
+python recommendation_example.py
+python knowledge_graph_example.py
+python decision_support_example.py
+python explanation_example.py
+python maintenance_evolution_example.py
+```
+
+Todos os scripts imprimem JSON no terminal.
