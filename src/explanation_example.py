@@ -1,12 +1,4 @@
-"""
-explanation_example.py
-
-Exemplo 5: sistema de explicação.
-Gera uma justificativa textual e estruturada para a interpretação contextual.
-
-Como executar:
-    python explanation_example.py
-"""
+"""Example 5: explanation system with structured evidence."""
 
 from common import build_base_response, print_json
 
@@ -16,7 +8,7 @@ def explain(profile_name: str):
     top = response["ranking"][:3]
 
     explanation_parts = [
-        f"{item['element']} recebeu peso {item['weight']} e relevância {item['relevance']}"
+        f"{item['element']} received weight {item['weight']} and relevance {item['relevance']}"
         for item in top
     ]
 
@@ -26,15 +18,12 @@ def explain(profile_name: str):
         "context": response["context"],
         "interpretive_role": response["interpretive_role"],
         "explanation": (
-            f"A entidade foi interpretada como {response['interpretive_role']} porque "
-            f"os elementos mais influentes foram: " + "; ".join(explanation_parts) + "."
+            f"The entity was interpreted as {response['interpretive_role']} because "
+            f"the most influential elements were: {'; '.join(explanation_parts)}."
         ),
         "evidence": top,
     }
 
 
 if __name__ == "__main__":
-    print_json({
-        "marinheiro": explain("marinheiro"),
-        "historiador": explain("historiador"),
-    })
+    print_json({"sailor": explain("sailor"), "historian": explain("historian")})

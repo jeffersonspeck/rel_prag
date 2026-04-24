@@ -1,25 +1,17 @@
-"""
-maintenance_evolution_example.py
-
-Exemplo 6: manutenção e evolução de sistemas baseados em ontologias.
-Mostra como um novo perfil interpretativo pode ser adicionado sem alterar
-os perfis originais nem a estrutura ontológica principal da entidade.
-
-Como executar:
-    python maintenance_evolution_example.py
-"""
+"""Example 6: maintenance and evolution for ontology-based profiles."""
 
 from copy import deepcopy
+
 from common import PROFILES, print_json
 
 
 def add_public_manager_profile():
     evolved_profiles = deepcopy(PROFILES)
 
-    evolved_profiles["gestor_publico"] = {
-        "agent": {"id": "theseus:PublicManager", "label": "Gestor público"},
-        "context": {"id": "theseus:InstitutionalManagementContext", "label": "Gestão institucional"},
-        "interpretive_role": "Objeto de gestão, preservação e responsabilidade pública",
+    evolved_profiles["public_manager"] = {
+        "agent": {"id": "theseus:PublicManager", "label": "Public manager"},
+        "context": {"id": "theseus:InstitutionalManagementContext", "label": "Institutional management"},
+        "interpretive_role": "Public stewardship, preservation, and governance object",
         "weights": {
             "p_material": 0.6,
             "p_estrutura": 0.7,
@@ -39,27 +31,27 @@ def maintenance_report():
     return {
         "application": "ontology_maintenance_and_evolution",
         "original_profiles": list(PROFILES.keys()),
-        "new_profile_added": "gestor_publico",
+        "new_profile_added": "public_manager",
         "changed_ontology_structure": False,
         "message": (
-            "A estrutura ontológica da entidade não foi alterada. "
-            "A evolução ocorreu pela inclusão de um novo perfil interpretativo."
+            "The ontology structure for the entity remains unchanged. "
+            "Evolution occurs by adding a new interpretive profile."
         ),
         "comparison": {
-            "marinheiro": {
-                "agent": PROFILES["marinheiro"]["agent"],
-                "context": PROFILES["marinheiro"]["context"],
-                "weights": PROFILES["marinheiro"]["weights"],
+            "sailor": {
+                "agent": PROFILES["sailor"]["agent"],
+                "context": PROFILES["sailor"]["context"],
+                "weights": PROFILES["sailor"]["weights"],
             },
-            "historiador": {
-                "agent": PROFILES["historiador"]["agent"],
-                "context": PROFILES["historiador"]["context"],
-                "weights": PROFILES["historiador"]["weights"],
+            "historian": {
+                "agent": PROFILES["historian"]["agent"],
+                "context": PROFILES["historian"]["context"],
+                "weights": PROFILES["historian"]["weights"],
             },
-            "gestor_publico": {
-                "agent": evolved_profiles["gestor_publico"]["agent"],
-                "context": evolved_profiles["gestor_publico"]["context"],
-                "weights": evolved_profiles["gestor_publico"]["weights"],
+            "public_manager": {
+                "agent": evolved_profiles["public_manager"]["agent"],
+                "context": evolved_profiles["public_manager"]["context"],
+                "weights": evolved_profiles["public_manager"]["weights"],
             },
         },
     }

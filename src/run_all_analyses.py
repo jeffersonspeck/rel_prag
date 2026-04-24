@@ -1,0 +1,200 @@
+"""
+Run all project scripts and generate consolidated artifacts:
+- JSON responses
+- explainability JSON grounded in Rel_prag
+- PDF test report
+
+All element structure and weight vectors are loaded from data/theseus_ontology.ttl.
+"""
+
+from __future__ import annotations
+
+import json
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Dict, List
+
+from rdflib import Graph
+
+from demo_relevance import EX, TTL_PATH, calculate_relevance, get_element_values, get_vector_weights
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+ARTIFACTS_DIR = BASE_DIR / "artifacts"
+JSON_OUTPUT = ARTIFACTS_DIR / "all_responses.json"
+EXPLAINABILITY_OUTPUT = ARTIFACTS_DIR / "explainability.json"
+PDF_OUTPUT = ARTIFACTS_DIR / "test_report.pdf"
+
+SCRIPT_COMMANDS = [
+    ["python", "src/create_theseus_ontology.py"],
+    ["python", "src/demo_relevance.py"],
+    ["python", "src/semantic_query_example.py"],
+    ["python", "src/recommendation_example.py"],
+    ["python", "src/knowledge_graph_example.py"],
+    ["python", "src/decision_support_example.py"],
+    ["python", "src/explanation_example.py"],
+    ["python", "src/maintenance_evolution_example.py"],
+]
+
+JSON_SCRIPT_NAMES = {
+    "semantic_query_example.py",
+    "recommendation_example.py",
+    "knowledge_graph_example.py",
+    "decision_support_example.py",
+    "explanation_example.py",
+    "maintenance_evolution_example.py",
+}
+
+VECTOR_PROFILE_MAP = {
+    "W_Marinheiro_Navegacao": "sailor",
+    "W_Historiador_Preservacao": "historian",
+}
+
+
+def run_all_scripts() -> tuple[Dict[str, object], List[Dict[str, str]]]:
+    outputs: Dict[str, object] = {}
+    checks: List[Dict[str, str]] = []
+
+    for cmd in SCRIPT_COMMANDS:
+        completed = subprocess.run(cmd, cwd=BASE_DIR, capture_output=True, text=True, check=False)
+        script_name = Path(cmd[-1]).name
+
+        checks.append(
+            {
+                "command": " ".join(cmd),
+                "status": "PASS" if completed.returncode == 0 else "FAIL",
+                "details": completed.stderr.strip() or completed.stdout.strip()[:240],
+            }
+        )
+
+        if completed.returncode != 0:
+            outputs[script_name] = {"error": completed.stderr.strip(), "stdout": completed.stdout.strip()}
+            continue
+
+        stdout = completed.stdout.strip()
+        if script_name in JSON_SCRIPT_NAMES:
+            try:
+                outputs[script_name] = json.loads(stdout)
+            except json.JSONDecodeError:
+                outputs[script_name] = {"raw_output": stdout, "error": "Non-JSON output."}
+                checks.append(
+                    {
+                        "command": f"json-parse:{script_name}",
+                        "status": "FAIL",
+                        "details": "Script did not emit valid JSON.",
+                    }
+                )
+        else:
+            outputs[script_name] = {"text_output": stdout}
+
+    return outputs, checks
+
+
+def build_explainability() -> Dict[str, object]:
+    graph = Graph()
+    graph.parse(TTL_PATH, format="turtle")
+    values = get_element_values(graph)
+
+    profiles = {}
+    for vector_name, profile_name in VECTOR_PROFILE_MAP.items():
+        _, weights = get_vector_weights(graph, vector_name)
+        total = calculate_relevance(values, weights)
+        contributions = []
+
+        for element_name, element_value in values.items():
+            weight = weights.get(element_name, 0)
+            relevance = float(weight) * float(element_value)
+            contributions.append(
+                {
+                    "element_id": element_name,
+                    "weight": float(weight),
+                    "ontological_value": float(element_value),
+                    "rel_prag_contribution": round(relevance, 4),
+                }
+            )
+
+        contributions.sort(key=lambda item: item["rel_prag_contribution"], reverse=True)
+        profiles[profile_name] = {
+            "vector": vector_name,
+            "rel_prag_total": float(total),
+            "formula": "Rel_prag(I,A,C) = sum(w_i(A,C) * v(p_i))",
+            "top_contributors": contributions[:3],
+            "all_contributions": contributions,
+        }
+
+    return {
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "ontology_source": str(TTL_PATH.relative_to(BASE_DIR)),
+        "profiles": profiles,
+    }
+
+
+def write_minimal_pdf(lines: List[str], path: Path) -> None:
+    safe_lines = [line.replace("(", "[").replace(")", "]") for line in lines]
+    y = 760
+    text_commands = ["BT", "/F1 11 Tf", "72 790 Td"]
+    for idx, line in enumerate(safe_lines):
+        if idx == 0:
+            text_commands.append(f"({line}) Tj")
+        else:
+            text_commands.append(f"0 -14 Td ({line}) Tj")
+        y -= 14
+        if y < 40:
+            break
+    text_commands.append("ET")
+    stream = "\n".join(text_commands).encode("latin-1", errors="replace")
+
+    objects = []
+    objects.append(b"1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj\n")
+    objects.append(b"2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj\n")
+    objects.append(b"3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >> endobj\n")
+    objects.append(b"4 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> endobj\n")
+    objects.append(f"5 0 obj << /Length {len(stream)} >> stream\n".encode("ascii") + stream + b"\nendstream endobj\n")
+
+    pdf = bytearray(b"%PDF-1.4\n")
+    offsets = [0]
+    for obj in objects:
+        offsets.append(len(pdf))
+        pdf.extend(obj)
+
+    xref_pos = len(pdf)
+    pdf.extend(f"xref\n0 {len(offsets)}\n".encode("ascii"))
+    pdf.extend(b"0000000000 65535 f \n")
+    for off in offsets[1:]:
+        pdf.extend(f"{off:010d} 00000 n \n".encode("ascii"))
+
+    pdf.extend(f"trailer << /Size {len(offsets)} /Root 1 0 R >>\nstartxref\n{xref_pos}\n%%EOF\n".encode("ascii"))
+    path.write_bytes(pdf)
+
+
+def main() -> None:
+    ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
+
+    outputs, checks = run_all_scripts()
+    JSON_OUTPUT.write_text(json.dumps(outputs, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    explainability = build_explainability()
+    EXPLAINABILITY_OUTPUT.write_text(json.dumps(explainability, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    report_lines = [
+        "Rel_prag automated test report",
+        f"Generated at UTC: {datetime.now(timezone.utc).isoformat()}",
+        "",
+        "Checks:",
+    ]
+    report_lines.extend([f"- {item['status']}: {item['command']}" for item in checks])
+    write_minimal_pdf(report_lines, PDF_OUTPUT)
+
+    print(json.dumps({
+        "status": "ok",
+        "artifacts": {
+            "responses_json": str(JSON_OUTPUT.relative_to(BASE_DIR)),
+            "explainability_json": str(EXPLAINABILITY_OUTPUT.relative_to(BASE_DIR)),
+            "test_pdf": str(PDF_OUTPUT.relative_to(BASE_DIR)),
+        },
+        "checks": checks,
+    }, indent=2))
+
+
+if __name__ == "__main__":
+    main()

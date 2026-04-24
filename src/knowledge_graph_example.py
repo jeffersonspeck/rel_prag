@@ -1,53 +1,14 @@
-"""
-knowledge_graph_example.py
-
-Exemplo 3: grafo de conhecimento.
-Destaca relações mais relevantes de acordo com o perfil interpretativo.
-
-Como executar:
-    python knowledge_graph_example.py
-"""
+"""Example 3: knowledge graph highlighting by contextual relevance."""
 
 from common import get_profile, print_json
 
-
 GRAPH_EDGES = [
-    {
-        "source": "theseus:ShipOfTheseus",
-        "predicate": "theseus:hasMaterialComposition",
-        "target": "theseus:OriginalAndReplacedParts",
-        "element_id": "p_material",
-    },
-    {
-        "source": "theseus:ShipOfTheseus",
-        "predicate": "theseus:hasStructuralOrganization",
-        "target": "theseus:ShipStructure",
-        "element_id": "p_estrutura",
-    },
-    {
-        "source": "theseus:ShipOfTheseus",
-        "predicate": "theseus:hasDisposition",
-        "target": "theseus:FloatingDisposition",
-        "element_id": "p_flutuar",
-    },
-    {
-        "source": "theseus:ShipOfTheseus",
-        "predicate": "theseus:hasOrigin",
-        "target": "theseus:TheseusHistoricalOrigin",
-        "element_id": "p_origem",
-    },
-    {
-        "source": "theseus:ShipOfTheseus",
-        "predicate": "theseus:hasHistoricalValue",
-        "target": "theseus:HistoricalValue",
-        "element_id": "p_valor_historico",
-    },
-    {
-        "source": "theseus:ShipOfTheseus",
-        "predicate": "theseus:hasContextualRole",
-        "target": "theseus:MonumentRole",
-        "element_id": "p_papel_monumento",
-    },
+    {"source": "theseus:ShipOfTheseus", "predicate": "theseus:hasMaterialComposition", "target": "theseus:OriginalAndReplacedParts", "element_id": "p_material"},
+    {"source": "theseus:ShipOfTheseus", "predicate": "theseus:hasStructuralOrganization", "target": "theseus:ShipStructure", "element_id": "p_estrutura"},
+    {"source": "theseus:ShipOfTheseus", "predicate": "theseus:hasDisposition", "target": "theseus:FloatingDisposition", "element_id": "p_flutuar"},
+    {"source": "theseus:ShipOfTheseus", "predicate": "theseus:hasOrigin", "target": "theseus:TheseusHistoricalOrigin", "element_id": "p_origem"},
+    {"source": "theseus:ShipOfTheseus", "predicate": "theseus:hasHistoricalValue", "target": "theseus:HistoricalValue", "element_id": "p_valor_historico"},
+    {"source": "theseus:ShipOfTheseus", "predicate": "theseus:hasContextualRole", "target": "theseus:MonumentRole", "element_id": "p_papel_monumento"},
 ]
 
 
@@ -58,11 +19,13 @@ def highlight_graph(profile_name: str):
     highlighted_edges = []
     for edge in GRAPH_EDGES:
         relevance = weights[edge["element_id"]]
-        highlighted_edges.append({
-            **edge,
-            "relevance": relevance,
-            "visibility": "high" if relevance >= 0.8 else "medium" if relevance >= 0.3 else "low",
-        })
+        highlighted_edges.append(
+            {
+                **edge,
+                "relevance": relevance,
+                "visibility": "high" if relevance >= 0.8 else "medium" if relevance >= 0.3 else "low",
+            }
+        )
 
     highlighted_edges.sort(key=lambda edge: edge["relevance"], reverse=True)
 
@@ -76,7 +39,4 @@ def highlight_graph(profile_name: str):
 
 
 if __name__ == "__main__":
-    print_json({
-        "marinheiro": highlight_graph("marinheiro"),
-        "historiador": highlight_graph("historiador"),
-    })
+    print_json({"sailor": highlight_graph("sailor"), "historian": highlight_graph("historian")})
