@@ -21,17 +21,20 @@ def decision_support(profile_name: str):
 
     evaluated: List[Dict[str, Any]] = []
     for alternative in ALTERNATIVES:
-        evaluated.append({
-            "id": alternative["id"],
-            "label": alternative["label"],
-            "score": evaluate_alternative(alternative, profile_name),
-            "impact": alternative["impact"],
-        })
+        evaluated.append(
+            {
+                "id": alternative["id"],
+                "label": alternative["label"],
+                "score": evaluate_alternative(alternative, profile_name),
+                "impact": alternative["impact"],
+            }
+        )
 
     evaluated.sort(key=lambda item: item["score"], reverse=True)
 
     return {
         "application": "decision_support",
+        "formula": "score(alt) = Σ(w_i(A,C) * impact_i(alt))",
         "agent": profile["agent"],
         "context": profile["context"],
         "interpretive_role": profile["interpretive_role"],

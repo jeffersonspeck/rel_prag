@@ -1,22 +1,42 @@
-"""
-Demonstrates pragmatic relevance calculation from the TTL ontology.
+"""Demonstração da fórmula de relevância pragmática com base na ontologia.
 
-Implemented formula:
+A ontologia fornece os elementos e valores ontológicos v(p_i).
+Os pesos w_i(A,C) são definidos em perfis de aplicação.
 
-    Rel_prag(I,A,C) = sum(w_i(A,C) * v(p_i))
+Fórmula:
+    Rel_prag(I,A,C) = Σ(w_i(A,C) * v(p_i))
 """
 
 from __future__ import annotations
 
 from decimal import Decimal
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict
 
-from rdflib import Graph, Namespace, RDFS
+from rdflib import Graph, Namespace
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 TTL_PATH = BASE_DIR / "data" / "theseus_ontology.ttl"
 EX = Namespace("https://example.org/theseus#")
+
+SIMULATION_WEIGHTS: Dict[str, Dict[str, Decimal]] = {
+    "sailor": {
+        "p_material": Decimal("0.2"),
+        "p_estrutura": Decimal("0.8"),
+        "p_flutuar": Decimal("1.0"),
+        "p_origem": Decimal("0.1"),
+        "p_valor_historico": Decimal("0.1"),
+        "p_papel_monumento": Decimal("0.0"),
+    },
+    "historian": {
+        "p_material": Decimal("0.9"),
+        "p_estrutura": Decimal("0.4"),
+        "p_flutuar": Decimal("0.1"),
+        "p_origem": Decimal("1.0"),
+        "p_valor_historico": Decimal("1.0"),
+        "p_papel_monumento": Decimal("0.9"),
+    },
+}
 
 
 def decimal_from_literal(value) -> Decimal:
@@ -27,30 +47,12 @@ def get_element_values(graph: Graph) -> Dict[str, Decimal]:
     values: Dict[str, Decimal] = {}
 
     for element in graph.objects(EX.TheseusShip, EX.hasElement):
-        label = next(graph.objects(element, EX.elementValue), None)
-        if label is None:
+        literal_value = next(graph.objects(element, EX.elementValue), None)
+        if literal_value is None:
             continue
-        values[element.split("#")[-1]] = decimal_from_literal(label)
+        values[str(element).split("#")[-1]] = decimal_from_literal(literal_value)
 
     return values
-
-
-def get_vector_weights(graph: Graph, vector_name: str) -> Tuple[str, Dict[str, Decimal]]:
-    vector = EX[vector_name]
-    label = next(graph.objects(vector, RDFS.label), None)
-
-    weights: Dict[str, Decimal] = {}
-    for assignment in graph.objects(vector, EX.hasWeightAssignment):
-        element = next(graph.objects(assignment, EX.forElement), None)
-        weight = next(graph.objects(assignment, EX.weightValue), None)
-
-        if element is None or weight is None:
-            continue
-
-        element_name = element.split("#")[-1]
-        weights[element_name] = decimal_from_literal(weight)
-
-    return str(label or vector_name), weights
 
 
 def calculate_relevance(element_values: Dict[str, float | Decimal], weights: Dict[str, float | Decimal]) -> Decimal:
@@ -63,6 +65,14 @@ def calculate_relevance(element_values: Dict[str, float | Decimal], weights: Dic
     return relevance
 
 
+def simulate_profiles(graph: Graph) -> Dict[str, Decimal]:
+    element_values = get_element_values(graph)
+    return {
+        profile_name: calculate_relevance(element_values, weights)
+        for profile_name, weights in SIMULATION_WEIGHTS.items()
+    }
+
+
 def main() -> None:
     if not TTL_PATH.exists():
         raise FileNotFoundError(f"TTL file not found: {TTL_PATH}. Run create_theseus_ontology.py first.")
@@ -71,22 +81,13 @@ def main() -> None:
     graph.parse(TTL_PATH, format="turtle")
 
     element_values = get_element_values(graph)
-    vectors = ["W_Marinheiro_Navegacao", "W_Historiador_Preservacao"]
+    print("Elementos carregados da ontologia-base S(I_navio):")
+    for element_name, value in sorted(element_values.items()):
+        print(f"- {element_name}: v(p_i)={value}")
 
-    print("Elements from S(I_ship) and their ontological values v(p_i):")
-    for element_name, value in element_values.items():
-        print(f"- {element_name}: {value}")
-
-    print("\nRel_prag(I,A,C) results:")
-    for vector_name in vectors:
-        _, weights = get_vector_weights(graph, vector_name)
-        relevance = calculate_relevance(element_values, weights)
-        print(f"- {vector_name}: {relevance}")
-
-    print("\nInterpretation:")
-    print("- The sailor profile prioritizes structure and navigation capacity.")
-    print("- The historian profile prioritizes provenance, historical value, and monument role.")
-    print("- Ontological instance remains stable; epistemic-pragmatic weighting changes.")
+    print("\nSimulação de perfis (pesos externos à ontologia):")
+    for profile_name, rel in simulate_profiles(graph).items():
+        print(f"- {profile_name}: Rel_prag={rel}")
 
 
 if __name__ == "__main__":

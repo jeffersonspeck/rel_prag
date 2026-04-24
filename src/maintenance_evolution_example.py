@@ -30,29 +30,14 @@ def maintenance_report():
 
     return {
         "application": "ontology_maintenance_and_evolution",
+        "message": "A ontologia-base permanece estável; a evolução ocorre nos perfis de interpretação.",
+        "changed_ontology_structure": False,
         "original_profiles": list(PROFILES.keys()),
         "new_profile_added": "public_manager",
-        "changed_ontology_structure": False,
-        "message": (
-            "The ontology structure for the entity remains unchanged. "
-            "Evolution occurs by adding a new interpretive profile."
-        ),
         "comparison": {
-            "sailor": {
-                "agent": PROFILES["sailor"]["agent"],
-                "context": PROFILES["sailor"]["context"],
-                "weights": PROFILES["sailor"]["weights"],
-            },
-            "historian": {
-                "agent": PROFILES["historian"]["agent"],
-                "context": PROFILES["historian"]["context"],
-                "weights": PROFILES["historian"]["weights"],
-            },
-            "public_manager": {
-                "agent": evolved_profiles["public_manager"]["agent"],
-                "context": evolved_profiles["public_manager"]["context"],
-                "weights": evolved_profiles["public_manager"]["weights"],
-            },
+            "sailor": evolved_profiles["sailor"],
+            "historian": evolved_profiles["historian"],
+            "public_manager": evolved_profiles["public_manager"],
         },
     }
 

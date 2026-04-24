@@ -43,6 +43,7 @@ def recommend(profile_name: str) -> Dict[str, Any]:
 
     return {
         "application": "recommendation",
+        "formula": "score(item) = Σ(w_i(A,C) * attr_i(item))",
         "agent": profile["agent"],
         "context": profile["context"],
         "interpretive_role": profile["interpretive_role"],
