@@ -17,13 +17,14 @@ from typing import Dict, List
 
 from rdflib import Graph
 
-from demo_relevance import EX, TTL_PATH, calculate_relevance, get_element_values, get_vector_weights
+from demo_relevance import SIMULATION_WEIGHTS, TTL_PATH, calculate_relevance, get_element_values
 
 BASE_DIR = Path(__file__).resolve().parents[1]
-ARTIFACTS_DIR = BASE_DIR / "artifacts"
-JSON_OUTPUT = ARTIFACTS_DIR / "all_responses.json"
-EXPLAINABILITY_OUTPUT = ARTIFACTS_DIR / "explainability.json"
-PDF_OUTPUT = ARTIFACTS_DIR / "test_report.pdf"
+OUTPUT_DIR = BASE_DIR / "output"
+JSON_OUTPUT = OUTPUT_DIR / "all_responses.json"
+EXPLAINABILITY_OUTPUT = OUTPUT_DIR / "explainability.json"
+TEST_RESULTS_OUTPUT = OUTPUT_DIR / "test_results.json"
+PDF_OUTPUT = OUTPUT_DIR / "execution_report.pdf"
 
 SCRIPT_COMMANDS = [
     ["python", "src/create_theseus_ontology.py"],
@@ -45,12 +46,6 @@ JSON_SCRIPT_NAMES = {
     "maintenance_evolution_example.py",
 }
 
-VECTOR_PROFILE_MAP = {
-    "W_Marinheiro_Navegacao": "sailor",
-    "W_Historiador_Preservacao": "historian",
-}
-
-
 def run_all_scripts() -> tuple[Dict[str, object], List[Dict[str, str]]]:
     outputs: Dict[str, object] = {}
     checks: List[Dict[str, str]] = []
@@ -58,25 +53,28 @@ def run_all_scripts() -> tuple[Dict[str, object], List[Dict[str, str]]]:
     for cmd in SCRIPT_COMMANDS:
         completed = subprocess.run(cmd, cwd=BASE_DIR, capture_output=True, text=True, check=False)
         script_name = Path(cmd[-1]).name
+        command_str = " ".join(cmd)
 
-        checks.append(
-            {
-                "command": " ".join(cmd),
-                "status": "PASS" if completed.returncode == 0 else "FAIL",
-                "details": completed.stderr.strip() or completed.stdout.strip()[:240],
-            }
-        )
+        check_item = {
+            "command": command_str,
+            "status": "PASS" if completed.returncode == 0 else "FAIL",
+            "details": "",
+        }
+        checks.append(check_item)
 
         if completed.returncode != 0:
             outputs[script_name] = {"error": completed.stderr.strip(), "stdout": completed.stdout.strip()}
+            check_item["details"] = completed.stderr.strip() or "O script retornou erro sem mensagem."
             continue
 
         stdout = completed.stdout.strip()
         if script_name in JSON_SCRIPT_NAMES:
             try:
                 outputs[script_name] = json.loads(stdout)
+                check_item["details"] = "O script gerou JSON válido e o resultado foi exportado."
             except json.JSONDecodeError:
                 outputs[script_name] = {"raw_output": stdout, "error": "Non-JSON output."}
+                check_item["details"] = "O script executou, mas não retornou JSON válido."
                 checks.append(
                     {
                         "command": f"json-parse:{script_name}",
@@ -86,6 +84,8 @@ def run_all_scripts() -> tuple[Dict[str, object], List[Dict[str, str]]]:
                 )
         else:
             outputs[script_name] = {"text_output": stdout}
+            first_line = stdout.splitlines()[0] if stdout else "Script executado sem saída textual."
+            check_item["details"] = first_line[:180]
 
     return outputs, checks
 
@@ -96,8 +96,7 @@ def build_explainability() -> Dict[str, object]:
     values = get_element_values(graph)
 
     profiles = {}
-    for vector_name, profile_name in VECTOR_PROFILE_MAP.items():
-        _, weights = get_vector_weights(graph, vector_name)
+    for profile_name, weights in SIMULATION_WEIGHTS.items():
         total = calculate_relevance(values, weights)
         contributions = []
 
@@ -115,7 +114,7 @@ def build_explainability() -> Dict[str, object]:
 
         contributions.sort(key=lambda item: item["rel_prag_contribution"], reverse=True)
         profiles[profile_name] = {
-            "vector": vector_name,
+            "vector": f"W_{profile_name}",
             "rel_prag_total": float(total),
             "formula": "Rel_prag(I,A,C) = sum(w_i(A,C) * v(p_i))",
             "top_contributors": contributions[:3],
@@ -127,6 +126,46 @@ def build_explainability() -> Dict[str, object]:
         "ontology_source": str(TTL_PATH.relative_to(BASE_DIR)),
         "profiles": profiles,
     }
+
+
+def _format_console_summary(checks: List[Dict[str, str]]) -> str:
+    passed = sum(1 for item in checks if item["status"] == "PASS")
+    failed = sum(1 for item in checks if item["status"] == "FAIL")
+
+    summary_lines = [
+        "A execução completa foi concluída.",
+        "",
+        (
+            "Os artefatos foram salvos na pasta output com os seguintes arquivos: "
+            f"{JSON_OUTPUT.name}, {EXPLAINABILITY_OUTPUT.name}, {TEST_RESULTS_OUTPUT.name} e {PDF_OUTPUT.name}."
+        ),
+        "",
+        f"No total, {passed} verificações passaram e {failed} falharam.",
+        "Resumo por script:",
+    ]
+    for item in checks:
+        status_label = "passou" if item["status"] == "PASS" else "falhou"
+        summary_lines.append(f"O comando '{item['command']}' {status_label}.")
+        if item["details"]:
+            summary_lines.append(f"Detalhes: {item['details']}")
+    return "\n".join(summary_lines)
+
+
+def _build_execution_report_lines(checks: List[Dict[str, str]], outputs: Dict[str, object]) -> List[str]:
+    report_lines = [
+        "Rel_prag execution report",
+        f"Generated at UTC: {datetime.now(timezone.utc).isoformat()}",
+        "",
+        "Checks:",
+    ]
+    report_lines.extend([f"- {item['status']}: {item['command']} | {item['details']}" for item in checks])
+    report_lines.append("")
+    report_lines.append("Outputs:")
+    for script_name, payload in outputs.items():
+        payload_text = json.dumps(payload, ensure_ascii=False)
+        report_lines.append(f"- {script_name}")
+        report_lines.append(f"  {payload_text[:260]}")
+    return report_lines
 
 
 def write_minimal_pdf(lines: List[str], path: Path) -> None:
@@ -168,32 +207,24 @@ def write_minimal_pdf(lines: List[str], path: Path) -> None:
 
 
 def main() -> None:
-    ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     outputs, checks = run_all_scripts()
     JSON_OUTPUT.write_text(json.dumps(outputs, indent=2, ensure_ascii=False), encoding="utf-8")
 
+    test_results_payload = {
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "checks": checks,
+    }
+    TEST_RESULTS_OUTPUT.write_text(json.dumps(test_results_payload, indent=2, ensure_ascii=False), encoding="utf-8")
+
     explainability = build_explainability()
     EXPLAINABILITY_OUTPUT.write_text(json.dumps(explainability, indent=2, ensure_ascii=False), encoding="utf-8")
 
-    report_lines = [
-        "Rel_prag automated test report",
-        f"Generated at UTC: {datetime.now(timezone.utc).isoformat()}",
-        "",
-        "Checks:",
-    ]
-    report_lines.extend([f"- {item['status']}: {item['command']}" for item in checks])
+    report_lines = _build_execution_report_lines(checks, outputs)
     write_minimal_pdf(report_lines, PDF_OUTPUT)
 
-    print(json.dumps({
-        "status": "ok",
-        "artifacts": {
-            "responses_json": str(JSON_OUTPUT.relative_to(BASE_DIR)),
-            "explainability_json": str(EXPLAINABILITY_OUTPUT.relative_to(BASE_DIR)),
-            "test_pdf": str(PDF_OUTPUT.relative_to(BASE_DIR)),
-        },
-        "checks": checks,
-    }, indent=2))
+    print(_format_console_summary(checks))
 
 
 if __name__ == "__main__":
