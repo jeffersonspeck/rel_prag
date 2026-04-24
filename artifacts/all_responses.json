@@ -1,0 +1,746 @@
+{
+  "create_theseus_ontology.py": {
+    "text_output": "Ontology generated at: /workspace/rel_prag/data/theseus_ontology.ttl\nTotal RDF triples: 164"
+  },
+  "demo_relevance.py": {
+    "text_output": "Elements from S(I_ship) and their ontological values v(p_i):\n- p_estrutura: 1.0\n- p_flutuar: 1.0\n- p_material: 1.0\n- p_origem: 1.0\n- p_papel_monumento: 1.0\n- p_valor_historico: 1.0\n\nRel_prag(I,A,C) results:\n- W_Marinheiro_Navegacao: 2.20\n- W_Historiador_Preservacao: 4.30\n\nInterpretation:\n- The sailor profile prioritizes structure and navigation capacity.\n- The historian profile prioritizes provenance, historical value, and monument role.\n- Ontological instance remains stable; epistemic-pragmatic weighting changes."
+  },
+  "semantic_query_example.py": {
+    "sailor": {
+      "entity": {
+        "id": "theseus:ShipOfTheseus",
+        "label": "Ship of Theseus",
+        "type": "theseus:MaterialEntity",
+        "description": "Material entity analyzed through ontologically grounded elements."
+      },
+      "agent": {
+        "id": "theseus:Sailor",
+        "label": "Sailor"
+      },
+      "context": {
+        "id": "theseus:NavigationContext",
+        "label": "Navigation"
+      },
+      "interpretive_role": "Functional navigation object",
+      "ranking": [
+        {
+          "element_id": "p_flutuar",
+          "element": "Floating and navigation disposition",
+          "description": "Realizable capability related to floating and navigation.",
+          "weight": 1.0,
+          "ontological_value": 1.0,
+          "relevance": 1.0,
+          "normalized_contribution": 0.4545
+        },
+        {
+          "element_id": "p_estrutura",
+          "element": "Structural organization",
+          "description": "Configuration, form, and structural stability.",
+          "weight": 0.8,
+          "ontological_value": 1.0,
+          "relevance": 0.8,
+          "normalized_contribution": 0.3636
+        },
+        {
+          "element_id": "p_material",
+          "element": "Material composition",
+          "description": "Physical parts and material substrate of the ship.",
+          "weight": 0.2,
+          "ontological_value": 1.0,
+          "relevance": 0.2,
+          "normalized_contribution": 0.0909
+        },
+        {
+          "element_id": "p_origem",
+          "element": "Origin and provenance",
+          "description": "Origin, provenance, and historical continuity.",
+          "weight": 0.1,
+          "ontological_value": 1.0,
+          "relevance": 0.1,
+          "normalized_contribution": 0.0455
+        },
+        {
+          "element_id": "p_valor_historico",
+          "element": "Historical value",
+          "description": "Historical, symbolic, and memorial relevance.",
+          "weight": 0.1,
+          "ontological_value": 1.0,
+          "relevance": 0.1,
+          "normalized_contribution": 0.0455
+        },
+        {
+          "element_id": "p_papel_monumento",
+          "element": "Monument role",
+          "description": "Contextual role in historical preservation practices.",
+          "weight": 0.0,
+          "ontological_value": 1.0,
+          "relevance": 0.0,
+          "normalized_contribution": 0.0
+        }
+      ],
+      "application": "semantic_query",
+      "query": "Which aspects of the Ship of Theseus are most relevant in this context?",
+      "answer": {
+        "summary": "For agent Sailor in context Navigation, the entity is interpreted as Functional navigation object.",
+        "most_relevant_elements": [
+          {
+            "element_id": "p_flutuar",
+            "element": "Floating and navigation disposition",
+            "description": "Realizable capability related to floating and navigation.",
+            "weight": 1.0,
+            "ontological_value": 1.0,
+            "relevance": 1.0,
+            "normalized_contribution": 0.4545
+          },
+          {
+            "element_id": "p_estrutura",
+            "element": "Structural organization",
+            "description": "Configuration, form, and structural stability.",
+            "weight": 0.8,
+            "ontological_value": 1.0,
+            "relevance": 0.8,
+            "normalized_contribution": 0.3636
+          },
+          {
+            "element_id": "p_material",
+            "element": "Material composition",
+            "description": "Physical parts and material substrate of the ship.",
+            "weight": 0.2,
+            "ontological_value": 1.0,
+            "relevance": 0.2,
+            "normalized_contribution": 0.0909
+          }
+        ]
+      }
+    },
+    "historian": {
+      "entity": {
+        "id": "theseus:ShipOfTheseus",
+        "label": "Ship of Theseus",
+        "type": "theseus:MaterialEntity",
+        "description": "Material entity analyzed through ontologically grounded elements."
+      },
+      "agent": {
+        "id": "theseus:Historian",
+        "label": "Historian"
+      },
+      "context": {
+        "id": "theseus:HistoricalPreservationContext",
+        "label": "Historical preservation"
+      },
+      "interpretive_role": "Historical and symbolic preservation object",
+      "ranking": [
+        {
+          "element_id": "p_origem",
+          "element": "Origin and provenance",
+          "description": "Origin, provenance, and historical continuity.",
+          "weight": 1.0,
+          "ontological_value": 1.0,
+          "relevance": 1.0,
+          "normalized_contribution": 0.2326
+        },
+        {
+          "element_id": "p_valor_historico",
+          "element": "Historical value",
+          "description": "Historical, symbolic, and memorial relevance.",
+          "weight": 1.0,
+          "ontological_value": 1.0,
+          "relevance": 1.0,
+          "normalized_contribution": 0.2326
+        },
+        {
+          "element_id": "p_material",
+          "element": "Material composition",
+          "description": "Physical parts and material substrate of the ship.",
+          "weight": 0.9,
+          "ontological_value": 1.0,
+          "relevance": 0.9,
+          "normalized_contribution": 0.2093
+        },
+        {
+          "element_id": "p_papel_monumento",
+          "element": "Monument role",
+          "description": "Contextual role in historical preservation practices.",
+          "weight": 0.9,
+          "ontological_value": 1.0,
+          "relevance": 0.9,
+          "normalized_contribution": 0.2093
+        },
+        {
+          "element_id": "p_estrutura",
+          "element": "Structural organization",
+          "description": "Configuration, form, and structural stability.",
+          "weight": 0.4,
+          "ontological_value": 1.0,
+          "relevance": 0.4,
+          "normalized_contribution": 0.093
+        },
+        {
+          "element_id": "p_flutuar",
+          "element": "Floating and navigation disposition",
+          "description": "Realizable capability related to floating and navigation.",
+          "weight": 0.1,
+          "ontological_value": 1.0,
+          "relevance": 0.1,
+          "normalized_contribution": 0.0233
+        }
+      ],
+      "application": "semantic_query",
+      "query": "Which aspects of the Ship of Theseus are most relevant in this context?",
+      "answer": {
+        "summary": "For agent Historian in context Historical preservation, the entity is interpreted as Historical and symbolic preservation object.",
+        "most_relevant_elements": [
+          {
+            "element_id": "p_origem",
+            "element": "Origin and provenance",
+            "description": "Origin, provenance, and historical continuity.",
+            "weight": 1.0,
+            "ontological_value": 1.0,
+            "relevance": 1.0,
+            "normalized_contribution": 0.2326
+          },
+          {
+            "element_id": "p_valor_historico",
+            "element": "Historical value",
+            "description": "Historical, symbolic, and memorial relevance.",
+            "weight": 1.0,
+            "ontological_value": 1.0,
+            "relevance": 1.0,
+            "normalized_contribution": 0.2326
+          },
+          {
+            "element_id": "p_material",
+            "element": "Material composition",
+            "description": "Physical parts and material substrate of the ship.",
+            "weight": 0.9,
+            "ontological_value": 1.0,
+            "relevance": 0.9,
+            "normalized_contribution": 0.2093
+          }
+        ]
+      }
+    }
+  },
+  "recommendation_example.py": {
+    "sailor": {
+      "application": "recommendation",
+      "agent": {
+        "id": "theseus:Sailor",
+        "label": "Sailor"
+      },
+      "context": {
+        "id": "theseus:NavigationContext",
+        "label": "Navigation"
+      },
+      "interpretive_role": "Functional navigation object",
+      "recommendations": [
+        {
+          "id": "item_001",
+          "label": "Navigation readiness inspection",
+          "score": 1.8,
+          "attributes": {
+            "p_material": 0.3,
+            "p_estrutura": 0.9,
+            "p_flutuar": 1.0,
+            "p_origem": 0.1,
+            "p_valor_historico": 0.1,
+            "p_papel_monumento": 0.0
+          }
+        },
+        {
+          "id": "item_004",
+          "label": "Structural repair plan",
+          "score": 1.78,
+          "attributes": {
+            "p_material": 0.7,
+            "p_estrutura": 1.0,
+            "p_flutuar": 0.8,
+            "p_origem": 0.2,
+            "p_valor_historico": 0.2,
+            "p_papel_monumento": 0.1
+          }
+        },
+        {
+          "id": "item_002",
+          "label": "Historical authenticity report",
+          "score": 0.78,
+          "attributes": {
+            "p_material": 0.8,
+            "p_estrutura": 0.4,
+            "p_flutuar": 0.1,
+            "p_origem": 1.0,
+            "p_valor_historico": 1.0,
+            "p_papel_monumento": 0.7
+          }
+        },
+        {
+          "id": "item_003",
+          "label": "Museum exhibition project",
+          "score": 0.52,
+          "attributes": {
+            "p_material": 0.5,
+            "p_estrutura": 0.3,
+            "p_flutuar": 0.0,
+            "p_origem": 0.8,
+            "p_valor_historico": 1.0,
+            "p_papel_monumento": 1.0
+          }
+        }
+      ]
+    },
+    "historian": {
+      "application": "recommendation",
+      "agent": {
+        "id": "theseus:Historian",
+        "label": "Historian"
+      },
+      "context": {
+        "id": "theseus:HistoricalPreservationContext",
+        "label": "Historical preservation"
+      },
+      "interpretive_role": "Historical and symbolic preservation object",
+      "recommendations": [
+        {
+          "id": "item_002",
+          "label": "Historical authenticity report",
+          "score": 3.52,
+          "attributes": {
+            "p_material": 0.8,
+            "p_estrutura": 0.4,
+            "p_flutuar": 0.1,
+            "p_origem": 1.0,
+            "p_valor_historico": 1.0,
+            "p_papel_monumento": 0.7
+          }
+        },
+        {
+          "id": "item_003",
+          "label": "Museum exhibition project",
+          "score": 3.27,
+          "attributes": {
+            "p_material": 0.5,
+            "p_estrutura": 0.3,
+            "p_flutuar": 0.0,
+            "p_origem": 0.8,
+            "p_valor_historico": 1.0,
+            "p_papel_monumento": 1.0
+          }
+        },
+        {
+          "id": "item_004",
+          "label": "Structural repair plan",
+          "score": 1.6,
+          "attributes": {
+            "p_material": 0.7,
+            "p_estrutura": 1.0,
+            "p_flutuar": 0.8,
+            "p_origem": 0.2,
+            "p_valor_historico": 0.2,
+            "p_papel_monumento": 0.1
+          }
+        },
+        {
+          "id": "item_001",
+          "label": "Navigation readiness inspection",
+          "score": 0.93,
+          "attributes": {
+            "p_material": 0.3,
+            "p_estrutura": 0.9,
+            "p_flutuar": 1.0,
+            "p_origem": 0.1,
+            "p_valor_historico": 0.1,
+            "p_papel_monumento": 0.0
+          }
+        }
+      ]
+    }
+  },
+  "knowledge_graph_example.py": {
+    "sailor": {
+      "application": "knowledge_graph_visualization",
+      "agent": {
+        "id": "theseus:Sailor",
+        "label": "Sailor"
+      },
+      "context": {
+        "id": "theseus:NavigationContext",
+        "label": "Navigation"
+      },
+      "interpretive_role": "Functional navigation object",
+      "highlighted_edges": [
+        {
+          "source": "theseus:ShipOfTheseus",
+          "predicate": "theseus:hasDisposition",
+          "target": "theseus:FloatingDisposition",
+          "element_id": "p_flutuar",
+          "relevance": 1.0,
+          "visibility": "high"
+        },
+        {
+          "source": "theseus:ShipOfTheseus",
+          "predicate": "theseus:hasStructuralOrganization",
+          "target": "theseus:ShipStructure",
+          "element_id": "p_estrutura",
+          "relevance": 0.8,
+          "visibility": "high"
+        },
+        {
+          "source": "theseus:ShipOfTheseus",
+          "predicate": "theseus:hasMaterialComposition",
+          "target": "theseus:OriginalAndReplacedParts",
+          "element_id": "p_material",
+          "relevance": 0.2,
+          "visibility": "low"
+        },
+        {
+          "source": "theseus:ShipOfTheseus",
+          "predicate": "theseus:hasOrigin",
+          "target": "theseus:TheseusHistoricalOrigin",
+          "element_id": "p_origem",
+          "relevance": 0.1,
+          "visibility": "low"
+        },
+        {
+          "source": "theseus:ShipOfTheseus",
+          "predicate": "theseus:hasHistoricalValue",
+          "target": "theseus:HistoricalValue",
+          "element_id": "p_valor_historico",
+          "relevance": 0.1,
+          "visibility": "low"
+        },
+        {
+          "source": "theseus:ShipOfTheseus",
+          "predicate": "theseus:hasContextualRole",
+          "target": "theseus:MonumentRole",
+          "element_id": "p_papel_monumento",
+          "relevance": 0.0,
+          "visibility": "low"
+        }
+      ]
+    },
+    "historian": {
+      "application": "knowledge_graph_visualization",
+      "agent": {
+        "id": "theseus:Historian",
+        "label": "Historian"
+      },
+      "context": {
+        "id": "theseus:HistoricalPreservationContext",
+        "label": "Historical preservation"
+      },
+      "interpretive_role": "Historical and symbolic preservation object",
+      "highlighted_edges": [
+        {
+          "source": "theseus:ShipOfTheseus",
+          "predicate": "theseus:hasOrigin",
+          "target": "theseus:TheseusHistoricalOrigin",
+          "element_id": "p_origem",
+          "relevance": 1.0,
+          "visibility": "high"
+        },
+        {
+          "source": "theseus:ShipOfTheseus",
+          "predicate": "theseus:hasHistoricalValue",
+          "target": "theseus:HistoricalValue",
+          "element_id": "p_valor_historico",
+          "relevance": 1.0,
+          "visibility": "high"
+        },
+        {
+          "source": "theseus:ShipOfTheseus",
+          "predicate": "theseus:hasMaterialComposition",
+          "target": "theseus:OriginalAndReplacedParts",
+          "element_id": "p_material",
+          "relevance": 0.9,
+          "visibility": "high"
+        },
+        {
+          "source": "theseus:ShipOfTheseus",
+          "predicate": "theseus:hasContextualRole",
+          "target": "theseus:MonumentRole",
+          "element_id": "p_papel_monumento",
+          "relevance": 0.9,
+          "visibility": "high"
+        },
+        {
+          "source": "theseus:ShipOfTheseus",
+          "predicate": "theseus:hasStructuralOrganization",
+          "target": "theseus:ShipStructure",
+          "element_id": "p_estrutura",
+          "relevance": 0.4,
+          "visibility": "medium"
+        },
+        {
+          "source": "theseus:ShipOfTheseus",
+          "predicate": "theseus:hasDisposition",
+          "target": "theseus:FloatingDisposition",
+          "element_id": "p_flutuar",
+          "relevance": 0.1,
+          "visibility": "low"
+        }
+      ]
+    }
+  },
+  "decision_support_example.py": {
+    "sailor": {
+      "application": "decision_support",
+      "agent": {
+        "id": "theseus:Sailor",
+        "label": "Sailor"
+      },
+      "context": {
+        "id": "theseus:NavigationContext",
+        "label": "Navigation"
+      },
+      "interpretive_role": "Functional navigation object",
+      "ranked_alternatives": [
+        {
+          "id": "alt_001",
+          "label": "Return the ship to navigation",
+          "score": 1.72,
+          "impact": {
+            "p_material": 0.3,
+            "p_estrutura": 0.8,
+            "p_flutuar": 1.0,
+            "p_origem": 0.1,
+            "p_valor_historico": 0.1,
+            "p_papel_monumento": 0.0
+          }
+        },
+        {
+          "id": "alt_003",
+          "label": "Partially restore and keep controlled exhibition",
+          "score": 1.35,
+          "impact": {
+            "p_material": 0.7,
+            "p_estrutura": 0.8,
+            "p_flutuar": 0.4,
+            "p_origem": 0.8,
+            "p_valor_historico": 0.9,
+            "p_papel_monumento": 0.8
+          }
+        },
+        {
+          "id": "alt_002",
+          "label": "Preserve the ship as a monument",
+          "score": 0.76,
+          "impact": {
+            "p_material": 0.8,
+            "p_estrutura": 0.5,
+            "p_flutuar": 0.0,
+            "p_origem": 1.0,
+            "p_valor_historico": 1.0,
+            "p_papel_monumento": 1.0
+          }
+        }
+      ],
+      "note": "This ranking organizes alternatives by interpretive profile and does not replace expert validation."
+    },
+    "historian": {
+      "application": "decision_support",
+      "agent": {
+        "id": "theseus:Historian",
+        "label": "Historian"
+      },
+      "context": {
+        "id": "theseus:HistoricalPreservationContext",
+        "label": "Historical preservation"
+      },
+      "interpretive_role": "Historical and symbolic preservation object",
+      "ranked_alternatives": [
+        {
+          "id": "alt_002",
+          "label": "Preserve the ship as a monument",
+          "score": 3.82,
+          "impact": {
+            "p_material": 0.8,
+            "p_estrutura": 0.5,
+            "p_flutuar": 0.0,
+            "p_origem": 1.0,
+            "p_valor_historico": 1.0,
+            "p_papel_monumento": 1.0
+          }
+        },
+        {
+          "id": "alt_003",
+          "label": "Partially restore and keep controlled exhibition",
+          "score": 3.41,
+          "impact": {
+            "p_material": 0.7,
+            "p_estrutura": 0.8,
+            "p_flutuar": 0.4,
+            "p_origem": 0.8,
+            "p_valor_historico": 0.9,
+            "p_papel_monumento": 0.8
+          }
+        },
+        {
+          "id": "alt_001",
+          "label": "Return the ship to navigation",
+          "score": 0.89,
+          "impact": {
+            "p_material": 0.3,
+            "p_estrutura": 0.8,
+            "p_flutuar": 1.0,
+            "p_origem": 0.1,
+            "p_valor_historico": 0.1,
+            "p_papel_monumento": 0.0
+          }
+        }
+      ],
+      "note": "This ranking organizes alternatives by interpretive profile and does not replace expert validation."
+    }
+  },
+  "explanation_example.py": {
+    "sailor": {
+      "application": "explanation",
+      "agent": {
+        "id": "theseus:Sailor",
+        "label": "Sailor"
+      },
+      "context": {
+        "id": "theseus:NavigationContext",
+        "label": "Navigation"
+      },
+      "interpretive_role": "Functional navigation object",
+      "explanation": "The entity was interpreted as Functional navigation object because the most influential elements were: Floating and navigation disposition received weight 1.0 and relevance 1.0; Structural organization received weight 0.8 and relevance 0.8; Material composition received weight 0.2 and relevance 0.2.",
+      "evidence": [
+        {
+          "element_id": "p_flutuar",
+          "element": "Floating and navigation disposition",
+          "description": "Realizable capability related to floating and navigation.",
+          "weight": 1.0,
+          "ontological_value": 1.0,
+          "relevance": 1.0,
+          "normalized_contribution": 0.4545
+        },
+        {
+          "element_id": "p_estrutura",
+          "element": "Structural organization",
+          "description": "Configuration, form, and structural stability.",
+          "weight": 0.8,
+          "ontological_value": 1.0,
+          "relevance": 0.8,
+          "normalized_contribution": 0.3636
+        },
+        {
+          "element_id": "p_material",
+          "element": "Material composition",
+          "description": "Physical parts and material substrate of the ship.",
+          "weight": 0.2,
+          "ontological_value": 1.0,
+          "relevance": 0.2,
+          "normalized_contribution": 0.0909
+        }
+      ]
+    },
+    "historian": {
+      "application": "explanation",
+      "agent": {
+        "id": "theseus:Historian",
+        "label": "Historian"
+      },
+      "context": {
+        "id": "theseus:HistoricalPreservationContext",
+        "label": "Historical preservation"
+      },
+      "interpretive_role": "Historical and symbolic preservation object",
+      "explanation": "The entity was interpreted as Historical and symbolic preservation object because the most influential elements were: Origin and provenance received weight 1.0 and relevance 1.0; Historical value received weight 1.0 and relevance 1.0; Material composition received weight 0.9 and relevance 0.9.",
+      "evidence": [
+        {
+          "element_id": "p_origem",
+          "element": "Origin and provenance",
+          "description": "Origin, provenance, and historical continuity.",
+          "weight": 1.0,
+          "ontological_value": 1.0,
+          "relevance": 1.0,
+          "normalized_contribution": 0.2326
+        },
+        {
+          "element_id": "p_valor_historico",
+          "element": "Historical value",
+          "description": "Historical, symbolic, and memorial relevance.",
+          "weight": 1.0,
+          "ontological_value": 1.0,
+          "relevance": 1.0,
+          "normalized_contribution": 0.2326
+        },
+        {
+          "element_id": "p_material",
+          "element": "Material composition",
+          "description": "Physical parts and material substrate of the ship.",
+          "weight": 0.9,
+          "ontological_value": 1.0,
+          "relevance": 0.9,
+          "normalized_contribution": 0.2093
+        }
+      ]
+    }
+  },
+  "maintenance_evolution_example.py": {
+    "application": "ontology_maintenance_and_evolution",
+    "original_profiles": [
+      "sailor",
+      "historian"
+    ],
+    "new_profile_added": "public_manager",
+    "changed_ontology_structure": false,
+    "message": "The ontology structure for the entity remains unchanged. Evolution occurs by adding a new interpretive profile.",
+    "comparison": {
+      "sailor": {
+        "agent": {
+          "id": "theseus:Sailor",
+          "label": "Sailor"
+        },
+        "context": {
+          "id": "theseus:NavigationContext",
+          "label": "Navigation"
+        },
+        "weights": {
+          "p_estrutura": 0.8,
+          "p_flutuar": 1.0,
+          "p_material": 0.2,
+          "p_origem": 0.1,
+          "p_papel_monumento": 0.0,
+          "p_valor_historico": 0.1
+        }
+      },
+      "historian": {
+        "agent": {
+          "id": "theseus:Historian",
+          "label": "Historian"
+        },
+        "context": {
+          "id": "theseus:HistoricalPreservationContext",
+          "label": "Historical preservation"
+        },
+        "weights": {
+          "p_estrutura": 0.4,
+          "p_flutuar": 0.1,
+          "p_material": 0.9,
+          "p_origem": 1.0,
+          "p_papel_monumento": 0.9,
+          "p_valor_historico": 1.0
+        }
+      },
+      "public_manager": {
+        "agent": {
+          "id": "theseus:PublicManager",
+          "label": "Public manager"
+        },
+        "context": {
+          "id": "theseus:InstitutionalManagementContext",
+          "label": "Institutional management"
+        },
+        "weights": {
+          "p_material": 0.6,
+          "p_estrutura": 0.7,
+          "p_flutuar": 0.2,
+          "p_origem": 0.7,
+          "p_valor_historico": 0.9,
+          "p_papel_monumento": 0.8
+        }
+      }
+    }
+  }
+}

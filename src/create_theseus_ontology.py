@@ -293,8 +293,8 @@ def main() -> None:
     graph = build_graph()
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     graph.serialize(destination=str(OUTPUT_PATH), format="turtle")
-    print(f"Ontologia gerada em: {OUTPUT_PATH}")
-    print(f"Total de triplas RDF: {len(graph)}")
+    print(f"Ontology generated at: {OUTPUT_PATH}")
+    print(f"Total RDF triples: {len(graph)}")
 
 
 if __name__ == "__main__":
