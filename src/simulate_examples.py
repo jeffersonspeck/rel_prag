@@ -1,4 +1,4 @@
-"""Executa todos os exemplos e imprime uma simulação resumida."""
+"""Runs all examples and prints a summarized simulation."""
 
 from common import print_json
 from decision_support_example import decision_support

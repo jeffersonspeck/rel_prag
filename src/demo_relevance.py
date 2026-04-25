@@ -1,9 +1,9 @@
-"""Demonstração da fórmula de relevância pragmática com base na ontologia.
+"""Demonstration of the pragmatic relevance formula based on the ontology.
 
-A ontologia fornece os elementos e valores ontológicos v(p_i).
-Os pesos w_i(A,C) são definidos em perfis de aplicação.
+The ontology provides the ontological elements and values v(p_i).
+Weights w_i(A,C) are defined in application profiles.
 
-Fórmula:
+Formula:
     Rel_prag(I,A,C) = Σ(w_i(A,C) * v(p_i))
 """
 
@@ -81,11 +81,11 @@ def main() -> None:
     graph.parse(TTL_PATH, format="turtle")
 
     element_values = get_element_values(graph)
-    print("Elementos carregados da ontologia-base S(I_navio):")
+    print("Elements loaded from the base ontology S(I_ship):")
     for element_name, value in sorted(element_values.items()):
         print(f"- {element_name}: v(p_i)={value}")
 
-    print("\nSimulação de perfis (pesos externos à ontologia):")
+    print("\nProfile simulation (weights external to ontology):")
     for profile_name, rel in simulate_profiles(graph).items():
         print(f"- {profile_name}: Rel_prag={rel}")
 

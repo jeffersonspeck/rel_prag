@@ -3,22 +3,40 @@
 2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj
 3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >> endobj
 4 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> endobj
-5 0 obj << /Length 635 >> stream
+5 0 obj << /Length 3571 >> stream
 BT
 /F1 11 Tf
 72 790 Td
-(Rel_prag automated test report) Tj
-0 -14 Td (Generated at UTC: 2026-04-24T19:38:04.232345+00:00) Tj
+(Rel_prag execution report) Tj
+0 -14 Td (Generated at UTC: 2026-04-25T00:20:38.306251+00:00) Tj
 0 -14 Td () Tj
 0 -14 Td (Checks:) Tj
-0 -14 Td (- PASS: python src/create_theseus_ontology.py) Tj
-0 -14 Td (- PASS: python src/demo_relevance.py) Tj
-0 -14 Td (- PASS: python src/semantic_query_example.py) Tj
-0 -14 Td (- PASS: python src/recommendation_example.py) Tj
-0 -14 Td (- PASS: python src/knowledge_graph_example.py) Tj
-0 -14 Td (- PASS: python src/decision_support_example.py) Tj
-0 -14 Td (- PASS: python src/explanation_example.py) Tj
-0 -14 Td (- PASS: python src/maintenance_evolution_example.py) Tj
+0 -14 Td (- PASS: python src/create_theseus_ontology.py | Ontology generated at: /workspace/rel_prag/data/theseus_ontology.ttl) Tj
+0 -14 Td (- PASS: python src/demo_relevance.py | Elements loaded from the base ontology S[I_ship]:) Tj
+0 -14 Td (- PASS: python src/semantic_query_example.py | The script generated valid JSON and the result was exported.) Tj
+0 -14 Td (- PASS: python src/recommendation_example.py | The script generated valid JSON and the result was exported.) Tj
+0 -14 Td (- PASS: python src/knowledge_graph_example.py | The script generated valid JSON and the result was exported.) Tj
+0 -14 Td (- PASS: python src/decision_support_example.py | The script generated valid JSON and the result was exported.) Tj
+0 -14 Td (- PASS: python src/explanation_example.py | The script generated valid JSON and the result was exported.) Tj
+0 -14 Td (- PASS: python src/maintenance_evolution_example.py | The script generated valid JSON and the result was exported.) Tj
+0 -14 Td () Tj
+0 -14 Td (Outputs:) Tj
+0 -14 Td (- create_theseus_ontology.py) Tj
+0 -14 Td (  {"text_output": "Ontology generated at: /workspace/rel_prag/data/theseus_ontology.ttl\nTotal RDF triples: 60"}) Tj
+0 -14 Td (- demo_relevance.py) Tj
+0 -14 Td (  {"text_output": "Elements loaded from the base ontology S[I_ship]:\n- p_estrutura: v[p_i]=1.0\n- p_flutuar: v[p_i]=1.0\n- p_material: v[p_i]=1.0\n- p_origem: v[p_i]=1.0\n- p_papel_monumento: v[p_i]=1.0\n- p_valor_historico: v[p_i]=1.0\n\nProfile simulation [we) Tj
+0 -14 Td (- semantic_query_example.py) Tj
+0 -14 Td (  {"sailor": {"entity": {"id": "theseus:ShipOfTheseus", "label": "Ship of Theseus", "type": "theseus:MaterialEntity", "description": "Material entity analyzed through ontologically grounded elements."}, "agent": {"id": "theseus:Sailor", "label": "Sailor"}, "cont) Tj
+0 -14 Td (- recommendation_example.py) Tj
+0 -14 Td (  {"sailor": {"application": "recommendation", "formula": "score[item] = ?[w_i[A,C] * attr_i[item]]", "agent": {"id": "theseus:Sailor", "label": "Sailor"}, "context": {"id": "theseus:NavigationContext", "label": "Navigation"}, "interpretive_role": "Functional na) Tj
+0 -14 Td (- knowledge_graph_example.py) Tj
+0 -14 Td (  {"sailor": {"application": "knowledge_graph_visualization", "formula": "edge_relevance = w_i[A,C] linked to ontology element p_i", "agent": {"id": "theseus:Sailor", "label": "Sailor"}, "context": {"id": "theseus:NavigationContext", "label": "Navigation"}, "int) Tj
+0 -14 Td (- decision_support_example.py) Tj
+0 -14 Td (  {"sailor": {"application": "decision_support", "formula": "score[alt] = ?[w_i[A,C] * impact_i[alt]]", "agent": {"id": "theseus:Sailor", "label": "Sailor"}, "context": {"id": "theseus:NavigationContext", "label": "Navigation"}, "interpretive_role": "Functional ) Tj
+0 -14 Td (- explanation_example.py) Tj
+0 -14 Td (  {"sailor": {"application": "explanation", "formula": "Rel_prag[I,A,C] = ?[w_i[A,C] * v[p_i]]", "agent": {"id": "theseus:Sailor", "label": "Sailor"}, "context": {"id": "theseus:NavigationContext", "label": "Navigation"}, "interpretive_role": "Functional navigat) Tj
+0 -14 Td (- maintenance_evolution_example.py) Tj
+0 -14 Td (  {"application": "ontology_maintenance_and_evolution", "message": "The base ontology remains stable; evolution happens in interpretive profiles.", "changed_ontology_structure": false, "original_profiles": ["sailor", "historian"], "new_profile_added": "public_ma) Tj
 ET
 endstream endobj
 xref
@@ -31,5 +49,5 @@ xref
 0000000311 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-997
+3934
 %%EOF

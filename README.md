@@ -1,63 +1,63 @@
-# Ontologia-base do Navio de Teseu + Simulações Epistêmico-Pragmáticas
+# Ship of Theseus Base Ontology + Epistemic-Pragmatic Simulations
 
-Este repositório foi reorganizado para ficar **mais informativo** e seguir o princípio pedido:
+This repository was reorganized to be **more informative** and to follow the requested principle:
 
-- a ontologia em `data/theseus_ontology.ttl` contém **somente a estrutura estável** do Navio de Teseu;
-- os perfis interpretativos (ex.: marinheiro/historiador) ficam fora da ontologia, como camada de aplicação;
-- **todos os exemplos consomem a ontologia-base** como fonte dos elementos `p_i`.
+- the ontology in `data/theseus_ontology.ttl` contains **only the stable structure** of the Ship of Theseus;
+- interpretive profiles (e.g., sailor/historian) remain outside the ontology as an application layer;
+- **all examples consume the base ontology** as the source of elements `p_i`.
 
 ---
 
-## 1) Ideia formal implementada
+## 1) Implemented formal idea
 
-### 1.1 Estrutura ontológica estável
+### 1.1 Stable ontological structure
 
-A ontologia representa apenas:
-
-\[
-S(I_{navio}) = \{p_{material}, p_{estrutura}, p_{flutuar}, p_{origem}, p_{valor\_historico}, p_{papel\_monumento}\}
-\]
-
-Com valores ontológicos iniciais:
+The ontology represents only:
 
 \[
-v(p_i)=1.0 \quad \forall p_i \in S(I_{navio})
+S(I_{ship}) = \{p_{material}, p_{estrutura}, p_{flutuar}, p_{origem}, p_{valor\_historico}, p_{papel\_monumento}\}
 \]
 
-### 1.2 Relevância pragmática
+With initial ontological values:
 
-A interpretação por perfil é calculada por:
+\[
+v(p_i)=1.0 \quad \forall p_i \in S(I_{ship})
+\]
+
+### 1.2 Pragmatic relevance
+
+Interpretation by profile is computed as:
 
 \[
 Rel_{prag}(I,A,C) = \sum_i w_i(A,C) \cdot v(p_i)
 \]
 
-Onde:
-- `I` = instância (Navio de Teseu),
-- `A` = agente interpretativo,
-- `C` = contexto,
-- `w_i(A,C)` = peso pragmático,
-- `v(p_i)` = valor ontológico do elemento.
+Where:
+- `I` = instance (Ship of Theseus),
+- `A` = interpretive agent,
+- `C` = context,
+- `w_i(A,C)` = pragmatic weight,
+- `v(p_i)` = ontological value of the element.
 
 ---
 
-## 2) Estrutura do projeto
+## 2) Project structure
 
-- `data/theseus_ontology.ttl`: ontologia-base com classes, propriedades e elementos do navio.
-- `src/create_theseus_ontology.py`: regenera a ontologia-base em Turtle.
-- `src/common.py`: carrega a ontologia, valida perfis contra os elementos ontológicos e disponibiliza utilitários comuns.
-- `src/demo_relevance.py`: demonstra a fórmula `Rel_prag` com simulação de perfis.
-- `src/semantic_query_example.py`: Exemplo 1 (consulta semântica).
-- `src/recommendation_example.py`: Exemplo 2 (recomendação).
-- `src/knowledge_graph_example.py`: Exemplo 3 (realce de grafo por relevância).
-- `src/decision_support_example.py`: Exemplo 4 (apoio à decisão).
-- `src/explanation_example.py`: Exemplo 5 (explicação com evidências).
-- `src/maintenance_evolution_example.py`: Exemplo 6 (manutenção/evolução de perfis sem alterar ontologia).
-- `src/simulate_examples.py`: executa todos os exemplos em lote.
+- `data/theseus_ontology.ttl`: base ontology with classes, properties, and ship elements.
+- `src/create_theseus_ontology.py`: regenerates the base ontology in Turtle.
+- `src/common.py`: loads the ontology, validates profiles against ontological elements, and provides shared utilities.
+- `src/demo_relevance.py`: demonstrates the `Rel_prag` formula with profile simulation.
+- `src/semantic_query_example.py`: Example 1 (semantic query).
+- `src/recommendation_example.py`: Example 2 (recommendation).
+- `src/knowledge_graph_example.py`: Example 3 (relevance-based graph highlighting).
+- `src/decision_support_example.py`: Example 4 (decision support).
+- `src/explanation_example.py`: Example 5 (explanation with evidence).
+- `src/maintenance_evolution_example.py`: Example 6 (profile maintenance/evolution without changing ontology).
+- `src/simulate_examples.py`: runs all examples in batch mode.
 
 ---
 
-## 3) Como executar
+## 3) How to run
 
 ```bash
 pip install -r requirements.txt
@@ -66,7 +66,7 @@ python src/demo_relevance.py
 python src/simulate_examples.py
 ```
 
-Também é possível rodar cada exemplo separadamente:
+You can also run each example separately:
 
 ```bash
 python src/semantic_query_example.py
@@ -77,98 +77,98 @@ python src/explanation_example.py
 python src/maintenance_evolution_example.py
 ```
 
-Para executar tudo de uma vez, gerar arquivos JSON de resultados e um PDF de execução:
+To run everything at once and generate result JSON files plus an execution PDF:
 
 ```bash
 python src/run_all_analyses.py
 ```
 
-Esse comando cria a pasta `output/` com:
+This command creates the `output/` folder with:
 
-- `all_responses.json`: saídas agregadas de todos os scripts.
-- `test_results.json`: resultado de cada teste/comando executado (`PASS`/`FAIL` + detalhes).
-- `explainability.json`: rastreabilidade das contribuições na fórmula `Rel_prag`.
-- `execution_report.pdf`: relatório textual consolidado da execução.
+- `all_responses.json`: aggregated outputs from all scripts.
+- `test_results.json`: result of each executed test/command (`PASS`/`FAIL` + details).
+- `explainability.json`: traceability of contributions in the `Rel_prag` formula.
+- `execution_report.pdf`: consolidated textual execution report.
 
-No console, a saída final é apresentada em linguagem natural (texto legível), sem imprimir o JSON bruto.
+In the console, final output is presented in natural language (readable text), without printing raw JSON.
 
 ---
 
-## 4) Simulação dos exemplos (resumo)
+## 4) Example simulation (summary)
 
-### 4.1 Demo de relevância
+### 4.1 Relevance demo
 
-Ao rodar `python src/demo_relevance.py`, você verá os elementos carregados da ontologia e o resultado simulado dos perfis.
+When running `python src/demo_relevance.py`, you will see ontology-loaded elements and simulated profile results.
 
-Exemplo de saída resumida:
+Example summarized output:
 
 - `sailor`: `Rel_prag = 2.20`
 - `historian`: `Rel_prag = 4.30`
 
-### 4.2 Exemplo 1 — Consulta semântica
+### 4.2 Example 1 — Semantic query
 
-Arquivo: `src/semantic_query_example.py`
+File: `src/semantic_query_example.py`
 
-- Entrada: perfil (`sailor` ou `historian`)
-- Saída: resumo textual + top 3 elementos mais relevantes
-- Fórmula usada: `Rel_prag(I,A,C)` para ranking dos elementos
+- Input: profile (`sailor` or `historian`)
+- Output: textual summary + top 3 most relevant elements
+- Formula used: `Rel_prag(I,A,C)` for element ranking
 
-### 4.3 Exemplo 2 — Recomendação
+### 4.3 Example 2 — Recommendation
 
-Arquivo: `src/recommendation_example.py`
+File: `src/recommendation_example.py`
 
-- Score por item:
+- Score per item:
 
 \[
 score(item)=\sum_i w_i(A,C)\cdot attr_i(item)
 \]
 
-- Retorna itens ordenados por aderência ao perfil.
+- Returns items ordered by profile adherence.
 
-### 4.4 Exemplo 3 — Grafo de conhecimento
+### 4.4 Example 3 — Knowledge graph
 
-Arquivo: `src/knowledge_graph_example.py`
+File: `src/knowledge_graph_example.py`
 
-- Cada aresta é ligada a um elemento `p_i`.
-- A visualização recebe nível `high/medium/low` conforme o peso `w_i`.
+- Each edge is linked to one `p_i` element.
+- Visualization receives `high/medium/low` level according to weight `w_i`.
 
-### 4.5 Exemplo 4 — Apoio à decisão
+### 4.5 Example 4 — Decision support
 
-Arquivo: `src/decision_support_example.py`
+File: `src/decision_support_example.py`
 
-- Score por alternativa:
+- Score per alternative:
 
 \[
 score(alt)=\sum_i w_i(A,C)\cdot impact_i(alt)
 \]
 
-- Retorna alternativas ranqueadas para cada perfil.
+- Returns ranked alternatives for each profile.
 
-### 4.6 Exemplo 5 — Explicação
+### 4.6 Example 5 — Explanation
 
-Arquivo: `src/explanation_example.py`
+File: `src/explanation_example.py`
 
-- Produz explicação textual baseada nas maiores contribuições de relevância.
-- Inclui evidências estruturadas (`weight`, `relevance`, `normalized_contribution`).
+- Produces textual explanation based on highest relevance contributions.
+- Includes structured evidence (`weight`, `relevance`, `normalized_contribution`).
 
-### 4.7 Exemplo 6 — Manutenção e evolução
+### 4.7 Example 6 — Maintenance and evolution
 
-Arquivo: `src/maintenance_evolution_example.py`
+File: `src/maintenance_evolution_example.py`
 
-- Demonstra adição de um novo perfil (`public_manager`) sem alterar a ontologia-base.
-- Mostra separação entre:
-  - **núcleo ontológico estável**;
-  - **camada pragmática evolutiva**.
+- Demonstrates adding a new profile (`public_manager`) without changing the base ontology.
+- Shows separation between:
+  - **stable ontological core**;
+  - **evolving pragmatic layer**.
 
 ---
 
-## 5) Garantia de que “tudo consome a ontologia”
+## 5) Guarantee that “everything consumes the ontology”
 
-No fluxo atual:
+In the current flow:
 
-1. `src/common.py` carrega `data/theseus_ontology.ttl`.
-2. Extrai elementos `p_i` e seus `v(p_i)`.
-3. Valida se cada perfil possui pesos exatamente para os elementos da ontologia.
-4. Todos os exemplos reutilizam `common.py`.
+1. `src/common.py` loads `data/theseus_ontology.ttl`.
+2. Extracts elements `p_i` and their `v(p_i)`.
+3. Validates that each profile has weights exactly for ontology elements.
+4. All examples reuse `common.py`.
 
-Isso assegura que a ontologia do Navio de Teseu é a base única para todo o restante.
+This ensures that the Ship of Theseus ontology is the single base for everything else.
