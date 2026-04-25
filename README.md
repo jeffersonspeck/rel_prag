@@ -14,23 +14,17 @@ This repository was reorganized to be **more informative** and to follow the req
 
 The ontology represents only:
 
-\[
-S(I_{ship}) = \{p_{material}, p_{estrutura}, p_{flutuar}, p_{origem}, p_{valor\_historico}, p_{papel\_monumento}\}
-\]
+$$S(I_{\text{ship}}) = \{p_{\text{material}}, p_{\text{structure}}, p_{\text{buoyancy}}, p_{\text{origin}}, p_{\text{historical\_value}}, p_{\text{monument\_role}}\}$$
 
 With initial ontological values:
 
-\[
-v(p_i)=1.0 \quad \forall p_i \in S(I_{ship})
-\]
+$$v(p_i) = 1.0 \quad \forall p_i \in S(I_{\text{ship}})$$
 
 ### 1.2 Pragmatic relevance
 
 Interpretation by profile is computed as:
 
-\[
-Rel_{prag}(I,A,C) = \sum_i w_i(A,C) \cdot v(p_i)
-\]
+$$Rel_{prag}(I,A,C) = \sum_i w_i(A,C) \cdot v(p_i)$$
 
 Where:
 - `I` = instance (Ship of Theseus),
