@@ -4,12 +4,12 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 :TheseusOntology a owl:Ontology ;
-    rdfs:label "Ontologia-base do Navio de Teseu"@pt ;
-    rdfs:comment "Ontologia simplificada para representar apenas a estrutura estável S(I_navio)."@pt .
+    rdfs:label "Ship of Theseus base ontology"@en ;
+    rdfs:comment "Simplified ontology representing only the stable structure S(I_ship)."@en .
 
 :TheseusShip a :Ship ;
-    rdfs:label "Navio de Teseu"@pt ;
-    rdfs:comment "Instância material com estrutura ontológica estável usada como base para interpretações pragmáticas externas."@pt ;
+    rdfs:label "Ship of Theseus"@en ;
+    rdfs:comment "Material instance with stable ontological structure used as a base for external pragmatic interpretations."@en ;
     :hasElement :p_estrutura,
         :p_flutuar,
         :p_material,
@@ -18,63 +18,63 @@
         :p_valor_historico .
 
 :elementValue a owl:DatatypeProperty ;
-    rdfs:label "valor do elemento"@pt ;
+    rdfs:label "element value"@en ;
     rdfs:domain :OntologicalElement ;
     rdfs:range xsd:decimal .
 
 :hasElement a owl:ObjectProperty ;
-    rdfs:label "tem elemento"@pt ;
+    rdfs:label "has element"@en ;
     rdfs:domain :OntologicalInstance ;
     rdfs:range :OntologicalElement .
 
 :MaterialEntity a owl:Class ;
-    rdfs:label "Entidade material"@pt ;
-    rdfs:comment "Classe simplificada compatível com a leitura de entidade material/continuante independente."@pt ;
+    rdfs:label "Material entity"@en ;
+    rdfs:comment "Simplified class compatible with reading as a material entity/independent continuant."@en ;
     rdfs:subClassOf :OntologicalInstance .
 
 :Role a owl:Class ;
-    rdfs:label "Papel"@pt ;
-    rdfs:comment "Condição ou função contextualmente atribuída a uma entidade sem alterar sua base ontológica."@pt ;
+    rdfs:label "Role"@en ;
+    rdfs:comment "Condition or function contextually attributed to an entity without changing its ontological base."@en ;
     rdfs:subClassOf :OntologicalElement .
 
 :Ship a owl:Class ;
-    rdfs:label "Navio"@pt ;
+    rdfs:label "Ship"@en ;
     rdfs:subClassOf :MaterialEntity .
 
 :p_estrutura a :OntologicalElement ;
-    rdfs:label "Organização estrutural"@pt ;
-    rdfs:comment "Aspecto relativo à configuração formal e organização do navio."@pt ;
+    rdfs:label "Structural organization"@en ;
+    rdfs:comment "Aspect related to the ship's formal configuration and organization."@en ;
     :elementValue 1.0 .
 
 :p_flutuar a :OntologicalElement ;
-    rdfs:label "Disposição para flutuar e navegar"@pt ;
-    rdfs:comment "Disposição realizável associada à capacidade de flutuação e navegação."@pt ;
+    rdfs:label "Disposition to float and navigate"@en ;
+    rdfs:comment "Realizable disposition associated with floating and navigation capability."@en ;
     :elementValue 1.0 .
 
 :p_material a :OntologicalElement ;
-    rdfs:label "Composição material"@pt ;
-    rdfs:comment "Aspecto relativo às partes físicas e ao substrato material do navio."@pt ;
+    rdfs:label "Material composition"@en ;
+    rdfs:comment "Aspect related to the physical parts and material substrate of the ship."@en ;
     :elementValue 1.0 .
 
 :p_origem a :OntologicalElement ;
-    rdfs:label "Origem e procedência"@pt ;
-    rdfs:comment "Aspecto relativo à origem, procedência e continuidade histórica da entidade."@pt ;
+    rdfs:label "Origin and provenance"@en ;
+    rdfs:comment "Aspect related to the entity's origin, provenance, and historical continuity."@en ;
     :elementValue 1.0 .
 
 :p_papel_monumento a :Role ;
-    rdfs:label "Papel de monumento"@pt ;
-    rdfs:comment "Papel contextualmente atribuído ao navio em práticas de preservação histórica."@pt ;
+    rdfs:label "Monument role"@en ;
+    rdfs:comment "Role contextually attributed to the ship in historical preservation practices."@en ;
     :elementValue 1.0 .
 
 :p_valor_historico a :OntologicalElement ;
-    rdfs:label "Valor histórico"@pt ;
-    rdfs:comment "Aspecto relativo à relevância histórica, simbólica e memorial da entidade."@pt ;
+    rdfs:label "Historical value"@en ;
+    rdfs:comment "Aspect related to the entity's historical, symbolic, and memorial relevance."@en ;
     :elementValue 1.0 .
 
 :OntologicalInstance a owl:Class ;
-    rdfs:label "Instância ontológica"@pt .
+    rdfs:label "Ontological instance"@en .
 
 :OntologicalElement a owl:Class ;
-    rdfs:label "Elemento ontologicamente ancorado"@pt ;
-    rdfs:comment "Componente descritivo da instância, como qualidade, disposição, função, origem histórica ou papel contextual."@pt .
+    rdfs:label "Ontologically grounded element"@en ;
+    rdfs:comment "Descriptive component of the instance, such as quality, disposition, function, historical origin, or contextual role."@en .
 

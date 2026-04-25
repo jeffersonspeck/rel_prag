@@ -30,7 +30,7 @@ def maintenance_report():
 
     return {
         "application": "ontology_maintenance_and_evolution",
-        "message": "A ontologia-base permanece estável; a evolução ocorre nos perfis de interpretação.",
+        "message": "The base ontology remains stable; evolution happens in interpretive profiles.",
         "changed_ontology_structure": False,
         "original_profiles": list(PROFILES.keys()),
         "new_profile_added": "public_manager",

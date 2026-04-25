@@ -1,8 +1,8 @@
-"""Módulo compartilhado para exemplos epistêmico-pragmáticos.
+"""Shared module for epistemic-pragmatic examples.
 
-A ontologia (data/theseus_ontology.ttl) contém apenas a base estável S(I_navio).
-Perfis interpretativos ficam no código de aplicação e sempre referenciam os
-mesmos elementos carregados da ontologia.
+The ontology (data/theseus_ontology.ttl) contains only the stable base S(I_ship).
+Interpretive profiles remain in application code and always reference the
+same elements loaded from the ontology.
 """
 
 from __future__ import annotations
@@ -169,7 +169,7 @@ def build_base_response(profile_name: str) -> Dict[str, Any]:
 
 
 def run_simulation() -> Dict[str, Any]:
-    """Executa a simulação dos perfis disponíveis usando a ontologia como base."""
+    """Runs simulation of available profiles using the ontology as base."""
     return {
         profile_name: build_base_response(profile_name)
         for profile_name in sorted(PROFILES.keys())

@@ -64,17 +64,17 @@ def run_all_scripts() -> tuple[Dict[str, object], List[Dict[str, str]]]:
 
         if completed.returncode != 0:
             outputs[script_name] = {"error": completed.stderr.strip(), "stdout": completed.stdout.strip()}
-            check_item["details"] = completed.stderr.strip() or "O script retornou erro sem mensagem."
+            check_item["details"] = completed.stderr.strip() or "The script returned an error with no message."
             continue
 
         stdout = completed.stdout.strip()
         if script_name in JSON_SCRIPT_NAMES:
             try:
                 outputs[script_name] = json.loads(stdout)
-                check_item["details"] = "O script gerou JSON válido e o resultado foi exportado."
+                check_item["details"] = "The script generated valid JSON and the result was exported."
             except json.JSONDecodeError:
                 outputs[script_name] = {"raw_output": stdout, "error": "Non-JSON output."}
-                check_item["details"] = "O script executou, mas não retornou JSON válido."
+                check_item["details"] = "The script ran, but did not return valid JSON."
                 checks.append(
                     {
                         "command": f"json-parse:{script_name}",
@@ -84,7 +84,7 @@ def run_all_scripts() -> tuple[Dict[str, object], List[Dict[str, str]]]:
                 )
         else:
             outputs[script_name] = {"text_output": stdout}
-            first_line = stdout.splitlines()[0] if stdout else "Script executado sem saída textual."
+            first_line = stdout.splitlines()[0] if stdout else "Script executed with no textual output."
             check_item["details"] = first_line[:180]
 
     return outputs, checks
@@ -133,21 +133,21 @@ def _format_console_summary(checks: List[Dict[str, str]]) -> str:
     failed = sum(1 for item in checks if item["status"] == "FAIL")
 
     summary_lines = [
-        "A execução completa foi concluída.",
+        "Full execution completed.",
         "",
         (
-            "Os artefatos foram salvos na pasta output com os seguintes arquivos: "
+            "Artifacts were saved in the output folder with the following files: "
             f"{JSON_OUTPUT.name}, {EXPLAINABILITY_OUTPUT.name}, {TEST_RESULTS_OUTPUT.name} e {PDF_OUTPUT.name}."
         ),
         "",
-        f"No total, {passed} verificações passaram e {failed} falharam.",
-        "Resumo por script:",
+        f"In total, {passed} checks passed and {failed} failed.",
+        "Summary by script:",
     ]
     for item in checks:
-        status_label = "passou" if item["status"] == "PASS" else "falhou"
-        summary_lines.append(f"O comando '{item['command']}' {status_label}.")
+        status_label = "passed" if item["status"] == "PASS" else "failed"
+        summary_lines.append(f"Command '{item['command']}' {status_label}.")
         if item["details"]:
-            summary_lines.append(f"Detalhes: {item['details']}")
+            summary_lines.append(f"Details: {item['details']}")
     return "\n".join(summary_lines)
 
 

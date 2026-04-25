@@ -1,12 +1,12 @@
 """
-Gera a ontologia-base do Navio de Teseu em Turtle (.ttl).
+Generates the Ship of Theseus base ontology in Turtle (.ttl).
 
-Objetivo:
-- Manter SOMENTE a estrutura ontológica estável da entidade.
-- Não incluir dados interpretativos de agentes (marinheiro, historiador etc.)
-  dentro da ontologia.
+Goal:
+- Keep ONLY the entity's stable ontological structure.
+- Do not include agent interpretive data (sailor, historian, etc.)
+  inside the ontology.
 
-Assim, a ontologia funciona como base compartilhada para todos os exemplos.
+This way, the ontology serves as a shared base for all examples.
 """
 
 from __future__ import annotations
@@ -27,7 +27,7 @@ BFO = Namespace("http://purl.obolibrary.org/obo/BFO_")
 
 @dataclass(frozen=True)
 class OntologicalElement:
-    """Representa um elemento p_i pertencente a S(I_navio)."""
+    """Represents a p_i element belonging to S(I_ship)."""
 
     iri_name: str
     label: str
@@ -37,26 +37,26 @@ class OntologicalElement:
 
 
 def add_label_comment(graph: Graph, subject, label: str, comment: str | None = None) -> None:
-    graph.add((subject, RDFS.label, Literal(label, lang="pt")))
+    graph.add((subject, RDFS.label, Literal(label, lang="en")))
     if comment:
-        graph.add((subject, RDFS.comment, Literal(comment, lang="pt")))
+        graph.add((subject, RDFS.comment, Literal(comment, lang="en")))
 
 
 def add_classes(graph: Graph) -> None:
     classes = {
-        EX.OntologicalInstance: ("Instância ontológica", None),
+        EX.OntologicalInstance: ("Ontological instance", None),
         EX.MaterialEntity: (
-            "Entidade material",
-            "Classe simplificada compatível com a leitura de entidade material/continuante independente.",
+            "Material entity",
+            "Simplified class compatible with reading as a material entity/independent continuant.",
         ),
-        EX.Ship: ("Navio", None),
+        EX.Ship: ("Ship", None),
         EX.OntologicalElement: (
-            "Elemento ontologicamente ancorado",
-            "Componente descritivo da instância, como qualidade, disposição, função, origem histórica ou papel contextual.",
+            "Ontologically grounded element",
+            "Descriptive component of the instance, such as quality, disposition, function, historical origin, or contextual role.",
         ),
         EX.Role: (
-            "Papel",
-            "Condição ou função contextualmente atribuída a uma entidade sem alterar sua base ontológica.",
+            "Role",
+            "Condition or function contextually attributed to an entity without changing its ontological base.",
         ),
     }
 
@@ -73,25 +73,25 @@ def add_properties(graph: Graph) -> None:
     graph.add((EX.hasElement, RDF.type, OWL.ObjectProperty))
     graph.add((EX.hasElement, RDFS.domain, EX.OntologicalInstance))
     graph.add((EX.hasElement, RDFS.range, EX.OntologicalElement))
-    add_label_comment(graph, EX.hasElement, "tem elemento")
+    add_label_comment(graph, EX.hasElement, "has element")
 
     graph.add((EX.elementValue, RDF.type, OWL.DatatypeProperty))
     graph.add((EX.elementValue, RDFS.domain, EX.OntologicalElement))
     graph.add((EX.elementValue, RDFS.range, XSD.decimal))
-    add_label_comment(graph, EX.elementValue, "valor do elemento")
+    add_label_comment(graph, EX.elementValue, "element value")
 
 
 def default_elements() -> list[OntologicalElement]:
     return [
-        OntologicalElement("p_material", "Composição material", "Aspecto relativo às partes físicas e ao substrato material do navio."),
-        OntologicalElement("p_estrutura", "Organização estrutural", "Aspecto relativo à configuração formal e organização do navio."),
-        OntologicalElement("p_flutuar", "Disposição para flutuar e navegar", "Disposição realizável associada à capacidade de flutuação e navegação."),
-        OntologicalElement("p_origem", "Origem e procedência", "Aspecto relativo à origem, procedência e continuidade histórica da entidade."),
-        OntologicalElement("p_valor_historico", "Valor histórico", "Aspecto relativo à relevância histórica, simbólica e memorial da entidade."),
+        OntologicalElement("p_material", "Material composition", "Aspect related to the physical parts and material substrate of the ship."),
+        OntologicalElement("p_estrutura", "Structural organization", "Aspect related to the ship's formal configuration and organization."),
+        OntologicalElement("p_flutuar", "Disposition to float and navigate", "Realizable disposition associated with floating and navigation capability."),
+        OntologicalElement("p_origem", "Origin and provenance", "Aspect related to the entity's origin, provenance, and historical continuity."),
+        OntologicalElement("p_valor_historico", "Historical value", "Aspect related to the entity's historical, symbolic, and memorial relevance."),
         OntologicalElement(
             "p_papel_monumento",
-            "Papel de monumento",
-            "Papel contextualmente atribuído ao navio em práticas de preservação histórica.",
+            "Monument role",
+            "Role contextually attributed to the ship in historical preservation practices.",
             is_role=True,
         ),
     ]
@@ -103,8 +103,8 @@ def add_theseus_instance(graph: Graph, elements: Iterable[OntologicalElement]) -
     add_label_comment(
         graph,
         ship,
-        "Navio de Teseu",
-        "Instância material com estrutura ontológica estável usada como base para interpretações pragmáticas externas.",
+        "Ship of Theseus",
+        "Material instance with stable ontological structure used as a base for external pragmatic interpretations.",
     )
 
     for element in elements:
@@ -128,8 +128,8 @@ def build_graph() -> Graph:
     add_label_comment(
         graph,
         EX.TheseusOntology,
-        "Ontologia-base do Navio de Teseu",
-        "Ontologia simplificada para representar apenas a estrutura estável S(I_navio).",
+        "Ship of Theseus base ontology",
+        "Simplified ontology representing only the stable structure S(I_ship).",
     )
 
     add_classes(graph)

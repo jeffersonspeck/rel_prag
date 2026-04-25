@@ -1,9 +1,9 @@
 {
-  "generated_at_utc": "2026-04-24T19:38:04.231780+00:00",
+  "generated_at_utc": "2026-04-25T00:20:38.305311+00:00",
   "ontology_source": "data/theseus_ontology.ttl",
   "profiles": {
     "sailor": {
-      "vector": "W_Marinheiro_Navegacao",
+      "vector": "W_sailor",
       "rel_prag_total": 2.2,
       "formula": "Rel_prag(I,A,C) = sum(w_i(A,C) * v(p_i))",
       "top_contributors": [
@@ -66,7 +66,7 @@
       ]
     },
     "historian": {
-      "vector": "W_Historiador_Preservacao",
+      "vector": "W_historian",
       "rel_prag_total": 4.3,
       "formula": "Rel_prag(I,A,C) = sum(w_i(A,C) * v(p_i))",
       "top_contributors": [
