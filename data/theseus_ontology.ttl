@@ -1,80 +1,85 @@
-@prefix : <https://example.org/theseus#> .
+@prefix epm: <https://example.org/epm/theseus#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:TheseusOntology a owl:Ontology ;
-    rdfs:label "Ship of Theseus base ontology"@en ;
-    rdfs:comment "Simplified ontology representing only the stable structure S(I_ship)."@en .
+epm:TheseusOntology a owl:Ontology ;
+    rdfs:label "Ship of Theseus stable ontology"@en ;
+    rdfs:comment "Reference ontology containing only the ontologically anchored descriptor schema S(I)."@en .
 
-:TheseusShip a :Ship ;
+epm:TheseusShip a epm:Ship ;
     rdfs:label "Ship of Theseus"@en ;
-    rdfs:comment "Material instance with stable ontological structure used as a base for external pragmatic interpretations."@en ;
-    :hasElement :p_estrutura,
-        :p_flutuar,
-        :p_material,
-        :p_origem,
-        :p_papel_monumento,
-        :p_valor_historico .
+    rdfs:comment "Material instance used by independent systems over the same stable ontology."@en ;
+    epm:hasDescriptor epm:p_float,
+        epm:p_historical_value,
+        epm:p_material,
+        epm:p_monument_role,
+        epm:p_origin,
+        epm:p_structure .
 
-:elementValue a owl:DatatypeProperty ;
-    rdfs:label "element value"@en ;
-    rdfs:domain :OntologicalElement ;
+epm:defaultValue a owl:DatatypeProperty ;
     rdfs:range xsd:decimal .
 
-:hasElement a owl:ObjectProperty ;
-    rdfs:label "has element"@en ;
-    rdfs:domain :OntologicalInstance ;
-    rdfs:range :OntologicalElement .
+epm:descriptorKind a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
 
-:MaterialEntity a owl:Class ;
+epm:hasDescriptor a owl:ObjectProperty ;
+    rdfs:domain epm:OntologicalInstance ;
+    rdfs:range epm:Descriptor .
+
+epm:MaterialEntity a owl:Class ;
     rdfs:label "Material entity"@en ;
-    rdfs:comment "Simplified class compatible with reading as a material entity/independent continuant."@en ;
-    rdfs:subClassOf :OntologicalInstance .
+    rdfs:comment "Domain class used for physical entities in this example."@en ;
+    rdfs:subClassOf epm:OntologicalInstance ;
+    skos:closeMatch <http://purl.obolibrary.org/obo/BFO_0000040> .
 
-:Role a owl:Class ;
-    rdfs:label "Role"@en ;
-    rdfs:comment "Condition or function contextually attributed to an entity without changing its ontological base."@en ;
-    rdfs:subClassOf :OntologicalElement .
-
-:Ship a owl:Class ;
+epm:Ship a owl:Class ;
     rdfs:label "Ship"@en ;
-    rdfs:subClassOf :MaterialEntity .
+    rdfs:comment "Material artifact capable of realizing navigation-related dispositions."@en ;
+    rdfs:subClassOf epm:MaterialEntity .
 
-:p_estrutura a :OntologicalElement ;
-    rdfs:label "Structural organization"@en ;
-    rdfs:comment "Aspect related to the ship's formal configuration and organization."@en ;
-    :elementValue 1.0 .
-
-:p_flutuar a :OntologicalElement ;
+epm:p_float a epm:Descriptor ;
     rdfs:label "Disposition to float and navigate"@en ;
-    rdfs:comment "Realizable disposition associated with floating and navigation capability."@en ;
-    :elementValue 1.0 .
+    rdfs:comment "Realizable disposition related to floating and navigation."@en ;
+    epm:defaultValue 1.0 ;
+    epm:descriptorKind "disposition" .
 
-:p_material a :OntologicalElement ;
-    rdfs:label "Material composition"@en ;
-    rdfs:comment "Aspect related to the physical parts and material substrate of the ship."@en ;
-    :elementValue 1.0 .
-
-:p_origem a :OntologicalElement ;
-    rdfs:label "Origin and provenance"@en ;
-    rdfs:comment "Aspect related to the entity's origin, provenance, and historical continuity."@en ;
-    :elementValue 1.0 .
-
-:p_papel_monumento a :Role ;
-    rdfs:label "Monument role"@en ;
-    rdfs:comment "Role contextually attributed to the ship in historical preservation practices."@en ;
-    :elementValue 1.0 .
-
-:p_valor_historico a :OntologicalElement ;
+epm:p_historical_value a epm:Descriptor ;
     rdfs:label "Historical value"@en ;
-    rdfs:comment "Aspect related to the entity's historical, symbolic, and memorial relevance."@en ;
-    :elementValue 1.0 .
+    rdfs:comment "Historical, symbolic, and memorial relevance."@en ;
+    epm:defaultValue 1.0 ;
+    epm:descriptorKind "quality" .
 
-:OntologicalInstance a owl:Class ;
-    rdfs:label "Ontological instance"@en .
+epm:p_material a epm:Descriptor ;
+    rdfs:label "Material composition"@en ;
+    rdfs:comment "Physical parts and material substrate of the ship."@en ;
+    epm:defaultValue 1.0 ;
+    epm:descriptorKind "part/provenance" .
 
-:OntologicalElement a owl:Class ;
-    rdfs:label "Ontologically grounded element"@en ;
-    rdfs:comment "Descriptive component of the instance, such as quality, disposition, function, historical origin, or contextual role."@en .
+epm:p_monument_role a epm:Descriptor ;
+    rdfs:label "Monument role"@en ;
+    rdfs:comment "Context-dependent role in preservation practices."@en ;
+    epm:defaultValue 1.0 ;
+    epm:descriptorKind "role" .
+
+epm:p_origin a epm:Descriptor ;
+    rdfs:label "Origin and provenance"@en ;
+    rdfs:comment "Origin, provenance, and historical continuity."@en ;
+    epm:defaultValue 1.0 ;
+    epm:descriptorKind "provenance" .
+
+epm:p_structure a epm:Descriptor ;
+    rdfs:label "Structural organization"@en ;
+    rdfs:comment "Formal configuration and organization of the ship."@en ;
+    epm:defaultValue 1.0 ;
+    epm:descriptorKind "structure" .
+
+epm:OntologicalInstance a owl:Class ;
+    rdfs:label "Ontological instance"@en ;
+    rdfs:comment "Entity described by an ontology-grounded descriptor schema."@en .
+
+epm:Descriptor a owl:Class ;
+    rdfs:label "Typed descriptor"@en ;
+    rdfs:comment "Ontology-grounded aspect available to the policy layer."@en .
 

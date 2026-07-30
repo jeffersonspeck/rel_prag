@@ -1,0 +1,36 @@
+{
+  "policy_id": "navigation-v1",
+  "ontology_id": "theseus",
+  "agent": {
+    "id": "system:navigation-operations",
+    "label": "Navigation Operations System",
+    "kind": "computational_system"
+  },
+  "context": {
+    "goal": "Assess operational readiness for navigation",
+    "temporal_scope": "Current maintenance cycle",
+    "environment": "Maritime operation",
+    "roles": ["vessel", "navigation asset"],
+    "norms": ["seaworthiness", "safety", "structural integrity"]
+  },
+  "interpretive_role": "Functional navigation object",
+  "weights": {
+    "p_material": 0.2,
+    "p_structure": 0.8,
+    "p_float": 1.0,
+    "p_origin": 0.1,
+    "p_historical_value": 0.1,
+    "p_monument_role": 0.0
+  },
+  "provenance": {
+    "source": "Illustrative navigation policy derived from the paper's sailor profile",
+    "method": "Author-defined expert-elicitation example",
+    "evidence": ["Ship of Theseus analytical illustration", "Navigation-domain priorities"],
+    "timestamp": "2026-07-30T12:00:00Z",
+    "version": "1.0.0",
+    "empirically_validated": false
+  },
+  "notes": [
+    "The vector is illustrative and must not be interpreted as an empirically validated maritime policy."
+  ]
+}

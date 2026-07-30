@@ -1,174 +1,102 @@
-# Ship of Theseus Base Ontology + Epistemic-Pragmatic Simulations
+# Plataforma do Modelo Epistêmico-Pragmático
 
-This repository was reorganized to be **more informative** and to follow the requested principle:
+Implementação de referência do modelo apresentado no artigo **The Ship of Theseus Paradox and Epistemic-Pragmatic Weighting in Ontological Modeling**.
 
-- the ontology in `data/theseus_ontology.ttl` contains **only the stable structure** of the Ship of Theseus;
-- interpretive profiles (e.g., sailor/historian) remain outside the ontology as an application layer;
-- **all examples consume the base ontology** as the source of elements `p_i`.
+O projeto foi reestruturado para refletir as correções conceituais e formais da versão final:
 
----
+- separação entre a ontologia estável `S(I)` e as políticas externas `W(A,C)`;
+- contexto estruturado como `C=<g,t,e,r,n>`;
+- proveniência explícita `Pi_W=<source, method, evidence, timestamp, version>`;
+- distinção entre relevância unária `Rel_prag(I,A,C)` e similaridade binária `Sim_prag(I',I'',A,C)`;
+- similaridade limiarizada tratada como suporte à continuidade operacional, nunca como identidade numérica;
+- agregação configurável, com soma/média ponderada e regras para dependência, sinergia, redundância, requisitos e vetos;
+- API compartilhada consumida por dois sistemas externos independentes;
+- trilha de auditoria e versionamento das políticas.
 
-## 1) Implemented formal idea
+## Arquitetura
 
-### 1.1 Stable ontological structure
-
-The ontology represents only:
-
-\[
-S(I_{ship}) = \{p_{material}, p_{estrutura}, p_{flutuar}, p_{origem}, p_{valor\_historico}, p_{papel\_monumento}\}
-\]
-
-With initial ontological values:
-
-\[
-v(p_i)=1.0 \quad \forall p_i \in S(I_{ship})
-\]
-
-### 1.2 Pragmatic relevance
-
-Interpretation by profile is computed as:
-
-\[
-Rel_{prag}(I,A,C) = \sum_i w_i(A,C) \cdot v(p_i)
-\]
-
-Where:
-- `I` = instance (Ship of Theseus),
-- `A` = interpretive agent,
-- `C` = context,
-- `w_i(A,C)` = pragmatic weight,
-- `v(p_i)` = ontological value of the element.
-
----
-
-## 2) Project structure
-
-- `data/theseus_ontology.ttl`: base ontology with classes, properties, and ship elements.
-- `src/create_theseus_ontology.py`: regenerates the base ontology in Turtle.
-- `src/common.py`: loads the ontology, validates profiles against ontological elements, and provides shared utilities.
-- `src/demo_relevance.py`: demonstrates the `Rel_prag` formula with profile simulation.
-- `src/semantic_query_example.py`: Example 1 (semantic query).
-- `src/recommendation_example.py`: Example 2 (recommendation).
-- `src/knowledge_graph_example.py`: Example 3 (relevance-based graph highlighting).
-- `src/decision_support_example.py`: Example 4 (decision support).
-- `src/explanation_example.py`: Example 5 (explanation with evidence).
-- `src/maintenance_evolution_example.py`: Example 6 (profile maintenance/evolution without changing ontology).
-- `src/simulate_examples.py`: runs all examples in batch mode.
-
----
-
-## 3) How to run
-
-```bash
-pip install -r requirements.txt
-python src/create_theseus_ontology.py
-python src/demo_relevance.py
-python src/simulate_examples.py
+```text
+Ontologia RDF/OWL estável
+        |
+        v
+API do Modelo Epistêmico-Pragmático
+        |
+        +-----------------------------+
+        |                             |
+Navigation Operations System   Heritage Preservation System
+policy=navigation-v1           policy=preservation-v1
 ```
 
-You can also run each example separately:
+Os dois consumidores enviam **o mesmo estado do navio** e usam **a mesma ontologia**. A diferença está na política explícita, no agente e no contexto. Nenhum consumidor altera a ontologia.
+
+## Instalação
 
 ```bash
-python src/semantic_query_example.py
-python src/recommendation_example.py
-python src/knowledge_graph_example.py
-python src/decision_support_example.py
-python src/explanation_example.py
-python src/maintenance_evolution_example.py
+python -m venv .venv
+source .venv/bin/activate        # Linux/macOS
+# .venv\Scripts\activate         # Windows
+pip install -e ".[dev]"
+python scripts/create_theseus_ontology.py
 ```
 
-To run everything at once and generate result JSON files plus an execution PDF:
+## Executar a API
 
 ```bash
-python src/run_all_analyses.py
+uvicorn epm.api:app --reload
 ```
 
-This command creates the `output/` folder with:
+Ponto de entrada da API: `http://127.0.0.1:8000/`
 
-- `all_responses.json`: aggregated outputs from all scripts.
-- `test_results.json`: result of each executed test/command (`PASS`/`FAIL` + details).
-- `explainability.json`: traceability of contributions in the `Rel_prag` formula.
-- `execution_report.pdf`: consolidated textual execution report.
+Documentação interativa:
 
-In the console, final output is presented in natural language (readable text), without printing raw JSON.
+- Swagger UI: `http://127.0.0.1:8000/docs`
+- ReDoc: `http://127.0.0.1:8000/redoc`
 
----
+## Executar os dois sistemas consumidores
 
-## 4) Example simulation (summary)
+Em terminais separados, mantendo a API ativa:
 
-### 4.1 Relevance demo
+```bash
+python clients/navigation_system.py
+python clients/heritage_system.py
+```
 
-When running `python src/demo_relevance.py`, you will see ontology-loaded elements and simulated profile results.
+Ambos consomem `POST /v1/relevance`, mas selecionam políticas diferentes.
 
-Example summarized output:
+## Exemplo sem HTTP
 
-- `sailor`: `Rel_prag = 2.20`
-- `historian`: `Rel_prag = 4.30`
+```bash
+python scripts/run_local_demo.py
+```
 
-### 4.2 Example 1 — Semantic query
+O comando produz `output/demo_results.json`, incluindo os dois sistemas e um exemplo adicional de similaridade binária.
 
-File: `src/semantic_query_example.py`
+## Testes
 
-- Input: profile (`sailor` or `historian`)
-- Output: textual summary + top 3 most relevant elements
-- Formula used: `Rel_prag(I,A,C)` for element ranking
+```bash
+pytest
+```
 
-### 4.3 Example 2 — Recommendation
+Os testes verificam:
 
-File: `src/recommendation_example.py`
+- ausência de pesos e agentes na ontologia estável;
+- compatibilidade entre políticas e descritores;
+- presença de proveniência;
+- respostas diferentes para os dois sistemas sobre a mesma entidade;
+- funcionamento do agregador com requisitos;
+- distinção entre similaridade operacional e identidade numérica;
+- contrato HTTP da API.
 
-- Score per item:
+## Limites assumidos
 
-\[
-score(item)=\sum_i w_i(A,C)\cdot attr_i(item)
-\]
+Esta implementação não fornece:
 
-- Returns items ordered by profile adherence.
+- uma teoria metafísica de identidade numérica;
+- um método universal para elicitar pesos;
+- negociação automática entre políticas incompatíveis;
+- validação empírica dos vetores ilustrativos;
+- inferência integral das operações numéricas por um reasoner OWL.
 
-### 4.4 Example 3 — Knowledge graph
+A ontologia representa o vocabulário e a estrutura estável. Os cálculos, a proveniência, a auditoria e as decisões contextuais são executados externamente, como uma camada de aplicação.
 
-File: `src/knowledge_graph_example.py`
-
-- Each edge is linked to one `p_i` element.
-- Visualization receives `high/medium/low` level according to weight `w_i`.
-
-### 4.5 Example 4 — Decision support
-
-File: `src/decision_support_example.py`
-
-- Score per alternative:
-
-\[
-score(alt)=\sum_i w_i(A,C)\cdot impact_i(alt)
-\]
-
-- Returns ranked alternatives for each profile.
-
-### 4.6 Example 5 — Explanation
-
-File: `src/explanation_example.py`
-
-- Produces textual explanation based on highest relevance contributions.
-- Includes structured evidence (`weight`, `relevance`, `normalized_contribution`).
-
-### 4.7 Example 6 — Maintenance and evolution
-
-File: `src/maintenance_evolution_example.py`
-
-- Demonstrates adding a new profile (`public_manager`) without changing the base ontology.
-- Shows separation between:
-  - **stable ontological core**;
-  - **evolving pragmatic layer**.
-
----
-
-## 5) Guarantee that “everything consumes the ontology”
-
-In the current flow:
-
-1. `src/common.py` loads `data/theseus_ontology.ttl`.
-2. Extracts elements `p_i` and their `v(p_i)`.
-3. Validates that each profile has weights exactly for ontology elements.
-4. All examples reuse `common.py`.
-
-This ensures that the Ship of Theseus ontology is the single base for everything else.
+Mais detalhes estão em `docs/`.

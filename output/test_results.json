@@ -1,0 +1,45 @@
+{
+  "generated_at_utc": "2026-04-25T00:44:48.743160+00:00",
+  "checks": [
+    {
+      "command": "python src/create_theseus_ontology.py",
+      "status": "PASS",
+      "details": "Ontology generated at: /mnt/c/Users/jeffe/OneDrive/Faculdade/Artigos/Teseu/fontes/theseus_ontology_project/data/theseus_ontology.ttl"
+    },
+    {
+      "command": "python src/demo_relevance.py",
+      "status": "PASS",
+      "details": "Elements loaded from the base ontology S(I_ship):"
+    },
+    {
+      "command": "python src/semantic_query_example.py",
+      "status": "PASS",
+      "details": "The script generated valid JSON and the result was exported."
+    },
+    {
+      "command": "python src/recommendation_example.py",
+      "status": "PASS",
+      "details": "The script generated valid JSON and the result was exported."
+    },
+    {
+      "command": "python src/knowledge_graph_example.py",
+      "status": "PASS",
+      "details": "The script generated valid JSON and the result was exported."
+    },
+    {
+      "command": "python src/decision_support_example.py",
+      "status": "PASS",
+      "details": "The script generated valid JSON and the result was exported."
+    },
+    {
+      "command": "python src/explanation_example.py",
+      "status": "PASS",
+      "details": "The script generated valid JSON and the result was exported."
+    },
+    {
+      "command": "python src/maintenance_evolution_example.py",
+      "status": "PASS",
+      "details": "The script generated valid JSON and the result was exported."
+    }
+  ]
+}

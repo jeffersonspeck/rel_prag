@@ -1,0 +1,10 @@
+README.md                         Main documentation and quick start
+src/epm/                         Reusable model, API, repositories and audit
+scripts/create_theseus_ontology.py  Stable RDF/OWL generator
+clients/navigation_system.py     Independent consumer 1
+clients/heritage_system.py       Independent consumer 2
+data/policies/                    Versioned W(A,C) policies with Pi_W
+docs/openapi.json                Integration contract
+docs/REVIEW_CHANGES.md           Reviewer observations mapped to code
+docs/IMPLEMENTATION_REPORT.md    Implementation report
+tests/                            Automated validation

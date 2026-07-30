@@ -1,0 +1,892 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Epistemic-Pragmatic Model API",
+    "description": "Shared service for ontology-grounded unary contextual relevance and binary contextual similarity. A similarity threshold can support operational continuity, but never asserts numerical identity.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Health Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/policies": {
+      "get": {
+        "summary": "List Policies",
+        "operationId": "list_policies_v1_policies_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response List Policies V1 Policies Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/policies/{policy_id}": {
+      "get": {
+        "summary": "Get Policy",
+        "operationId": "get_policy_v1_policies__policy_id__get",
+        "parameters": [
+          {
+            "name": "policy_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Policy Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Policy V1 Policies  Policy Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ontologies/{ontology_id}/entities/{entity_id}": {
+      "get": {
+        "summary": "Get Entity",
+        "operationId": "get_entity_v1_ontologies__ontology_id__entities__entity_id__get",
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "entity_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Entity Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Entity V1 Ontologies  Ontology Id  Entities  Entity Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/relevance": {
+      "post": {
+        "summary": "Relevance",
+        "operationId": "relevance_v1_relevance_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RelevanceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RelevanceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/similarity": {
+      "post": {
+        "summary": "Similarity",
+        "operationId": "similarity_v1_similarity_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimilarityRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimilarityResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Agent": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "human",
+              "institution",
+              "computational_system",
+              "hybrid"
+            ],
+            "title": "Kind"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "kind"
+        ],
+        "title": "Agent"
+      },
+      "ComparatorSpec": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "exact",
+              "numeric_closeness",
+              "string_ratio",
+              "jaccard"
+            ],
+            "title": "Kind",
+            "default": "numeric_closeness"
+          },
+          "minimum": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minimum"
+          },
+          "maximum": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maximum"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ComparatorSpec"
+      },
+      "Context": {
+        "properties": {
+          "goal": {
+            "type": "string",
+            "title": "Goal"
+          },
+          "temporal_scope": {
+            "type": "string",
+            "title": "Temporal Scope"
+          },
+          "environment": {
+            "type": "string",
+            "title": "Environment"
+          },
+          "roles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Roles"
+          },
+          "norms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Norms"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "goal",
+          "temporal_scope",
+          "environment"
+        ],
+        "title": "Context",
+        "description": "Minimal task-oriented representation C=<g,t,e,r,n>."
+      },
+      "Contribution": {
+        "properties": {
+          "descriptor_id": {
+            "type": "string",
+            "title": "Descriptor Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "value": {
+            "type": "number",
+            "title": "Value"
+          },
+          "weight": {
+            "type": "number",
+            "title": "Weight"
+          },
+          "weighted_contribution": {
+            "type": "number",
+            "title": "Weighted Contribution"
+          },
+          "normalized_contribution": {
+            "type": "number",
+            "title": "Normalized Contribution"
+          }
+        },
+        "type": "object",
+        "required": [
+          "descriptor_id",
+          "label",
+          "value",
+          "weight",
+          "weighted_contribution",
+          "normalized_contribution"
+        ],
+        "title": "Contribution"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "InteractionRule": {
+        "properties": {
+          "rule_id": {
+            "type": "string",
+            "title": "Rule Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "synergy",
+              "redundancy",
+              "veto",
+              "requirement"
+            ],
+            "title": "Kind"
+          },
+          "descriptors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Descriptors"
+          },
+          "trigger": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Trigger",
+            "default": 0.5
+          },
+          "coefficient": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Coefficient",
+            "default": 0.1
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "rule_id",
+          "kind",
+          "descriptors",
+          "description"
+        ],
+        "title": "InteractionRule",
+        "description": "Optional rule used by the rule-aware aggregation strategy."
+      },
+      "ProvenanceRecord": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "evidence": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Evidence"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Timestamp"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "empirically_validated": {
+            "type": "boolean",
+            "title": "Empirically Validated",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source",
+          "method",
+          "timestamp",
+          "version"
+        ],
+        "title": "ProvenanceRecord",
+        "description": "Operational representation of Pi_W."
+      },
+      "RelevanceRequest": {
+        "properties": {
+          "ontology_id": {
+            "type": "string",
+            "title": "Ontology Id",
+            "default": "theseus"
+          },
+          "entity_id": {
+            "type": "string",
+            "title": "Entity Id",
+            "default": "TheseusShip"
+          },
+          "policy_id": {
+            "type": "string",
+            "title": "Policy Id"
+          },
+          "descriptor_values": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "number",
+                  "maximum": 1.0,
+                  "minimum": 0.0
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Descriptor Values"
+          },
+          "aggregator": {
+            "type": "string",
+            "enum": [
+              "weighted_average",
+              "weighted_sum",
+              "rule_aware"
+            ],
+            "title": "Aggregator",
+            "default": "weighted_average"
+          },
+          "interaction_rules": {
+            "items": {
+              "$ref": "#/components/schemas/InteractionRule"
+            },
+            "type": "array",
+            "title": "Interaction Rules"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "policy_id"
+        ],
+        "title": "RelevanceRequest"
+      },
+      "RelevanceResponse": {
+        "properties": {
+          "measure_type": {
+            "type": "string",
+            "const": "unary_contextual_relevance",
+            "title": "Measure Type",
+            "default": "unary_contextual_relevance"
+          },
+          "ontology_id": {
+            "type": "string",
+            "title": "Ontology Id"
+          },
+          "entity_id": {
+            "type": "string",
+            "title": "Entity Id"
+          },
+          "policy_id": {
+            "type": "string",
+            "title": "Policy Id"
+          },
+          "score": {
+            "type": "number",
+            "title": "Score"
+          },
+          "raw_score": {
+            "type": "number",
+            "title": "Raw Score"
+          },
+          "aggregator": {
+            "type": "string",
+            "title": "Aggregator"
+          },
+          "contributions": {
+            "items": {
+              "$ref": "#/components/schemas/Contribution"
+            },
+            "type": "array",
+            "title": "Contributions"
+          },
+          "agent": {
+            "$ref": "#/components/schemas/Agent"
+          },
+          "context": {
+            "$ref": "#/components/schemas/Context"
+          },
+          "interpretive_role": {
+            "type": "string",
+            "title": "Interpretive Role"
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/ProvenanceRecord"
+          },
+          "applied_rules": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Applied Rules"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "ontology_id",
+          "entity_id",
+          "policy_id",
+          "score",
+          "raw_score",
+          "aggregator",
+          "contributions",
+          "agent",
+          "context",
+          "interpretive_role",
+          "provenance"
+        ],
+        "title": "RelevanceResponse"
+      },
+      "SimilarityContribution": {
+        "properties": {
+          "descriptor_id": {
+            "type": "string",
+            "title": "Descriptor Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "left_value": {
+            "title": "Left Value"
+          },
+          "right_value": {
+            "title": "Right Value"
+          },
+          "similarity": {
+            "type": "number",
+            "title": "Similarity"
+          },
+          "weight": {
+            "type": "number",
+            "title": "Weight"
+          },
+          "weighted_contribution": {
+            "type": "number",
+            "title": "Weighted Contribution"
+          },
+          "normalized_contribution": {
+            "type": "number",
+            "title": "Normalized Contribution"
+          }
+        },
+        "type": "object",
+        "required": [
+          "descriptor_id",
+          "label",
+          "left_value",
+          "right_value",
+          "similarity",
+          "weight",
+          "weighted_contribution",
+          "normalized_contribution"
+        ],
+        "title": "SimilarityContribution"
+      },
+      "SimilarityRequest": {
+        "properties": {
+          "ontology_id": {
+            "type": "string",
+            "title": "Ontology Id",
+            "default": "theseus"
+          },
+          "entity_id": {
+            "type": "string",
+            "title": "Entity Id",
+            "default": "TheseusShip"
+          },
+          "policy_id": {
+            "type": "string",
+            "title": "Policy Id"
+          },
+          "left_record_id": {
+            "type": "string",
+            "title": "Left Record Id"
+          },
+          "right_record_id": {
+            "type": "string",
+            "title": "Right Record Id"
+          },
+          "left_values": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Left Values"
+          },
+          "right_values": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Right Values"
+          },
+          "comparators": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ComparatorSpec"
+            },
+            "type": "object",
+            "title": "Comparators"
+          },
+          "threshold": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Threshold",
+            "default": 0.85
+          },
+          "aggregator": {
+            "type": "string",
+            "enum": [
+              "weighted_average",
+              "weighted_sum",
+              "rule_aware"
+            ],
+            "title": "Aggregator",
+            "default": "weighted_average"
+          },
+          "interaction_rules": {
+            "items": {
+              "$ref": "#/components/schemas/InteractionRule"
+            },
+            "type": "array",
+            "title": "Interaction Rules"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "policy_id",
+          "left_record_id",
+          "right_record_id",
+          "left_values",
+          "right_values"
+        ],
+        "title": "SimilarityRequest"
+      },
+      "SimilarityResponse": {
+        "properties": {
+          "measure_type": {
+            "type": "string",
+            "const": "binary_contextual_similarity",
+            "title": "Measure Type",
+            "default": "binary_contextual_similarity"
+          },
+          "ontology_id": {
+            "type": "string",
+            "title": "Ontology Id"
+          },
+          "entity_id": {
+            "type": "string",
+            "title": "Entity Id"
+          },
+          "policy_id": {
+            "type": "string",
+            "title": "Policy Id"
+          },
+          "left_record_id": {
+            "type": "string",
+            "title": "Left Record Id"
+          },
+          "right_record_id": {
+            "type": "string",
+            "title": "Right Record Id"
+          },
+          "score": {
+            "type": "number",
+            "title": "Score"
+          },
+          "raw_score": {
+            "type": "number",
+            "title": "Raw Score"
+          },
+          "threshold": {
+            "type": "number",
+            "title": "Threshold"
+          },
+          "operational_continuity_supported": {
+            "type": "boolean",
+            "title": "Operational Continuity Supported"
+          },
+          "numerical_identity_claimed": {
+            "type": "boolean",
+            "const": false,
+            "title": "Numerical Identity Claimed",
+            "default": false
+          },
+          "aggregator": {
+            "type": "string",
+            "title": "Aggregator"
+          },
+          "contributions": {
+            "items": {
+              "$ref": "#/components/schemas/SimilarityContribution"
+            },
+            "type": "array",
+            "title": "Contributions"
+          },
+          "agent": {
+            "$ref": "#/components/schemas/Agent"
+          },
+          "context": {
+            "$ref": "#/components/schemas/Context"
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/ProvenanceRecord"
+          },
+          "applied_rules": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Applied Rules"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "ontology_id",
+          "entity_id",
+          "policy_id",
+          "left_record_id",
+          "right_record_id",
+          "score",
+          "raw_score",
+          "threshold",
+          "operational_continuity_supported",
+          "aggregator",
+          "contributions",
+          "agent",
+          "context",
+          "provenance"
+        ],
+        "title": "SimilarityResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

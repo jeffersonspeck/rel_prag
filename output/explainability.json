@@ -1,0 +1,132 @@
+{
+  "generated_at_utc": "2026-04-25T00:44:48.807533+00:00",
+  "ontology_source": "data/theseus_ontology.ttl",
+  "profiles": {
+    "sailor": {
+      "vector": "W_sailor",
+      "rel_prag_total": 2.2,
+      "formula": "Rel_prag(I,A,C) = sum(w_i(A,C) * v(p_i))",
+      "top_contributors": [
+        {
+          "element_id": "p_flutuar",
+          "weight": 1.0,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 1.0
+        },
+        {
+          "element_id": "p_estrutura",
+          "weight": 0.8,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 0.8
+        },
+        {
+          "element_id": "p_material",
+          "weight": 0.2,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 0.2
+        }
+      ],
+      "all_contributions": [
+        {
+          "element_id": "p_flutuar",
+          "weight": 1.0,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 1.0
+        },
+        {
+          "element_id": "p_estrutura",
+          "weight": 0.8,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 0.8
+        },
+        {
+          "element_id": "p_material",
+          "weight": 0.2,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 0.2
+        },
+        {
+          "element_id": "p_origem",
+          "weight": 0.1,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 0.1
+        },
+        {
+          "element_id": "p_valor_historico",
+          "weight": 0.1,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 0.1
+        },
+        {
+          "element_id": "p_papel_monumento",
+          "weight": 0.0,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 0.0
+        }
+      ]
+    },
+    "historian": {
+      "vector": "W_historian",
+      "rel_prag_total": 4.3,
+      "formula": "Rel_prag(I,A,C) = sum(w_i(A,C) * v(p_i))",
+      "top_contributors": [
+        {
+          "element_id": "p_origem",
+          "weight": 1.0,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 1.0
+        },
+        {
+          "element_id": "p_valor_historico",
+          "weight": 1.0,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 1.0
+        },
+        {
+          "element_id": "p_material",
+          "weight": 0.9,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 0.9
+        }
+      ],
+      "all_contributions": [
+        {
+          "element_id": "p_origem",
+          "weight": 1.0,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 1.0
+        },
+        {
+          "element_id": "p_valor_historico",
+          "weight": 1.0,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 1.0
+        },
+        {
+          "element_id": "p_material",
+          "weight": 0.9,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 0.9
+        },
+        {
+          "element_id": "p_papel_monumento",
+          "weight": 0.9,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 0.9
+        },
+        {
+          "element_id": "p_estrutura",
+          "weight": 0.4,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 0.4
+        },
+        {
+          "element_id": "p_flutuar",
+          "weight": 0.1,
+          "ontological_value": 1.0,
+          "rel_prag_contribution": 0.1
+        }
+      ]
+    }
+  }
+}

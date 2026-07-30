@@ -1,0 +1,115 @@
+Metadata-Version: 2.4
+Name: epistemic-pragmatic-platform
+Version: 1.0.0
+Summary: Reference implementation of the Epistemic-Pragmatic Model
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: fastapi<1.0,>=0.115
+Requires-Dist: pydantic<3.0,>=2.8
+Requires-Dist: rdflib<8.0,>=7.0
+Requires-Dist: uvicorn<1.0,>=0.30
+Requires-Dist: httpx<1.0,>=0.27
+Provides-Extra: dev
+Requires-Dist: pytest<10,>=8; extra == "dev"
+Requires-Dist: pytest-cov<7,>=5; extra == "dev"
+
+# Plataforma do Modelo Epistêmico-Pragmático
+
+Implementação de referência do modelo apresentado no artigo **The Ship of Theseus Paradox and Epistemic-Pragmatic Weighting in Ontological Modeling**.
+
+O projeto foi reestruturado para refletir as correções conceituais e formais da versão final:
+
+- separação entre a ontologia estável `S(I)` e as políticas externas `W(A,C)`;
+- contexto estruturado como `C=<g,t,e,r,n>`;
+- proveniência explícita `Pi_W=<source, method, evidence, timestamp, version>`;
+- distinção entre relevância unária `Rel_prag(I,A,C)` e similaridade binária `Sim_prag(I',I'',A,C)`;
+- similaridade limiarizada tratada como suporte à continuidade operacional, nunca como identidade numérica;
+- agregação configurável, com soma/média ponderada e regras para dependência, sinergia, redundância, requisitos e vetos;
+- API compartilhada consumida por dois sistemas externos independentes;
+- trilha de auditoria e versionamento das políticas.
+
+## Arquitetura
+
+```text
+Ontologia RDF/OWL estável
+        |
+        v
+API do Modelo Epistêmico-Pragmático
+        |
+        +-----------------------------+
+        |                             |
+Navigation Operations System   Heritage Preservation System
+policy=navigation-v1           policy=preservation-v1
+```
+
+Os dois consumidores enviam **o mesmo estado do navio** e usam **a mesma ontologia**. A diferença está na política explícita, no agente e no contexto. Nenhum consumidor altera a ontologia.
+
+## Instalação
+
+```bash
+python -m venv .venv
+source .venv/bin/activate        # Linux/macOS
+# .venv\Scripts\activate         # Windows
+pip install -e ".[dev]"
+python scripts/create_theseus_ontology.py
+```
+
+## Executar a API
+
+```bash
+uvicorn epm.api:app --reload
+```
+
+Documentação interativa:
+
+- Swagger UI: `http://127.0.0.1:8000/docs`
+- ReDoc: `http://127.0.0.1:8000/redoc`
+
+## Executar os dois sistemas consumidores
+
+Em terminais separados, mantendo a API ativa:
+
+```bash
+python clients/navigation_system.py
+python clients/heritage_system.py
+```
+
+Ambos consomem `POST /v1/relevance`, mas selecionam políticas diferentes.
+
+## Exemplo sem HTTP
+
+```bash
+python scripts/run_local_demo.py
+```
+
+O comando produz `output/demo_results.json`, incluindo os dois sistemas e um exemplo adicional de similaridade binária.
+
+## Testes
+
+```bash
+pytest
+```
+
+Os testes verificam:
+
+- ausência de pesos e agentes na ontologia estável;
+- compatibilidade entre políticas e descritores;
+- presença de proveniência;
+- respostas diferentes para os dois sistemas sobre a mesma entidade;
+- funcionamento do agregador com requisitos;
+- distinção entre similaridade operacional e identidade numérica;
+- contrato HTTP da API.
+
+## Limites assumidos
+
+Esta implementação não fornece:
+
+- uma teoria metafísica de identidade numérica;
+- um método universal para elicitar pesos;
+- negociação automática entre políticas incompatíveis;
+- validação empírica dos vetores ilustrativos;
+- inferência integral das operações numéricas por um reasoner OWL.
+
+A ontologia representa o vocabulário e a estrutura estável. Os cálculos, a proveniência, a auditoria e as decisões contextuais são executados externamente, como uma camada de aplicação.
+
+Mais detalhes estão em `docs/`.

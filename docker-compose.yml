@@ -1,0 +1,10 @@
+services:
+  epm-api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      EPM_DATA_DIR: /app/data
+      EPM_AUDIT_PATH: /app/output/audit.jsonl
+    volumes:
+      - ./output:/app/output

@@ -1,0 +1,36 @@
+{
+  "policy_id": "preservation-v1",
+  "ontology_id": "theseus",
+  "agent": {
+    "id": "system:heritage-preservation",
+    "label": "Heritage Preservation System",
+    "kind": "computational_system"
+  },
+  "context": {
+    "goal": "Assess relevance for historical preservation and exhibition",
+    "temporal_scope": "Current curatorial assessment",
+    "environment": "Museum and heritage institution",
+    "roles": ["monument", "historical artifact"],
+    "norms": ["provenance traceability", "historical authenticity", "public memory"]
+  },
+  "interpretive_role": "Historical and symbolic preservation object",
+  "weights": {
+    "p_material": 0.9,
+    "p_structure": 0.4,
+    "p_float": 0.1,
+    "p_origin": 1.0,
+    "p_historical_value": 1.0,
+    "p_monument_role": 0.9
+  },
+  "provenance": {
+    "source": "Illustrative preservation policy derived from the paper's historian profile",
+    "method": "Author-defined expert-elicitation example",
+    "evidence": ["Ship of Theseus analytical illustration", "Heritage-preservation priorities"],
+    "timestamp": "2026-07-30T12:00:00Z",
+    "version": "1.0.0",
+    "empirically_validated": false
+  },
+  "notes": [
+    "The vector is illustrative and must be validated before use in a real institution."
+  ]
+}
