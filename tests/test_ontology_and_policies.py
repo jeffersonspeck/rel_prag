@@ -62,3 +62,19 @@ def test_policies_use_the_exact_weight_vectors_from_the_article():
         "p_historical_value": 1.0,
         "p_monument_role": 0.9,
     }
+    assert navigation.agent.id == "agent:sailor"
+    assert navigation.context.model_dump() == {
+        "goal": "Safe navigation",
+        "temporal_scope": "Current operational episode",
+        "environment": "Maritime operation",
+        "roles": ["sailor", "operator"],
+        "norms": ["seaworthiness", "safety"],
+    }
+    assert preservation.agent.id == "agent:historian"
+    assert preservation.context.model_dump() == {
+        "goal": "Historical preservation",
+        "temporal_scope": "Long-term horizon",
+        "environment": "Heritage setting",
+        "roles": ["historian", "curator"],
+        "norms": ["authenticity", "conservation"],
+    }

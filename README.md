@@ -84,7 +84,7 @@ The tests verify:
 - explicit OWL types for the heterogeneous descriptors;
 - compatibility between policies and descriptors;
 - meaningful context and provenance;
-- the exact vectors and numerical results published in the article;
+- the exact contexts, agents, vectors, and numerical results from Equations 10-13;
 - complete observed state outside the ontology;
 - requirement-aware aggregation;
 - normalized scores before operational threshold decisions;
@@ -117,6 +117,7 @@ Every Markdown document in the repository is listed below.
 | [`REVIEW_CHANGES.md`](REVIEW_CHANGES.md) | Top-level copy mapping review observations to concrete implementation changes and remaining limitations. |
 | [`docs/API_USAGE.md`](docs/API_USAGE.md) | Example requests and response semantics for the relevance and similarity endpoints. |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Canonical description of the ontology, policy, engine, and integration layers. |
+| [`docs/FORMALIZATION_MAPPING.md`](docs/FORMALIZATION_MAPPING.md) | Equation-by-equation mapping from the final article PDF to code, tests, complexity assumptions, and declared boundaries. |
 | [`docs/IMPLEMENTATION_REPORT.md`](docs/IMPLEMENTATION_REPORT.md) | Canonical implementation report, including the two consumers and deliberately unresolved questions. |
 | [`docs/MIGRATION_FROM_LEGACY.md`](docs/MIGRATION_FROM_LEGACY.md) | Migration map from the removed legacy scripts to the maintained package, API, clients, and tests. |
 | [`docs/REVIEW_CHANGES.md`](docs/REVIEW_CHANGES.md) | Canonical response to conceptual and technical review observations. |

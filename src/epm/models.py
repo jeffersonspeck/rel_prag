@@ -20,7 +20,7 @@ class Agent(BaseModel):
 
 
 class Context(BaseModel):
-    """Minimal task-oriented representation C=<g,t,e,r,n>."""
+    """Structured context C=<g,t,e,r,n> from Section 4.1 and Equation 3."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -32,7 +32,7 @@ class Context(BaseModel):
 
 
 class ProvenanceRecord(BaseModel):
-    """Operational representation of Pi_W."""
+    """Pi_W=<source,method,evidence,timestamp,version> from Equation 5."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -58,7 +58,7 @@ class InteractionRule(BaseModel):
 
 
 class ComparatorSpec(BaseModel):
-    """Descriptor-specific comparison function s_i."""
+    """Descriptor-specific comparison function s_i from Equations 8 and 17."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -79,7 +79,7 @@ class ComparatorSpec(BaseModel):
 
 
 class ValuationSpec(BaseModel):
-    """Domain rule that turns an observed value into v_I(p_i) on [0,1]."""
+    """Domain rule that obtains v_I(p_i) for Equation 6 on a comparable scale."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -108,7 +108,7 @@ class ValuationSpec(BaseModel):
 
 
 class AggregationSpec(BaseModel):
-    """The explicit, context-bound instantiation of Agg_C."""
+    """The explicit, context-bound Agg_C used by Equations 6 and 8."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -125,7 +125,7 @@ class AggregationSpec(BaseModel):
 
 
 class EvaluationConfiguration(BaseModel):
-    """Versioned realization of v, s, Agg_C, and the operational threshold."""
+    """Versioned realization of v, s, Agg_C, and beta in Equation 23."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -138,7 +138,7 @@ class EvaluationConfiguration(BaseModel):
 
 
 class WeightingPolicy(BaseModel):
-    """W(A,C), Pi_W, and the versioned operators used with that vector."""
+    """W(A,C) from Equations 2-4, Pi_W, and the operators used with it."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -187,7 +187,7 @@ class RelevanceRequest(BaseModel):
     ontology_id: NonBlankString = "theseus"
     entity_id: NonBlankString = "TheseusShip"
     policy_id: NonBlankString
-    # Observations remain outside S(I); the policy defines how they become v_I(p_i).
+    # Equation 1 keeps observations outside S(I); Equation 6 supplies v_I(p_i).
     descriptor_values: dict[NonBlankString, Any]
 
 

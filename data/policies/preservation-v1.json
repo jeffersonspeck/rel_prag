@@ -2,16 +2,16 @@
   "policy_id": "preservation-v1",
   "ontology_id": "theseus",
   "agent": {
-    "id": "system:heritage-preservation",
-    "label": "Heritage Preservation System",
-    "kind": "computational_system"
+    "id": "agent:historian",
+    "label": "Historian",
+    "kind": "human"
   },
   "context": {
-    "goal": "Assess relevance for historical preservation and exhibition",
-    "temporal_scope": "Current curatorial assessment",
-    "environment": "Museum and heritage institution",
-    "roles": ["monument", "historical artifact"],
-    "norms": ["provenance traceability", "historical authenticity", "public memory"]
+    "goal": "Historical preservation",
+    "temporal_scope": "Long-term horizon",
+    "environment": "Heritage setting",
+    "roles": ["historian", "curator"],
+    "norms": ["authenticity", "conservation"]
   },
   "interpretive_role": "Historical and symbolic preservation object",
   "weights": {

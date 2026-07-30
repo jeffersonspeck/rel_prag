@@ -19,20 +19,23 @@ Transform the previous scripts into a reusable platform with a stable ontology, 
 
 ## Formalization alignment
 
-- `S(I)` contains typed descriptor classes but no current or default observations.
-- `v_I(p_i)` is produced from explicit request observations through versioned valuation rules.
-- `W(A,C)` exactly reproduces the two illustrative vectors from the article.
-- `Pi_W` requires source, method, evidence, timestamp, and version.
-- each binary descriptor has an explicit comparison function `s_i`;
-- `Agg_C`, interaction rules, and the operational threshold are selected by the policy rather than the caller;
-- a threshold can only be applied to a normalized similarity score;
-- audit events preserve every formal component needed to reproduce an evaluation.
+- Equations 1 and 9: `S(I)` contains typed descriptor classes but no current or default observations.
+- Equation 3: each policy binds its vector to a complete `C=<g,t,e,r,n>`.
+- Equation 5: `Pi_W` requires source, method, evidence, timestamp, and version.
+- Equation 6: `v_I(p_i)` is produced from explicit request observations through versioned valuation rules.
+- Equation 7: raw weighted sums are preserved, while the published illustration uses normalized weights.
+- Equations 8 and 17: each binary descriptor has an explicit comparison function `s_i`.
+- Equations 10-13: the policies reproduce `C_nav`, `C_hist`, `A_sailor`, `A_hist`, and both illustrative vectors.
+- Equation 18: a threshold can only be applied to a normalized similarity score.
+- Equation 23: audit events preserve every formal component needed to reproduce an evaluation.
+- Section 7.3: unary and single-pair binary scoring remain linear in descriptor count under the article's comparator assumptions.
 
 ## Two implemented consumers
 
 ### Navigation Operations System
 
 - selects `navigation-v1`;
+- executes the policy associated with the sailor in `C_nav`;
 - uses the same ship state and ontology;
 - prioritizes structure and the disposition to navigate;
 - demonstrates a joint requirement between descriptors.
@@ -41,9 +44,12 @@ Transform the previous scripts into a reusable platform with a stable ontology, 
 ### Heritage Preservation System
 
 - selects `preservation-v1`;
+- executes the policy associated with the historian in `C_hist`;
 - uses the same ship state and ontology;
 - prioritizes origin, historical value, and the monument role;
 - receives different explanations and provenance.
+
+The consumer process and the formal agent are deliberately distinct. A software system may execute a policy whose interpreting agent is a sailor, historian, institution, or another computational system.
 
 ## Deliberately unresolved matters
 

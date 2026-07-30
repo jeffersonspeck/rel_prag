@@ -2,16 +2,16 @@
   "policy_id": "navigation-v1",
   "ontology_id": "theseus",
   "agent": {
-    "id": "system:navigation-operations",
-    "label": "Navigation Operations System",
-    "kind": "computational_system"
+    "id": "agent:sailor",
+    "label": "Sailor",
+    "kind": "human"
   },
   "context": {
-    "goal": "Assess operational readiness for navigation",
-    "temporal_scope": "Current maintenance cycle",
+    "goal": "Safe navigation",
+    "temporal_scope": "Current operational episode",
     "environment": "Maritime operation",
-    "roles": ["vessel", "navigation asset"],
-    "norms": ["seaworthiness", "safety", "structural integrity"]
+    "roles": ["sailor", "operator"],
+    "norms": ["seaworthiness", "safety"]
   },
   "interpretive_role": "Functional navigation object",
   "weights": {

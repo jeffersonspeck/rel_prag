@@ -1,4 +1,4 @@
-"""Descriptor-specific comparison functions s_i."""
+"""Descriptor-specific comparison functions s_i from Equations 8 and 17."""
 
 from __future__ import annotations
 
@@ -9,6 +9,7 @@ from .models import ComparatorSpec
 
 
 def exact(left: Any, right: Any) -> float:
+    # A discrete s_i: 1 when both values are equal, otherwise 0.
     return 1.0 if left == right else 0.0
 
 
@@ -22,6 +23,7 @@ def numeric_closeness(left: Any, right: Any, minimum: float, maximum: float) -> 
         )
     span = maximum - minimum
     distance = abs(left_number - right_number)
+    # s_i(x,y) = max(0, 1 - |x-y| / (maximum-minimum)).
     return max(0.0, min(1.0, 1.0 - (distance / span)))
 
 
@@ -35,6 +37,7 @@ def jaccard(left: Any, right: Any) -> float:
     union = left_set | right_set
     if not union:
         return 1.0
+    # s_i(X,Y) = |X intersection Y| / |X union Y|.
     return len(left_set & right_set) / len(union)
 
 

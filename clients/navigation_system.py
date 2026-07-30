@@ -26,7 +26,8 @@ def main() -> None:
         "ontology_id": "theseus",
         "entity_id": "TheseusShip",
         "policy_id": "navigation-v1",
-        # Agg_C and its navigation requirement belong to the versioned policy.
+        # The system executes the sailor policy from Equations 10 and 12.
+        # Agg_C and its navigation requirement remain versioned with that policy.
         "descriptor_values": SHIP_STATE
     }
 

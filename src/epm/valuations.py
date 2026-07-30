@@ -1,4 +1,4 @@
-"""Domain-specific valuation functions used to obtain v_I(p_i)."""
+"""Domain-specific valuation functions for v_I(p_i) in article Equation 6."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from .models import ValuationSpec
 
 
 def valuate(observed: Any, spec: ValuationSpec) -> float:
-    """Convert a raw observation into the comparable unit interval."""
+    """Convert a raw observation into the comparable v_I(p_i) unit interval."""
     if spec.kind == "categorical":
         key = str(observed)
         if key not in spec.categories:
@@ -30,4 +30,5 @@ def valuate(observed: Any, spec: ValuationSpec) -> float:
         raise ValueError(
             f"Observation {number} is outside the declared range [{spec.minimum},{spec.maximum}]."
         )
+    # v_I(p_i) = (observation-minimum) / (maximum-minimum).
     return (number - spec.minimum) / (spec.maximum - spec.minimum)

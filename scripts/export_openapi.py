@@ -12,7 +12,11 @@ OUTPUT = ROOT / "docs" / "openapi.json"
 
 
 def main() -> None:
-    OUTPUT.write_text(json.dumps(app.openapi(), ensure_ascii=False, indent=2), encoding="utf-8")
+    payload = json.dumps(app.openapi(), ensure_ascii=False, indent=2)
+    # Stable LF endings keep the generated contract identical across platforms.
+    with OUTPUT.open("w", encoding="utf-8", newline="\n") as stream:
+        stream.write(payload)
+        stream.write("\n")
     print(f"OpenAPI exported to: {OUTPUT}")
 
 

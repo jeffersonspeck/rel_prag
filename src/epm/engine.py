@@ -56,6 +56,8 @@ class EpistemicPragmaticEngine:
             except ValueError as exc:
                 raise ValueError(f"Invalid observation for descriptor '{descriptor_id}': {exc}") from exc
 
+        # Article Equation 6:
+        # Rel_prag(I,A,C) = Agg_C({(w_i(A,C), v_I(p_i))}_{i=1}^n).
         inputs = [
             WeightedInput(descriptor_id=descriptor_id, value=valued[descriptor_id], weight=weight)
             for descriptor_id, weight in policy.weights.items()
@@ -74,8 +76,6 @@ class EpistemicPragmaticEngine:
             )
             for item in inputs
         ]
-        contributions.sort(key=lambda item: item.weighted_contribution, reverse=True)
-
         warnings = [
             "The score expresses contextual relevance under the selected policy; it is not an ontological truth claim."
         ]
@@ -119,6 +119,9 @@ class EpistemicPragmaticEngine:
         descriptor_by_id = {descriptor.id: descriptor for descriptor in entity.descriptors}
         aggregation = policy.evaluation.similarity_aggregation
 
+        # Article Equation 8:
+        # Sim_prag(I',I'',A,C) =
+        # Agg_C({(w_i(A,C), s_i(v_I'(p_i), v_I''(p_i)))}_{i=1}^n).
         inputs: list[WeightedInput] = []
         rows: list[tuple[str, float, float]] = []
         for descriptor_id, weight in policy.weights.items():
@@ -153,8 +156,6 @@ class EpistemicPragmaticEngine:
             )
             for descriptor_id, similarity, weight in rows
         ]
-        contributions.sort(key=lambda item: item.weighted_contribution, reverse=True)
-
         warnings = [
             "Thresholded pairwise similarity supports an operational continuity decision, not numerical identity.",
             "The resulting continuity relation is not guaranteed to be transitive across a sequence of states.",
@@ -164,6 +165,8 @@ class EpistemicPragmaticEngine:
             warnings.append("The selected policy is illustrative or not yet empirically validated.")
 
         threshold = policy.evaluation.similarity_threshold
+        # Equation 18 calls this ContextContinuitySupport. It remains an
+        # operational, context-bound result and never a numerical identity claim.
         return SimilarityResponse(
             ontology_id=entity.ontology_id,
             entity_id=entity.entity_id,

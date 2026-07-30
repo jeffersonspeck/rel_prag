@@ -27,8 +27,8 @@ class EpistemicPragmaticService:
         policy = self.policy_repository.get(request.policy_id)
         self.policy_repository.validate_against_entity(policy, entity)
         response = self.engine.relevance(request, entity, policy)
-        # A decision is reproducible only when its observations, policy, and
-        # output are kept together. The policy carries W, v, s, Agg_C, and beta.
+        # Equation 23 is reproducible only when I, S(I), A, C, W, Pi_W, v, s,
+        # Agg_C, and the resulting output remain traceable as one audit event.
         self.audit_logger.record(
             "unary_contextual_relevance",
             {

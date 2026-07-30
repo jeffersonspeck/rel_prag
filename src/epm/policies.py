@@ -1,4 +1,4 @@
-"""File-backed repository for versioned weighting policies W(A,C)."""
+"""Repository for W(A,C), its Equation 5 provenance, and Equation 23 operators."""
 
 from __future__ import annotations
 
@@ -82,8 +82,9 @@ class PolicyRepository:
                         f"{sorted(unknown_rule_descriptors)}"
                     )
 
-        # Threshold decisions require a score on a stable unit scale. A raw
-        # weighted sum is safe here only when the policy already sums to one.
+        # The normalization condition sum_i w_i(A,C)=1 after Equation 7 is
+        # mandatory when scores are compared. Equation 18 cannot threshold an
+        # arbitrary sum.
         if policy.evaluation.similarity_aggregation.strategy == "weighted_sum":
             weight_total = sum(policy.weights.values())
             if not isclose(weight_total, 1.0, abs_tol=1e-9):

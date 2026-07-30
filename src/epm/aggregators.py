@@ -1,4 +1,4 @@
-"""Aggregation strategies for Agg_C.
+"""Aggregation strategies for Agg_C in article Equations 6-8.
 
 The weighted average is the default normalized baseline. The weighted sum is
 kept for direct correspondence with the paper's illustrative equation. The
@@ -45,8 +45,8 @@ def weighted_sum(inputs: Iterable[WeightedInput]) -> AggregationResult:
     _validate(items)
     raw = sum(item.weight * item.value for item in items)
     weight_total = sum(item.weight for item in items)
-    # The paper's linear equation is a raw sum. It is comparable on [0,1] only
-    # when the policy explicitly normalizes its weights.
+    # Equation 7: Rel_prag^lin = sum_i w_i(A,C) * v_I(p_i).
+    # The raw equation is comparable on [0,1] only when the policy normalizes W.
     return AggregationResult(
         raw_score=raw,
         score=raw,
@@ -60,6 +60,8 @@ def weighted_average(inputs: Iterable[WeightedInput]) -> AggregationResult:
     _validate(items)
     raw = sum(item.weight * item.value for item in items)
     weight_total = sum(item.weight for item in items)
+    # This is Equation 7 evaluated with the normalized vector
+    # w_i' = w_i / sum_j(w_j), as used by the numerical illustration.
     normalized = raw / weight_total if weight_total else 0.0
     return AggregationResult(
         raw_score=raw,
@@ -76,6 +78,8 @@ def rule_aware(inputs: Iterable[WeightedInput], rules: list[InteractionRule]) ->
     score = baseline.score
     applied: list[str] = []
 
+    # Equation 7 explicitly excludes material interactions. This operator is the
+    # corresponding Agg_C for contexts with synergy, redundancy, vetoes, or requirements.
     for rule in rules:
         selected = [by_id[descriptor_id] for descriptor_id in rule.descriptors if descriptor_id in by_id]
         if len(selected) != len(rule.descriptors):

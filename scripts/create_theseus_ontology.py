@@ -1,4 +1,4 @@
-"""Generate the stable Ship of Theseus ontology in Turtle.
+"""Generate S(I_ship) from article Equation 9 as a stable Turtle ontology.
 
 Agents, contexts, weights, provenance records, and decisions are intentionally
 kept outside the ontology. They belong to the epistemic-pragmatic policy layer.
@@ -85,8 +85,8 @@ def build_graph() -> Graph:
     graph.add((EX.hasDescriptor, RDFS.domain, EX.OntologicalInstance))
     graph.add((EX.hasDescriptor, RDFS.range, EX.Descriptor))
 
-    # Descriptor categories are OWL classes rather than string annotations.
-    # This keeps heterogeneous aspects formally visible inside S(I).
+    # Equations 1 and 9 require typed, heterogeneous descriptors. OWL classes
+    # preserve that distinction instead of reducing it to string annotations.
     for type_name, label, description in DESCRIPTOR_TYPES:
         type_iri = EX[type_name]
         graph.add((type_iri, RDF.type, OWL.Class))

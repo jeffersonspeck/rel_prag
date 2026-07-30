@@ -23,4 +23,6 @@ preservation-v1 -> unary_contextual_relevance
 
 Both systems used the same entity and descriptive state, but returned different values because they applied different contextual policies.
 
-The suite also checks the exact illustrative vectors and scores from the article, rejects incomplete observations and empty provenance, enforces normalized threshold decisions, and verifies that audit events preserve the complete evaluation configuration.
+The suite also checks the exact contexts, agents, vectors, and scores from Equations 10-13, rejects incomplete observations and empty provenance, enforces the normalized threshold decision in Equation 18, preserves formal descriptor order, and verifies that audit events retain the complete Equation 23 evaluation configuration.
+
+The final PDF was reviewed both through text extraction and rendered pages 14-23. Equation numbering and the computational assumptions in Section 7.3 were checked against the rendered document.

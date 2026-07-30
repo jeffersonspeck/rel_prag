@@ -12,6 +12,8 @@
 
 **Limitation:** this is not a complete context ontology.
 
+The bundled policies reproduce `C_nav` and `C_hist` from Equations 10 and 11. Their formal agents are the sailor and historian from Equations 12 and 13; the HTTP consumers are the systems that execute those policies.
+
 ## Weights as psychological properties
 
 **Change:** weights are treated as an explicit policy associated with an agent and context, not as an intrinsic property of either the entity or agent.
@@ -52,3 +54,9 @@ The raw weighted sum is preserved without clipping. Thresholded similarity requi
 **Partially addressed:** policies are versioned, comparable, and auditable.
 
 **Not addressed:** the project does not automatically reconcile conflicting policies; that decision remains institutional or governance-related.
+
+## Computational considerations
+
+**Change:** contribution sorting was removed so the unary and single-pair binary scoring kernels preserve the `O(n)` descriptor-count bound stated in Section 7.3, assuming constant-time descriptor comparisons.
+
+**Limit:** string and collection comparators depend on input size. Batch candidate generation, indexing, and exhaustive pairwise resolution remain outside the API.

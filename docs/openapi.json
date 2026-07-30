@@ -294,7 +294,7 @@
           "kind"
         ],
         "title": "ComparatorSpec",
-        "description": "Descriptor-specific comparison function s_i."
+        "description": "Descriptor-specific comparison function s_i from Equations 8 and 17."
       },
       "Context": {
         "properties": {
@@ -342,7 +342,7 @@
           "norms"
         ],
         "title": "Context",
-        "description": "Minimal task-oriented representation C=<g,t,e,r,n>."
+        "description": "Structured context C=<g,t,e,r,n> from Section 4.1 and Equation 3."
       },
       "Contribution": {
         "properties": {
@@ -446,7 +446,7 @@
           "version"
         ],
         "title": "ProvenanceRecord",
-        "description": "Operational representation of Pi_W."
+        "description": "Pi_W=<source,method,evidence,timestamp,version> from Equation 5."
       },
       "RelevanceRequest": {
         "properties": {

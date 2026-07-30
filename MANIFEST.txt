@@ -6,6 +6,7 @@ clients/navigation_system.py     Independent consumer 1
 clients/heritage_system.py       Independent consumer 2
 data/policies/                    Versioned W(A,C) policies with Pi_W
 docs/openapi.json                Integration contract
+docs/FORMALIZATION_MAPPING.md    Equation-by-equation implementation map
 docs/REVIEW_CHANGES.md           Reviewer observations mapped to code
 docs/IMPLEMENTATION_REPORT.md    Implementation report
 tests/                            Automated validation

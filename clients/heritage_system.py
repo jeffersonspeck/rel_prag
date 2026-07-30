@@ -26,6 +26,7 @@ def main() -> None:
         "ontology_id": "theseus",
         "entity_id": "TheseusShip",
         "policy_id": "preservation-v1",
+        # The system executes the historian policy from Equations 11 and 13.
         "descriptor_values": SHIP_STATE,
         "aggregator": "weighted_average"
     }

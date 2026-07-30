@@ -27,6 +27,8 @@ def test_two_systems_consume_same_entity_with_distinct_policies(service):
     assert preservation.score == pytest.approx(0.786047, abs=1e-6)
     assert navigation.score_is_normalized is True
     assert preservation.score_is_normalized is True
+    assert [row.descriptor_id for row in navigation.contributions] == list(STATE)
+    assert [row.descriptor_id for row in preservation.contributions] == list(STATE)
 
 
 def test_rule_aware_aggregator_can_apply_requirement(service):
