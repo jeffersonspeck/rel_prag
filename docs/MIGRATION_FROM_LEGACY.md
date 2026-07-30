@@ -1,22 +1,22 @@
-# Migração dos fontes anteriores
+# Migration from Legacy Sources
 
-Os fontes anteriores mantinham pesos duplicados em `common.py` e `demo_relevance.py`, executavam apenas scripts locais e usavam a soma linear diretamente.
+The previous implementation kept duplicated weights in `common.py` and `demo_relevance.py`, ran only as local scripts, and applied a linear sum directly. Those legacy files have been removed after their responsibilities were migrated to the maintained platform.
 
-## Correspondência
+## Migration map
 
-- `create_theseus_ontology.py` -> `scripts/create_theseus_ontology.py`
-- `common.py` -> `ontology.py`, `policies.py`, `models.py` e `service.py`
-- `demo_relevance.py` -> `engine.py` e endpoint `/v1/relevance`
-- exemplos locais -> dois consumidores HTTP em `clients/`
-- `run_all_analyses.py` -> `scripts/run_local_demo.py` + `pytest`
+- `src/create_theseus_ontology.py` -> `scripts/create_theseus_ontology.py`
+- `src/common.py` -> `src/epm/ontology.py`, `src/epm/policies.py`, `src/epm/models.py`, and `src/epm/service.py`
+- `src/demo_relevance.py` -> `src/epm/engine.py` and the `/v1/relevance` endpoint
+- local example scripts -> two HTTP consumers in `clients/`
+- `src/run_all_analyses.py` and `src/simulate_examples.py` -> `scripts/run_local_demo.py` and `pytest`
 
-## Correções principais
+## Main corrections
 
-1. IDs de descritores foram padronizados em inglês.
-2. Pesos foram removidos do código-fonte e colocados em políticas JSON versionadas.
-3. A proveniência tornou-se obrigatória.
-4. O contexto deixou de ser apenas um rótulo.
-5. A agregação tornou-se configurável.
-6. A similaridade binária ganhou contrato próprio.
-7. Resultados possuem advertências explícitas sobre validade e identidade.
-8. A API permite consumo por sistemas independentes.
+1. Descriptor IDs were standardized in English.
+2. Weights were removed from source code and placed in versioned JSON policies.
+3. Provenance became mandatory.
+4. Context is no longer represented as only a label.
+5. Aggregation became configurable.
+6. Binary similarity received its own contract.
+7. Results include explicit validity and identity warnings.
+8. The API allows independent systems to consume the platform.

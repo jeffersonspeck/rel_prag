@@ -1,25 +1,25 @@
-# Plataforma do Modelo Epistêmico-Pragmático
+# Epistemic-Pragmatic Model Platform
 
-Implementação de referência do modelo apresentado no artigo **The Ship of Theseus Paradox and Epistemic-Pragmatic Weighting in Ontological Modeling**.
+Reference implementation of the model presented in **The Ship of Theseus Paradox and Epistemic-Pragmatic Weighting in Ontological Modeling**.
 
-O projeto foi reestruturado para refletir as correções conceituais e formais da versão final:
+The project reflects the conceptual and formal corrections introduced in the final version:
 
-- separação entre a ontologia estável `S(I)` e as políticas externas `W(A,C)`;
-- contexto estruturado como `C=<g,t,e,r,n>`;
-- proveniência explícita `Pi_W=<source, method, evidence, timestamp, version>`;
-- distinção entre relevância unária `Rel_prag(I,A,C)` e similaridade binária `Sim_prag(I',I'',A,C)`;
-- similaridade limiarizada tratada como suporte à continuidade operacional, nunca como identidade numérica;
-- agregação configurável, com soma/média ponderada e regras para dependência, sinergia, redundância, requisitos e vetos;
-- API compartilhada consumida por dois sistemas externos independentes;
-- trilha de auditoria e versionamento das políticas.
+- separation between the stable ontology `S(I)` and external policies `W(A,C)`;
+- structured context represented as `C=<g,t,e,r,n>`;
+- explicit provenance represented as `Pi_W=<source, method, evidence, timestamp, version>`;
+- distinction between unary relevance `Rel_prag(I,A,C)` and binary similarity `Sim_prag(I',I'',A,C)`;
+- thresholded similarity treated as support for operational continuity, never as numerical identity;
+- configurable aggregation with weighted sum/average and rules for dependency, synergy, redundancy, requirements, and vetoes;
+- a shared API consumed by two independent external systems;
+- an audit trail and policy versioning.
 
-## Arquitetura
+## Architecture
 
 ```text
-Ontologia RDF/OWL estável
+Stable RDF/OWL ontology
         |
         v
-API do Modelo Epistêmico-Pragmático
+Epistemic-Pragmatic Model API
         |
         +-----------------------------+
         |                             |
@@ -27,9 +27,9 @@ Navigation Operations System   Heritage Preservation System
 policy=navigation-v1           policy=preservation-v1
 ```
 
-Os dois consumidores enviam **o mesmo estado do navio** e usam **a mesma ontologia**. A diferença está na política explícita, no agente e no contexto. Nenhum consumidor altera a ontologia.
+Both consumers submit **the same ship state** and use **the same ontology**. They differ in their explicit policy, agent, and context. Neither consumer modifies the ontology.
 
-## Instalação
+## Installation
 
 ```bash
 python -m venv .venv
@@ -39,64 +39,80 @@ pip install -e ".[dev]"
 python scripts/create_theseus_ontology.py
 ```
 
-## Executar a API
+## Run the API
 
 ```bash
 uvicorn epm.api:app --reload
 ```
 
-Ponto de entrada da API: `http://127.0.0.1:8000/`
+API entry point: `http://127.0.0.1:8000/`
 
-Documentação interativa:
+Interactive documentation:
 
 - Swagger UI: `http://127.0.0.1:8000/docs`
 - ReDoc: `http://127.0.0.1:8000/redoc`
 
-## Executar os dois sistemas consumidores
+## Run the two consumer systems
 
-Em terminais separados, mantendo a API ativa:
+In separate terminals, while keeping the API running:
 
 ```bash
 python clients/navigation_system.py
 python clients/heritage_system.py
 ```
 
-Ambos consomem `POST /v1/relevance`, mas selecionam políticas diferentes.
+Both consume `POST /v1/relevance`, but select different policies.
 
-## Exemplo sem HTTP
+## Run the example without HTTP
 
 ```bash
 python scripts/run_local_demo.py
 ```
 
-O comando produz `output/demo_results.json`, incluindo os dois sistemas e um exemplo adicional de similaridade binária.
+The command creates `output/demo_results.json`, containing results for both systems and an additional binary-similarity example.
 
-## Testes
+## Tests
 
 ```bash
 pytest
 ```
 
-Os testes verificam:
+The tests verify:
 
-- ausência de pesos e agentes na ontologia estável;
-- compatibilidade entre políticas e descritores;
-- presença de proveniência;
-- respostas diferentes para os dois sistemas sobre a mesma entidade;
-- funcionamento do agregador com requisitos;
-- distinção entre similaridade operacional e identidade numérica;
-- contrato HTTP da API.
+- the absence of weights and agents from the stable ontology;
+- compatibility between policies and descriptors;
+- the presence of provenance;
+- different responses from the two systems for the same entity;
+- requirement-aware aggregation;
+- the distinction between operational similarity and numerical identity;
+- the API's HTTP contract.
 
-## Limites assumidos
+## Known limitations
 
-Esta implementação não fornece:
+This implementation does not provide:
 
-- uma teoria metafísica de identidade numérica;
-- um método universal para elicitar pesos;
-- negociação automática entre políticas incompatíveis;
-- validação empírica dos vetores ilustrativos;
-- inferência integral das operações numéricas por um reasoner OWL.
+- a metaphysical theory of numerical identity;
+- a universal method for eliciting weights;
+- automatic negotiation between incompatible policies;
+- empirical validation of the illustrative vectors;
+- complete inference of numerical operations by an OWL reasoner.
 
-A ontologia representa o vocabulário e a estrutura estável. Os cálculos, a proveniência, a auditoria e as decisões contextuais são executados externamente, como uma camada de aplicação.
+The ontology represents the stable vocabulary and structure. Calculations, provenance, auditing, and contextual decisions are performed externally in the application layer.
 
-Mais detalhes estão em `docs/`.
+## Documentation index
+
+Every Markdown document in the repository is listed below.
+
+| Document | Purpose |
+| --- | --- |
+| [`README.md`](README.md) | Project overview, quick start, validation commands, limitations, and documentation index. |
+| [`ARCHITECTURE.md`](ARCHITECTURE.md) | Top-level copy of the architecture and design decisions for convenient access. |
+| [`IMPLEMENTATION_REPORT.md`](IMPLEMENTATION_REPORT.md) | Top-level copy of the implementation report and the problems addressed by the current platform. |
+| [`REVIEW_CHANGES.md`](REVIEW_CHANGES.md) | Top-level copy mapping review observations to concrete implementation changes and remaining limitations. |
+| [`docs/API_USAGE.md`](docs/API_USAGE.md) | Example requests and response semantics for the relevance and similarity endpoints. |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Canonical description of the ontology, policy, engine, and integration layers. |
+| [`docs/IMPLEMENTATION_REPORT.md`](docs/IMPLEMENTATION_REPORT.md) | Canonical implementation report, including the two consumers and deliberately unresolved questions. |
+| [`docs/MIGRATION_FROM_LEGACY.md`](docs/MIGRATION_FROM_LEGACY.md) | Migration map from the removed legacy scripts to the maintained package, API, clients, and tests. |
+| [`docs/REVIEW_CHANGES.md`](docs/REVIEW_CHANGES.md) | Canonical response to conceptual and technical review observations. |
+| [`docs/TWO_SYSTEMS.md`](docs/TWO_SYSTEMS.md) | Explanation of how two independent systems consume the same ontology and API with different policies. |
+| [`docs/VALIDATION.md`](docs/VALIDATION.md) | Commands and observed results used to validate the implementation. |

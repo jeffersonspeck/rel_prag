@@ -1,6 +1,6 @@
-# Uso da API
+# API Usage
 
-## Relevância contextual
+## Contextual relevance
 
 ```bash
 curl -X POST http://127.0.0.1:8000/v1/relevance \
@@ -21,16 +21,16 @@ curl -X POST http://127.0.0.1:8000/v1/relevance \
   }'
 ```
 
-A resposta contém:
+The response contains:
 
-- resultado normalizado;
-- resultado bruto;
-- contribuição por descritor;
-- agente e contexto;
-- proveniência da política;
-- alertas de validade.
+- the normalized result;
+- the raw result;
+- each descriptor's contribution;
+- the agent and context;
+- policy provenance;
+- validity warnings.
 
-## Similaridade contextual
+## Contextual similarity
 
 ```bash
 curl -X POST http://127.0.0.1:8000/v1/similarity \
@@ -61,4 +61,4 @@ curl -X POST http://127.0.0.1:8000/v1/similarity \
   }'
 ```
 
-O campo `operational_continuity_supported` é uma decisão operacional contextual. O campo `numerical_identity_claimed` permanece sempre `false`.
+The `operational_continuity_supported` field is a contextual operational decision. The `numerical_identity_claimed` field always remains `false`.

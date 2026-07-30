@@ -1,27 +1,27 @@
-# Dois sistemas independentes consumindo a mesma base
+# Two Independent Systems Consuming the Same Foundation
 
-## Sistema 1: Navigation Operations System
+## System 1: Navigation Operations System
 
-Arquivo: `clients/navigation_system.py`
+File: `clients/navigation_system.py`
 
-- política: `navigation-v1`;
-- objetivo: prontidão operacional;
-- maior relevância: estrutura e disposição para flutuar;
-- usa um requisito conjunto entre `p_structure` e `p_float`;
-- consome `POST /v1/relevance`.
+- policy: `navigation-v1`;
+- goal: operational readiness;
+- highest relevance: structure and disposition to float;
+- uses a joint requirement between `p_structure` and `p_float`;
+- consumes `POST /v1/relevance`.
 
-## Sistema 2: Heritage Preservation System
+## System 2: Heritage Preservation System
 
-Arquivo: `clients/heritage_system.py`
+File: `clients/heritage_system.py`
 
-- política: `preservation-v1`;
-- objetivo: preservação histórica;
-- maior relevância: origem, valor histórico e papel de monumento;
-- consome o mesmo endpoint e o mesmo estado da entidade;
-- recebe explicação e proveniência próprias da política.
+- policy: `preservation-v1`;
+- goal: historical preservation;
+- highest relevance: origin, historical value, and monument role;
+- consumes the same endpoint and entity state;
+- receives policy-specific explanations and provenance.
 
-## Por que são sistemas distintos
+## Why they are distinct systems
 
-Os consumidores são processos separados, com objetivos, políticas e responsabilidades diferentes. A integração ocorre somente por HTTP. Eles não importam diretamente classes internas do motor e não modificam o arquivo RDF.
+The consumers are separate processes with different goals, policies, and responsibilities. Integration occurs only over HTTP. They do not directly import internal engine classes and do not modify the RDF file.
 
-Essa organização demonstra que duas aplicações podem compartilhar a mesma ontologia e ainda manter políticas contextualizadas, auditáveis e versionadas.
+This organization demonstrates that two applications can share the same ontology while retaining contextualized, auditable, and versioned policies.
