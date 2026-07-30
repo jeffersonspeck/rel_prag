@@ -37,14 +37,12 @@ def main() -> None:
         RelevanceRequest(
             policy_id="navigation-v1",
             descriptor_values=state,
-            aggregator="weighted_average",
         )
     )
     preservation = service.relevance(
         RelevanceRequest(
             policy_id="preservation-v1",
             descriptor_values=state,
-            aggregator="weighted_average",
         )
     )
 
@@ -64,7 +62,6 @@ def main() -> None:
             right_record_id="ship-state-t2",
             left_values=left,
             right_values=right,
-            threshold=0.85,
         )
     )
 

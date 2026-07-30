@@ -8,6 +8,7 @@ File: `clients/navigation_system.py`
 - goal: operational readiness;
 - highest relevance: structure and disposition to float;
 - uses a joint requirement between `p_structure` and `p_float`;
+- obtains its valuation and aggregation procedure from the versioned policy;
 - consumes `POST /v1/relevance`.
 
 ## System 2: Heritage Preservation System
@@ -18,6 +19,7 @@ File: `clients/heritage_system.py`
 - goal: historical preservation;
 - highest relevance: origin, historical value, and monument role;
 - consumes the same endpoint and entity state;
+- obtains its valuation and aggregation procedure from a different versioned policy;
 - receives policy-specific explanations and provenance.
 
 ## Why they are distinct systems

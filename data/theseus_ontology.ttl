@@ -2,7 +2,6 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 epm:TheseusOntology a owl:Ontology ;
     rdfs:label "Ship of Theseus stable ontology"@en ;
@@ -18,15 +17,14 @@ epm:TheseusShip a epm:Ship ;
         epm:p_origin,
         epm:p_structure .
 
-epm:defaultValue a owl:DatatypeProperty ;
-    rdfs:range xsd:decimal .
-
-epm:descriptorKind a owl:DatatypeProperty ;
-    rdfs:range xsd:string .
-
 epm:hasDescriptor a owl:ObjectProperty ;
     rdfs:domain epm:OntologicalInstance ;
     rdfs:range epm:Descriptor .
+
+epm:DispositionDescriptor a owl:Class ;
+    rdfs:label "Disposition descriptor"@en ;
+    rdfs:comment "Descriptor concerning a realizable disposition."@en ;
+    rdfs:subClassOf epm:Descriptor .
 
 epm:MaterialEntity a owl:Class ;
     rdfs:label "Material entity"@en ;
@@ -34,46 +32,59 @@ epm:MaterialEntity a owl:Class ;
     rdfs:subClassOf epm:OntologicalInstance ;
     skos:closeMatch <http://purl.obolibrary.org/obo/BFO_0000040> .
 
+epm:PartDescriptor a owl:Class ;
+    rdfs:label "Part descriptor"@en ;
+    rdfs:comment "Descriptor concerning material parts or composition."@en ;
+    rdfs:subClassOf epm:Descriptor .
+
+epm:ProvenanceDescriptor a owl:Class ;
+    rdfs:label "Provenance descriptor"@en ;
+    rdfs:comment "Descriptor concerning origin or provenance."@en ;
+    rdfs:subClassOf epm:Descriptor .
+
+epm:QualityDescriptor a owl:Class ;
+    rdfs:label "Quality descriptor"@en ;
+    rdfs:comment "Descriptor concerning a quality of the entity."@en ;
+    rdfs:subClassOf epm:Descriptor .
+
+epm:RoleDescriptor a owl:Class ;
+    rdfs:label "Role descriptor"@en ;
+    rdfs:comment "Descriptor concerning a context-dependent role."@en ;
+    rdfs:subClassOf epm:Descriptor .
+
 epm:Ship a owl:Class ;
     rdfs:label "Ship"@en ;
     rdfs:comment "Material artifact capable of realizing navigation-related dispositions."@en ;
     rdfs:subClassOf epm:MaterialEntity .
 
-epm:p_float a epm:Descriptor ;
+epm:StructuralDescriptor a owl:Class ;
+    rdfs:label "Structural descriptor"@en ;
+    rdfs:comment "Descriptor concerning formal organization."@en ;
+    rdfs:subClassOf epm:Descriptor .
+
+epm:p_float a epm:DispositionDescriptor ;
     rdfs:label "Disposition to float and navigate"@en ;
-    rdfs:comment "Realizable disposition related to floating and navigation."@en ;
-    epm:defaultValue 1.0 ;
-    epm:descriptorKind "disposition" .
+    rdfs:comment "Realizable disposition related to floating and navigation."@en .
 
-epm:p_historical_value a epm:Descriptor ;
+epm:p_historical_value a epm:QualityDescriptor ;
     rdfs:label "Historical value"@en ;
-    rdfs:comment "Historical, symbolic, and memorial relevance."@en ;
-    epm:defaultValue 1.0 ;
-    epm:descriptorKind "quality" .
+    rdfs:comment "Historical, symbolic, and memorial relevance."@en .
 
-epm:p_material a epm:Descriptor ;
+epm:p_material a epm:PartDescriptor ;
     rdfs:label "Material composition"@en ;
-    rdfs:comment "Physical parts and material substrate of the ship."@en ;
-    epm:defaultValue 1.0 ;
-    epm:descriptorKind "part/provenance" .
+    rdfs:comment "Physical parts and material substrate of the ship."@en .
 
-epm:p_monument_role a epm:Descriptor ;
+epm:p_monument_role a epm:RoleDescriptor ;
     rdfs:label "Monument role"@en ;
-    rdfs:comment "Context-dependent role in preservation practices."@en ;
-    epm:defaultValue 1.0 ;
-    epm:descriptorKind "role" .
+    rdfs:comment "Context-dependent role in preservation practices."@en .
 
-epm:p_origin a epm:Descriptor ;
+epm:p_origin a epm:ProvenanceDescriptor ;
     rdfs:label "Origin and provenance"@en ;
-    rdfs:comment "Origin, provenance, and historical continuity."@en ;
-    epm:defaultValue 1.0 ;
-    epm:descriptorKind "provenance" .
+    rdfs:comment "Origin, provenance, and historical continuity."@en .
 
-epm:p_structure a epm:Descriptor ;
+epm:p_structure a epm:StructuralDescriptor ;
     rdfs:label "Structural organization"@en ;
-    rdfs:comment "Formal configuration and organization of the ship."@en ;
-    epm:defaultValue 1.0 ;
-    epm:descriptorKind "structure" .
+    rdfs:comment "Formal configuration and organization of the ship."@en .
 
 epm:OntologicalInstance a owl:Class ;
     rdfs:label "Ontological instance"@en ;

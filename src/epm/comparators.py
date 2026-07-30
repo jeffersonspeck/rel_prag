@@ -15,6 +15,11 @@ def exact(left: Any, right: Any) -> float:
 def numeric_closeness(left: Any, right: Any, minimum: float, maximum: float) -> float:
     left_number = float(left)
     right_number = float(right)
+    if not minimum <= left_number <= maximum or not minimum <= right_number <= maximum:
+        raise ValueError(
+            f"Numeric comparison values must stay within [{minimum},{maximum}]; "
+            f"received {left_number} and {right_number}."
+        )
     span = maximum - minimum
     distance = abs(left_number - right_number)
     return max(0.0, min(1.0, 1.0 - (distance / span)))

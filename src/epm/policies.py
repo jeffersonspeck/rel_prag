@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import json
+from math import isclose
 from pathlib import Path
 
 from .exceptions import PolicyNotFoundError, PolicyValidationError
@@ -46,6 +46,8 @@ class PolicyRepository:
     def validate_against_entity(policy: WeightingPolicy, entity: OntologyEntity) -> None:
         descriptor_ids = {descriptor.id for descriptor in entity.descriptors}
         weight_ids = set(policy.weights)
+        valuation_ids = set(policy.evaluation.valuations)
+        comparator_ids = set(policy.evaluation.comparators)
         missing = descriptor_ids - weight_ids
         unknown = weight_ids - descriptor_ids
         if policy.ontology_id != entity.ontology_id:
@@ -57,3 +59,35 @@ class PolicyRepository:
                 f"Policy '{policy.policy_id}' is inconsistent with the descriptor schema. "
                 f"Missing={sorted(missing)} Unknown={sorted(unknown)}"
             )
+        if valuation_ids != descriptor_ids:
+            raise PolicyValidationError(
+                f"Policy '{policy.policy_id}' must define one valuation v_I for every descriptor. "
+                f"Missing={sorted(descriptor_ids - valuation_ids)} Unknown={sorted(valuation_ids - descriptor_ids)}"
+            )
+        if comparator_ids != descriptor_ids:
+            raise PolicyValidationError(
+                f"Policy '{policy.policy_id}' must define one comparison function s_i for every descriptor. "
+                f"Missing={sorted(descriptor_ids - comparator_ids)} Unknown={sorted(comparator_ids - descriptor_ids)}"
+            )
+
+        for aggregation in (
+            policy.evaluation.relevance_aggregation,
+            policy.evaluation.similarity_aggregation,
+        ):
+            for rule in aggregation.rules:
+                unknown_rule_descriptors = set(rule.descriptors) - descriptor_ids
+                if unknown_rule_descriptors:
+                    raise PolicyValidationError(
+                        f"Rule '{rule.rule_id}' references unknown descriptors: "
+                        f"{sorted(unknown_rule_descriptors)}"
+                    )
+
+        # Threshold decisions require a score on a stable unit scale. A raw
+        # weighted sum is safe here only when the policy already sums to one.
+        if policy.evaluation.similarity_aggregation.strategy == "weighted_sum":
+            weight_total = sum(policy.weights.values())
+            if not isclose(weight_total, 1.0, abs_tol=1e-9):
+                raise PolicyValidationError(
+                    "Similarity cannot use a thresholded weighted sum unless policy weights sum to one. "
+                    f"Policy '{policy.policy_id}' has total weight {weight_total}."
+                )

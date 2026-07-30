@@ -26,18 +26,8 @@ def main() -> None:
         "ontology_id": "theseus",
         "entity_id": "TheseusShip",
         "policy_id": "navigation-v1",
-        "descriptor_values": SHIP_STATE,
-        "aggregator": "rule_aware",
-        "interaction_rules": [
-            {
-                "rule_id": "navigation-capability-requirement",
-                "kind": "requirement",
-                "descriptors": ["p_structure", "p_float"],
-                "trigger": 0.7,
-                "coefficient": 0.0,
-                "description": "Operational navigation requires both adequate structure and floating disposition."
-            }
-        ]
+        # Agg_C and its navigation requirement belong to the versioned policy.
+        "descriptor_values": SHIP_STATE
     }
 
     response = httpx.post(f"{args.base_url}/v1/relevance", json=payload, timeout=10.0)

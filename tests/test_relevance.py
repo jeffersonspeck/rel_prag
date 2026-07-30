@@ -1,4 +1,8 @@
-from epm.models import InteractionRule, RelevanceRequest
+import json
+
+import pytest
+
+from epm.models import RelevanceRequest
 
 STATE = {
     "p_material": 0.2,
@@ -19,25 +23,31 @@ def test_two_systems_consume_same_entity_with_distinct_policies(service):
     assert navigation.context.goal != preservation.context.goal
     assert navigation.score != preservation.score
     assert navigation.measure_type == "unary_contextual_relevance"
+    assert navigation.score == pytest.approx(0.918182, abs=1e-6)
+    assert preservation.score == pytest.approx(0.786047, abs=1e-6)
+    assert navigation.score_is_normalized is True
+    assert preservation.score_is_normalized is True
 
 
 def test_rule_aware_aggregator_can_apply_requirement(service):
     state = {**STATE, "p_float": 0.2}
-    request = RelevanceRequest(
-        policy_id="navigation-v1",
-        descriptor_values=state,
-        aggregator="rule_aware",
-        interaction_rules=[
-            InteractionRule(
-                rule_id="navigation-requirement",
-                kind="requirement",
-                descriptors=["p_structure", "p_float"],
-                trigger=0.7,
-                coefficient=0.0,
-                description="Both descriptors are required.",
-            )
-        ],
-    )
+    request = RelevanceRequest(policy_id="navigation-v1", descriptor_values=state)
     response = service.relevance(request)
     assert response.score == 0.0
-    assert "navigation-requirement:requirement-not-met" in response.applied_rules
+    assert "navigation-capability-requirement:requirement-not-met" in response.applied_rules
+
+
+def test_relevance_requires_an_explicit_complete_observation(service):
+    incomplete = {key: value for key, value in STATE.items() if key != "p_monument_role"}
+    with pytest.raises(ValueError, match="complete ontology-grounded descriptor schema"):
+        service.relevance(RelevanceRequest(policy_id="navigation-v1", descriptor_values=incomplete))
+
+
+def test_audit_record_preserves_request_policy_and_response(service):
+    service.relevance(RelevanceRequest(policy_id="preservation-v1", descriptor_values=STATE))
+    event = json.loads(service.audit_logger.path.read_text(encoding="utf-8").splitlines()[-1])
+
+    assert event["payload"]["request"]["descriptor_values"] == STATE
+    assert event["payload"]["policy"]["evaluation"]["relevance_aggregation"]["strategy"] == "weighted_average"
+    assert event["payload"]["policy"]["provenance"]["version"] == "1.0.0"
+    assert event["payload"]["response"]["score"] == pytest.approx(0.786047, abs=1e-6)

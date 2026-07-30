@@ -24,7 +24,7 @@ service = EpistemicPragmaticService(
 
 app = FastAPI(
     title="Epistemic-Pragmatic Model API",
-    version="1.0.0",
+    version="1.1.0",
     description=(
         "Shared service for ontology-grounded unary contextual relevance and binary contextual similarity. "
         "A similarity threshold can support operational continuity, but never asserts numerical identity."

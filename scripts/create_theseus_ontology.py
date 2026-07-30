@@ -7,10 +7,9 @@ kept outside the ontology. They belong to the epistemic-pragmatic policy layer.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from decimal import Decimal
 from pathlib import Path
 
-from rdflib import Graph, Literal, Namespace, OWL, RDF, RDFS, SKOS, XSD
+from rdflib import Graph, Literal, Namespace, OWL, RDF, RDFS, SKOS
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "data" / "theseus_ontology.ttl"
@@ -23,17 +22,25 @@ class DescriptorDefinition:
     iri_name: str
     label: str
     description: str
-    kind: str
-    default_value: Decimal = Decimal("1.0")
+    type_name: str
 
 
 DESCRIPTORS = [
-    DescriptorDefinition("p_material", "Material composition", "Physical parts and material substrate of the ship.", "part/provenance"),
-    DescriptorDefinition("p_structure", "Structural organization", "Formal configuration and organization of the ship.", "structure"),
-    DescriptorDefinition("p_float", "Disposition to float and navigate", "Realizable disposition related to floating and navigation.", "disposition"),
-    DescriptorDefinition("p_origin", "Origin and provenance", "Origin, provenance, and historical continuity.", "provenance"),
-    DescriptorDefinition("p_historical_value", "Historical value", "Historical, symbolic, and memorial relevance.", "quality"),
-    DescriptorDefinition("p_monument_role", "Monument role", "Context-dependent role in preservation practices.", "role"),
+    DescriptorDefinition("p_material", "Material composition", "Physical parts and material substrate of the ship.", "PartDescriptor"),
+    DescriptorDefinition("p_structure", "Structural organization", "Formal configuration and organization of the ship.", "StructuralDescriptor"),
+    DescriptorDefinition("p_float", "Disposition to float and navigate", "Realizable disposition related to floating and navigation.", "DispositionDescriptor"),
+    DescriptorDefinition("p_origin", "Origin and provenance", "Origin, provenance, and historical continuity.", "ProvenanceDescriptor"),
+    DescriptorDefinition("p_historical_value", "Historical value", "Historical, symbolic, and memorial relevance.", "QualityDescriptor"),
+    DescriptorDefinition("p_monument_role", "Monument role", "Context-dependent role in preservation practices.", "RoleDescriptor"),
+]
+
+DESCRIPTOR_TYPES = [
+    ("PartDescriptor", "Part descriptor", "Descriptor concerning material parts or composition."),
+    ("StructuralDescriptor", "Structural descriptor", "Descriptor concerning formal organization."),
+    ("DispositionDescriptor", "Disposition descriptor", "Descriptor concerning a realizable disposition."),
+    ("ProvenanceDescriptor", "Provenance descriptor", "Descriptor concerning origin or provenance."),
+    ("QualityDescriptor", "Quality descriptor", "Descriptor concerning a quality of the entity."),
+    ("RoleDescriptor", "Role descriptor", "Descriptor concerning a context-dependent role."),
 ]
 
 
@@ -50,7 +57,6 @@ def build_graph() -> Graph:
     graph.bind("rdf", RDF)
     graph.bind("rdfs", RDFS)
     graph.bind("skos", SKOS)
-    graph.bind("xsd", XSD)
 
     graph.add((EX.TheseusOntology, RDF.type, OWL.Ontology))
     add_label_comment(
@@ -78,10 +84,14 @@ def build_graph() -> Graph:
     graph.add((EX.hasDescriptor, RDF.type, OWL.ObjectProperty))
     graph.add((EX.hasDescriptor, RDFS.domain, EX.OntologicalInstance))
     graph.add((EX.hasDescriptor, RDFS.range, EX.Descriptor))
-    graph.add((EX.defaultValue, RDF.type, OWL.DatatypeProperty))
-    graph.add((EX.defaultValue, RDFS.range, XSD.decimal))
-    graph.add((EX.descriptorKind, RDF.type, OWL.DatatypeProperty))
-    graph.add((EX.descriptorKind, RDFS.range, XSD.string))
+
+    # Descriptor categories are OWL classes rather than string annotations.
+    # This keeps heterogeneous aspects formally visible inside S(I).
+    for type_name, label, description in DESCRIPTOR_TYPES:
+        type_iri = EX[type_name]
+        graph.add((type_iri, RDF.type, OWL.Class))
+        graph.add((type_iri, RDFS.subClassOf, EX.Descriptor))
+        add_label_comment(graph, type_iri, label, description)
 
     graph.add((EX.TheseusShip, RDF.type, EX.Ship))
     add_label_comment(
@@ -93,10 +103,8 @@ def build_graph() -> Graph:
 
     for descriptor in DESCRIPTORS:
         iri = EX[descriptor.iri_name]
-        graph.add((iri, RDF.type, EX.Descriptor))
+        graph.add((iri, RDF.type, EX[descriptor.type_name]))
         add_label_comment(graph, iri, descriptor.label, descriptor.description)
-        graph.add((iri, EX.descriptorKind, Literal(descriptor.kind)))
-        graph.add((iri, EX.defaultValue, Literal(descriptor.default_value, datatype=XSD.decimal)))
         graph.add((EX.TheseusShip, EX.hasDescriptor, iri))
 
     return graph

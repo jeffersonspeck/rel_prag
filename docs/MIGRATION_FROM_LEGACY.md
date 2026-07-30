@@ -16,7 +16,9 @@ The previous implementation kept duplicated weights in `common.py` and `demo_rel
 2. Weights were removed from source code and placed in versioned JSON policies.
 3. Provenance became mandatory.
 4. Context is no longer represented as only a label.
-5. Aggregation became configurable.
+5. Valuation, comparison, aggregation, interaction rules, and thresholds became explicit, versioned policy components.
 6. Binary similarity received its own contract.
 7. Results include explicit validity and identity warnings.
 8. The API allows independent systems to consume the platform.
+9. Observation values were separated from the stable ontology and made explicit in every request.
+10. Typed OWL descriptor classes replaced free-form descriptor-kind strings.

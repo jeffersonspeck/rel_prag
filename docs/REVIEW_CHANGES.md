@@ -2,13 +2,13 @@
 
 ## Underspecified W(A,C)
 
-**Change:** `WeightingPolicy` contains the agent, context, weights, notes, and a `ProvenanceRecord`. Policies are external, versioned, and auditable files.
+**Change:** `WeightingPolicy` contains the agent, context, weights, notes, a non-empty `ProvenanceRecord`, and a versioned evaluation configuration. Policies are external and auditable files.
 
 **Unresolved:** the project does not define a universal elicitation method. The method remains domain-dependent.
 
 ## Nature of context C
 
-**Change:** `Context` represents the goal, time scope, environment, roles, and norms, corresponding to `C=<g,t,e,r,n>`.
+**Change:** `Context` represents the goal, time scope, environment, roles, and norms, corresponding to `C=<g,t,e,r,n>`. Empty components are rejected.
 
 **Limitation:** this is not a complete context ontology.
 
@@ -18,7 +18,9 @@
 
 ## Linear sum and dependencies
 
-**Change:** an aggregation interface now supports weighted average, weighted sum, and a rule-based strategy. Requirements and vetoes demonstrate non-independent combinations.
+**Change:** an aggregation interface supports weighted average, weighted sum, and a rule-based strategy. Requirements and vetoes demonstrate non-independent combinations. `Agg_C` and its rules are part of the versioned contextual policy and cannot be replaced by a caller.
+
+The raw weighted sum is preserved without clipping. Thresholded similarity requires a normalized score, preventing the magnitude of an unnormalized weight vector from changing an operational decision.
 
 ## Unary function versus binary relation
 
@@ -33,15 +35,15 @@
 
 ## OWL implementation
 
-**Change:** RDF/OWL stores the stable structure. Python performs the calculations and evaluates policies. This separation is documented and tested.
+**Change:** RDF/OWL stores the stable structure with explicit descriptor subclasses for parts, structure, dispositions, provenance, qualities, and roles. It does not store observation defaults. Python evaluates explicit observations through policy-bound valuation functions.
 
 ## Instantiations and practical value
 
-**Change:** two external systems consume the same API with traceable contributions and policies. This demonstrates integration and operational explainability without claiming improved accuracy.
+**Change:** two external systems consume the same API with traceable contributions and policies. Audit events contain the request, complete policy, and response. This demonstrates integration and operational explainability without claiming improved accuracy.
 
 ## Validation
 
-**Partially addressed:** unit and software-integration tests are available.
+**Partially addressed:** unit and software-integration tests verify the article's exact vectors, published illustrative scores, normalization constraint, policy provenance, descriptor anchoring, and API behavior.
 
 **Not addressed:** there is no empirical evaluation of utility, performance, or weight quality. Such validation requires a domain and user study.
 

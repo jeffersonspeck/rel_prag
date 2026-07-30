@@ -7,9 +7,10 @@ The project reflects the conceptual and formal corrections introduced in the fin
 - separation between the stable ontology `S(I)` and external policies `W(A,C)`;
 - structured context represented as `C=<g,t,e,r,n>`;
 - explicit provenance represented as `Pi_W=<source, method, evidence, timestamp, version>`;
+- explicit separation between the descriptor schema `S(I)` and observed values `v_I(p_i)`;
 - distinction between unary relevance `Rel_prag(I,A,C)` and binary similarity `Sim_prag(I',I'',A,C)`;
 - thresholded similarity treated as support for operational continuity, never as numerical identity;
-- configurable aggregation with weighted sum/average and rules for dependency, synergy, redundancy, requirements, and vetoes;
+- versioned valuation, comparison, aggregation, interaction, and threshold settings;
 - a shared API consumed by two independent external systems;
 - an audit trail and policy versioning.
 
@@ -79,11 +80,15 @@ pytest
 
 The tests verify:
 
-- the absence of weights and agents from the stable ontology;
+- the absence of weights, agents, and observation defaults from the stable ontology;
+- explicit OWL types for the heterogeneous descriptors;
 - compatibility between policies and descriptors;
-- the presence of provenance;
-- different responses from the two systems for the same entity;
+- meaningful context and provenance;
+- the exact vectors and numerical results published in the article;
+- complete observed state outside the ontology;
 - requirement-aware aggregation;
+- normalized scores before operational threshold decisions;
+- reproducible audit records;
 - the distinction between operational similarity and numerical identity;
 - the API's HTTP contract.
 
@@ -106,6 +111,7 @@ Every Markdown document in the repository is listed below.
 | Document | Purpose |
 | --- | --- |
 | [`README.md`](README.md) | Project overview, quick start, validation commands, limitations, and documentation index. |
+| [`CHANGELOG.md`](CHANGELOG.md) | Version history linking implementation changes and regression tests to the article's formal definitions and equations. |
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | Top-level copy of the architecture and design decisions for convenient access. |
 | [`IMPLEMENTATION_REPORT.md`](IMPLEMENTATION_REPORT.md) | Top-level copy of the implementation report and the problems addressed by the current platform. |
 | [`REVIEW_CHANGES.md`](REVIEW_CHANGES.md) | Top-level copy mapping review observations to concrete implementation changes and remaining limitations. |

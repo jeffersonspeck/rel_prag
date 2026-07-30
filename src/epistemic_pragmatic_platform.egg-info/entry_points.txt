@@ -1,2 +1,0 @@
-[console_scripts]
-epm-api = epm.api:run

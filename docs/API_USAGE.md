@@ -16,14 +16,15 @@ curl -X POST http://127.0.0.1:8000/v1/relevance \
       "p_origin": 1.0,
       "p_historical_value": 0.8,
       "p_monument_role": 1.0
-    },
-    "aggregator": "weighted_average"
+    }
   }'
 ```
 
+The observation record must contain every descriptor in `S(I)`. The selected policy defines the valuation functions and `Agg_C`; callers cannot replace them.
+
 The response contains:
 
-- the normalized result;
+- the result and an explicit normalization flag;
 - the raw result;
 - each descriptor's contribution;
 - the agent and context;
@@ -56,9 +57,10 @@ curl -X POST http://127.0.0.1:8000/v1/similarity \
       "p_origin": 1.0,
       "p_historical_value": 0.85,
       "p_monument_role": 1.0
-    },
-    "threshold": 0.85
+    }
   }'
 ```
 
-The `operational_continuity_supported` field is a contextual operational decision. The `numerical_identity_claimed` field always remains `false`.
+Both records must contain the complete descriptor schema. The selected policy defines each comparison function `s_i`, the similarity `Agg_C`, and the threshold.
+
+The `operational_continuity_supported` field is a contextual operational decision over a normalized score. The `numerical_identity_claimed` field always remains `false`.

@@ -30,7 +30,36 @@
     "version": "1.0.0",
     "empirically_validated": false
   },
+  "evaluation": {
+    "version": "1.0.0",
+    "valuations": {
+      "p_material": {"kind": "normalized"},
+      "p_structure": {"kind": "normalized"},
+      "p_float": {"kind": "normalized"},
+      "p_origin": {"kind": "normalized"},
+      "p_historical_value": {"kind": "normalized"},
+      "p_monument_role": {"kind": "normalized"}
+    },
+    "comparators": {
+      "p_material": {"kind": "numeric_closeness", "minimum": 0.0, "maximum": 1.0},
+      "p_structure": {"kind": "numeric_closeness", "minimum": 0.0, "maximum": 1.0},
+      "p_float": {"kind": "numeric_closeness", "minimum": 0.0, "maximum": 1.0},
+      "p_origin": {"kind": "numeric_closeness", "minimum": 0.0, "maximum": 1.0},
+      "p_historical_value": {"kind": "numeric_closeness", "minimum": 0.0, "maximum": 1.0},
+      "p_monument_role": {"kind": "numeric_closeness", "minimum": 0.0, "maximum": 1.0}
+    },
+    "relevance_aggregation": {
+      "strategy": "weighted_average",
+      "rules": []
+    },
+    "similarity_aggregation": {
+      "strategy": "weighted_average",
+      "rules": []
+    },
+    "similarity_threshold": 0.85
+  },
   "notes": [
-    "The vector is illustrative and must be validated before use in a real institution."
+    "The vector is illustrative and must be validated before use in a real institution.",
+    "Valuation, comparison, aggregation, and threshold settings are versioned with the policy for reproducibility."
   ]
 }

@@ -27,7 +27,16 @@ class EpistemicPragmaticService:
         policy = self.policy_repository.get(request.policy_id)
         self.policy_repository.validate_against_entity(policy, entity)
         response = self.engine.relevance(request, entity, policy)
-        self.audit_logger.record("unary_contextual_relevance", response.model_dump(mode="json"))
+        # A decision is reproducible only when its observations, policy, and
+        # output are kept together. The policy carries W, v, s, Agg_C, and beta.
+        self.audit_logger.record(
+            "unary_contextual_relevance",
+            {
+                "request": request.model_dump(mode="json"),
+                "policy": policy.model_dump(mode="json"),
+                "response": response.model_dump(mode="json"),
+            },
+        )
         return response
 
     def similarity(self, request: SimilarityRequest) -> SimilarityResponse:
@@ -35,5 +44,12 @@ class EpistemicPragmaticService:
         policy = self.policy_repository.get(request.policy_id)
         self.policy_repository.validate_against_entity(policy, entity)
         response = self.engine.similarity(request, entity, policy)
-        self.audit_logger.record("binary_contextual_similarity", response.model_dump(mode="json"))
+        self.audit_logger.record(
+            "binary_contextual_similarity",
+            {
+                "request": request.model_dump(mode="json"),
+                "policy": policy.model_dump(mode="json"),
+                "response": response.model_dump(mode="json"),
+            },
+        )
         return response

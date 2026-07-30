@@ -9,6 +9,7 @@ can be represented without redefining the ontology.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from math import isclose
 from typing import Iterable
 
 from .exceptions import AggregationError
@@ -25,7 +26,8 @@ class WeightedInput:
 @dataclass(frozen=True)
 class AggregationResult:
     raw_score: float
-    normalized_score: float
+    score: float
+    normalized: bool
     applied_rules: list[str]
 
 
@@ -42,11 +44,13 @@ def weighted_sum(inputs: Iterable[WeightedInput]) -> AggregationResult:
     items = list(inputs)
     _validate(items)
     raw = sum(item.weight * item.value for item in items)
-    # The raw sum is preserved exactly. The normalized operational field is
-    # clipped to [0,1] because API decisions and thresholds use that interval.
+    weight_total = sum(item.weight for item in items)
+    # The paper's linear equation is a raw sum. It is comparable on [0,1] only
+    # when the policy explicitly normalizes its weights.
     return AggregationResult(
         raw_score=raw,
-        normalized_score=max(0.0, min(1.0, raw)),
+        score=raw,
+        normalized=isclose(weight_total, 1.0, abs_tol=1e-9),
         applied_rules=[],
     )
 
@@ -59,7 +63,8 @@ def weighted_average(inputs: Iterable[WeightedInput]) -> AggregationResult:
     normalized = raw / weight_total if weight_total else 0.0
     return AggregationResult(
         raw_score=raw,
-        normalized_score=max(0.0, min(1.0, normalized)),
+        score=normalized,
+        normalized=True,
         applied_rules=[],
     )
 
@@ -68,7 +73,7 @@ def rule_aware(inputs: Iterable[WeightedInput], rules: list[InteractionRule]) ->
     items = list(inputs)
     baseline = weighted_average(items)
     by_id = {item.descriptor_id: item for item in items}
-    score = baseline.normalized_score
+    score = baseline.score
     applied: list[str] = []
 
     for rule in rules:
@@ -93,7 +98,8 @@ def rule_aware(inputs: Iterable[WeightedInput], rules: list[InteractionRule]) ->
 
     return AggregationResult(
         raw_score=baseline.raw_score,
-        normalized_score=max(0.0, min(1.0, score)),
+        score=max(0.0, min(1.0, score)),
+        normalized=True,
         applied_rules=applied,
     )
 

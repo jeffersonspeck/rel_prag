@@ -42,15 +42,18 @@ class OntologyRepository:
             descriptor_id = str(descriptor_iri).split("#")[-1]
             label = str(next(graph.objects(descriptor_iri, RDFS.label), descriptor_id))
             description = str(next(graph.objects(descriptor_iri, RDFS.comment), ""))
-            descriptor_kind = str(next(graph.objects(descriptor_iri, EX.descriptorKind), "unspecified"))
-            default_value = float(next(graph.objects(descriptor_iri, EX.defaultValue), 1.0))
+            descriptor_type = next(graph.objects(descriptor_iri, RDF.type), None)
+            if descriptor_type is None:
+                raise OntologyNotFoundError(f"Descriptor '{descriptor_id}' has no explicit OWL type.")
+            descriptor_type_iri = str(descriptor_type)
+            descriptor_kind = descriptor_type_iri.rsplit("#", 1)[-1]
             descriptors.append(
                 Descriptor(
                     id=descriptor_id,
                     label=label,
                     description=description,
                     descriptor_kind=descriptor_kind,
-                    default_value=default_value,
+                    descriptor_type_iri=descriptor_type_iri,
                 )
             )
 

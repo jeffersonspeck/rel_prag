@@ -1,4 +1,5 @@
 README.md                         Main documentation and quick start
+CHANGELOG.md                      Formalization-linked version history
 src/epm/                         Reusable model, API, repositories and audit
 scripts/create_theseus_ontology.py  Stable RDF/OWL generator
 clients/navigation_system.py     Independent consumer 1
