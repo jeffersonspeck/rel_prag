@@ -165,7 +165,7 @@ class EpistemicPragmaticEngine:
             warnings.append("The selected policy is illustrative or not yet empirically validated.")
 
         threshold = policy.evaluation.similarity_threshold
-        # Equation 18 calls this ContextContinuitySupport. It remains an
+        # Equation 13 illustrates ContextualContinuitySupported. It remains an
         # operational, context-bound result and never a numerical identity claim.
         return SimilarityResponse(
             ontology_id=entity.ontology_id,

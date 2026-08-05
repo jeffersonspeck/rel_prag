@@ -61,6 +61,6 @@ curl -X POST http://127.0.0.1:8000/v1/similarity \
   }'
 ```
 
-Both records must contain the complete descriptor schema. The selected policy defines each comparison function `s_i`, the similarity `Agg_C`, and the threshold. The endpoint executes Equation 8 and evaluates the normalized result according to Equation 18.
+Both records must contain the complete descriptor schema and provide the already represented descriptor values `v_I(p_i)` used by Equation 8. The selected policy defines each comparison function `s_i`, the similarity `Agg_C`, and the threshold. The endpoint executes Equation 8 and applies the operational threshold semantics discussed immediately after it and illustrated by Equation 13.
 
 The `operational_continuity_supported` field is a contextual operational decision over a normalized score. The `numerical_identity_claimed` field always remains `false`.

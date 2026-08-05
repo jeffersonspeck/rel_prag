@@ -12,7 +12,7 @@
 
 **Limitation:** this is not a complete context ontology.
 
-The bundled policies reproduce `C_nav` and `C_hist` from Equations 10 and 11. Their formal agents are the sailor and historian from Equations 12 and 13; the HTTP consumers are the systems that execute those policies.
+The bundled policies provide explicit structured realizations of `C_nav` and `C_hist`. Equations 10 and 11 specify the sailor and historian weight vectors, while the HTTP consumers are the systems that execute those policies. The tuple contents chosen for the contexts are consistent implementation choices, not values enumerated by those equations.
 
 ## Weights as psychological properties
 
@@ -57,6 +57,8 @@ The raw weighted sum is preserved without clipping. Thresholded similarity requi
 
 ## Computational considerations
 
-**Change:** contribution sorting was removed so the unary and single-pair binary scoring kernels preserve the `O(n)` descriptor-count bound stated in Section 7.3, assuming constant-time descriptor comparisons.
+**Change:** contribution sorting was removed so the unary and single-pair binary scoring kernels preserve an `O(n)` descriptor-count bound, assuming constant-time descriptor comparisons.
 
 **Limit:** string and collection comparators depend on input size. Batch candidate generation, indexing, and exhaustive pairwise resolution remain outside the API.
+
+This complexity statement is an implementation analysis. The supplied article has no Section 7.3 and makes no runtime-complexity claim.

@@ -26,9 +26,9 @@ def main() -> None:
         "ontology_id": "theseus",
         "entity_id": "TheseusShip",
         "policy_id": "preservation-v1",
-        # The system executes the historian policy from Equations 11 and 13.
+        # The system executes the historian policy from Equation 11.
+        # Agg_C remains versioned with that policy and is not caller-supplied.
         "descriptor_values": SHIP_STATE,
-        "aggregator": "weighted_average"
     }
 
     response = httpx.post(f"{args.base_url}/v1/relevance", json=payload, timeout=10.0)

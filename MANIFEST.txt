@@ -1,4 +1,7 @@
 README.md                         Main documentation and quick start
+CITATION.cff                     Machine-readable software and article citation
+CITATION.bib                     BibTeX for the article and archived software
+RIGHTS.md                        Article license and source-code rights boundary
 CHANGELOG.md                      Formalization-linked version history
 src/epm/                         Reusable model, API, repositories and audit
 scripts/create_theseus_ontology.py  Stable RDF/OWL generator

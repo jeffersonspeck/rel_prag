@@ -1,4 +1,4 @@
-"""Repository for W(A,C), its Equation 5 provenance, and Equation 23 operators."""
+"""Repository for W(A,C), its Equation 5 provenance, and context-bound operators."""
 
 from __future__ import annotations
 
@@ -82,9 +82,9 @@ class PolicyRepository:
                         f"{sorted(unknown_rule_descriptors)}"
                     )
 
-        # The normalization condition sum_i w_i(A,C)=1 after Equation 7 is
-        # mandatory when scores are compared. Equation 18 cannot threshold an
-        # arbitrary sum.
+        # The normalization discussion after Equation 5 requires a declared
+        # normalization when scores are compared. A threshold as discussed after
+        # Equation 8 (and illustrated by Equation 13) cannot use an arbitrary sum.
         if policy.evaluation.similarity_aggregation.strategy == "weighted_sum":
             weight_total = sum(policy.weights.values())
             if not isclose(weight_total, 1.0, abs_tol=1e-9):

@@ -85,7 +85,7 @@ def build_graph() -> Graph:
     graph.add((EX.hasDescriptor, RDFS.domain, EX.OntologicalInstance))
     graph.add((EX.hasDescriptor, RDFS.range, EX.Descriptor))
 
-    # Equations 1 and 9 require typed, heterogeneous descriptors. OWL classes
+    # Equations 2 and 9 require typed, heterogeneous descriptors. OWL classes
     # preserve that distinction instead of reducing it to string annotations.
     for type_name, label, description in DESCRIPTOR_TYPES:
         type_iri = EX[type_name]

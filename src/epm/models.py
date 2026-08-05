@@ -20,7 +20,7 @@ class Agent(BaseModel):
 
 
 class Context(BaseModel):
-    """Structured context C=<g,t,e,r,n> from Section 4.1 and Equation 3."""
+    """Structured context C=<g,t,e,r_A,n> from Section 3.1 and Equation 1."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -58,7 +58,7 @@ class InteractionRule(BaseModel):
 
 
 class ComparatorSpec(BaseModel):
-    """Descriptor-specific comparison function s_i from Equations 8 and 17."""
+    """Descriptor-specific comparison function s_i from Equation 8."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -125,7 +125,7 @@ class AggregationSpec(BaseModel):
 
 
 class EvaluationConfiguration(BaseModel):
-    """Versioned realization of v, s, Agg_C, and beta in Equation 23."""
+    """Versioned realization of v, s, Agg_C, and an operational threshold (Sections 4.1-4.2)."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -138,7 +138,7 @@ class EvaluationConfiguration(BaseModel):
 
 
 class WeightingPolicy(BaseModel):
-    """W(A,C) from Equations 2-4, Pi_W, and the operators used with it."""
+    """W(A,C) from Equation 4, Pi_W from Equation 5, and the operators used with them."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -187,7 +187,8 @@ class RelevanceRequest(BaseModel):
     ontology_id: NonBlankString = "theseus"
     entity_id: NonBlankString = "TheseusShip"
     policy_id: NonBlankString
-    # Equation 1 keeps observations outside S(I); Equation 6 supplies v_I(p_i).
+    # Equation 2 defines S(I); Equation 3 keeps instance values v_I(p_i)
+    # distinct from that descriptor schema, and Equation 6 evaluates them.
     descriptor_values: dict[NonBlankString, Any]
 
 

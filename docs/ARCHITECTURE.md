@@ -4,8 +4,8 @@
 
 The implementation has four layers:
 
-1. **Stable ontology**: `data/theseus_ontology.ttl`, which implements `S(I)` from Equation 1 and the ship schema from Equation 9.
-2. **Epistemic-pragmatic policies**: versioned JSON files in `data/policies/` containing `W(A,C)`, `Pi_W`, `v`, `s`, `Agg_C`, interaction rules, and the operational threshold from the general schema in Equation 23.
+1. **Stable ontology**: `data/theseus_ontology.ttl`, which implements `S(I)` from Equation 2 and the ship schema from Equation 9.
+2. **Epistemic-pragmatic policies**: versioned JSON files in `data/policies/` containing `W(A,C)`, `Pi_W`, `v`, `s`, `Agg_C`, interaction rules, and an operational threshold.
 3. **Computational engine**: the `src/epm` package, responsible for validation, aggregation, comparison, and explanation.
 4. **Integration**: the FastAPI API and external consumers in `clients/`.
 
@@ -29,7 +29,7 @@ The Python engine is used to:
 
 This separation addresses the practical limitation of performing numerical calculations and contextual policy evaluation exclusively within the OWL and reasoner ecosystem.
 
-The ontology does not provide default observation values. This preserves the distinction in Equation 1 between the stable schema `S(I)` and the separately represented current valuation `v_I(p_i)`.
+The ontology does not provide default observation values. This preserves the distinction between the stable schema `S(I)` in Equation 2 and the separately represented current values `v_I(p_i)` in Equation 3.
 
 ## 3. Valuation and comparison
 
@@ -39,7 +39,7 @@ For Equation 6, raw observations are converted into comparable `v_I(p_i)` values
 - `numeric_range`: maps a declared numerical interval onto `[0,1]`;
 - `categorical`: maps declared categories onto `[0,1]`.
 
-Binary similarity implements Equations 8 and 17 with one explicit comparator `s_i` per descriptor. Comparator choices and ranges are stored in the same versioned policy as the weighting vector.
+Binary similarity implements Equation 8 with one explicit comparator `s_i` per descriptor. Comparator choices and ranges are stored in the same versioned policy as the weighting vector. Similarity requests provide the represented descriptor values on which those comparators operate.
 
 ## 4. Aggregation
 
@@ -49,7 +49,7 @@ Binary similarity implements Equations 8 and 17 with one explicit comparator `s_
 - `weighted_sum`: a direct implementation of the illustrative equation;
 - `rule_aware`: support for synergy, redundancy, requirements, and vetoes.
 
-The weighted sum preserves Equation 7 and is not treated as a universal definition of the model. Its raw result is not clipped. The normalization condition following Equation 7 is enforced before the threshold in Equation 18 can support an operational decision.
+The weighted sum preserves Equation 7 and is not treated as a universal definition of the model. Its raw result is not clipped. The normalization discussion after Equation 5 is enforced before a threshold can support the operational decision discussed after Equation 8 and illustrated by Equation 13.
 
 Aggregation strategies and interaction rules cannot be replaced by an API caller. They belong to the context-bound, versioned evaluation configuration.
 
@@ -69,7 +69,7 @@ Equation 6 evaluates an entity under a policy. It is used by the navigation and 
 Sim_prag(I',I'',A,C)
 ```
 
-Equation 8 compares two records or states. The result may support `ContextContinuitySupport` under Equation 18.
+Equation 8 compares two records or states. A thresholded result may support `ContextualContinuitySupported`, as illustrated by Equation 13.
 
 The API response always sets `numerical_identity_claimed=false` and includes an explicit non-transitivity warning.
 
@@ -81,11 +81,11 @@ Each audit event stores:
 - the complete versioned policy;
 - the resulting measure, contributions, warnings, and operational decision.
 
-This record is sufficient to reconstruct the implemented components of Equation 23: `I`, `S(I)`, `A`, `C`, `W(A,C)`, `Pi_W`, `v`, `s`, and `Agg_C`.
+This record is sufficient to reconstruct the implemented architecture: `I`, `S(I)`, `A`, `C`, `W(A,C)`, `Pi_W`, `v`, `s`, `Agg_C`, and the task-dependent output.
 
 ## 7. Computational bounds
 
-The scoring kernels preserve the descriptor-count bounds stated in Section 7.3:
+Independent implementation analysis gives the following descriptor-count bounds; the supplied article does not contain a Section 7.3 or make a runtime-complexity claim:
 
 - unary relevance is `O(n)`;
 - single-pair similarity is `O(n)` when every `s_i` is constant-time;

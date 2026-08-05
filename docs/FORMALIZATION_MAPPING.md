@@ -1,118 +1,48 @@
-# Formalization-to-Code Mapping
+# Article-to-Code Traceability Index
 
-This document maps the final PDF of **The Ship of Theseus Paradox and Epistemic-Pragmatic Weighting in Ontological Modeling** to the executable implementation. The PDF dated July 30, 2026 is the normative source for equation numbers and conceptual boundaries.
+This is the canonical index between the supplied article and the repository. The reviewed artifact is `TESEU_EN_NEW.pdf` (14 pages; SHA-256 `7D659806C8989E74661B113818ACA16C70C8D946D3F1F5F523164288FA9FD9C0`). It is the normative source for section and equation numbers in this document.
 
-## Scope
+## Status legend
 
-The article presents a propositional formalization rather than a complete axiomatic system. The repository implements the Ship of Theseus instantiation and the reusable unary and binary evaluation operators. The geographic and educational sections demonstrate cross-domain use; their domain ontologies and datasets are not included here.
+- **Implemented and verified**: executable code and an automated check exist.
+- **Implemented with runtime restriction**: the formal item exists, but the API narrows the article's admissible domain for safe executable scoring.
+- **Implemented**: executable support exists, but the article does not provide a complete numerical fixture to reproduce.
+- **Kernel verified; domain package absent**: the mathematical operator is tested with the article's values, but no domain ontology, policy file, or dataset is bundled.
+- **Not a software requirement**: conceptual background, analytical discussion, or future work rather than a claim of implemented functionality.
 
-## Formal components
+## Equation index
 
-| Article | Formal meaning | Implementation |
+| Article item | Meaning | Source implementation | Verification | Status |
+| --- | --- | --- | --- | --- |
+| Section 3.1, Equation 1 | Structured context `C=<g,t,e,r_A,n>`. | [`Context`](../src/epm/models.py#L22) and the `context` blocks in [`navigation-v1`](../data/policies/navigation-v1.json#L8) and [`preservation-v1`](../data/policies/preservation-v1.json#L8). | [`test_policies_use_the_exact_weight_vectors_from_the_article`](../tests/test_ontology_and_policies.py#L44) checks the repository's explicit context realizations. The tuple contents are implementation choices consistent with, but not numerically specified by, the article. | Implemented and verified |
+| Section 4.1, Equation 2 | Finite set of typed, ontology-anchored descriptors `S(I)`. | [`theseus_ontology.ttl`](../data/theseus_ontology.ttl#L9), [`OntologyRepository`](../src/epm/ontology.py#L15), and [`create_theseus_ontology.py`](../scripts/create_theseus_ontology.py). | [`test_stable_ontology_contains_descriptors_but_no_weights`](../tests/test_ontology_and_policies.py#L9). | Implemented and verified |
+| Section 4.1, Equation 3 | Each instance value satisfies `v_I(p_i) in V_i`. | [`ValuationSpec`](../src/epm/models.py#L81) and [`valuate`](../src/epm/valuations.py#L10); requests keep current values outside OWL. | [`test_domain_valuations_convert_raw_observations_explicitly`](../tests/test_formal_contracts.py#L55) and complete-schema checks in [`EpistemicPragmaticEngine`](../src/epm/engine.py#L21). Unary valuation is deliberately reduced to `[0,1]`; the article permits general declared value spaces `V_i`. | Implemented with runtime restriction |
+| Section 4.1, Equation 4 | Policy vector `W(A,C)` with every `w_i` in `[0,1]`. | [`WeightingPolicy`](../src/epm/models.py#L140), [`PolicyRepository`](../src/epm/policies.py), and the two versioned JSON policies. | [`test_each_policy_has_provenance_and_matches_ontology`](../tests/test_ontology_and_policies.py#L30) and exact vector assertions at [line 44](../tests/test_ontology_and_policies.py#L44). The implementation additionally rejects an all-zero vector because its normalized operators would be undefined. | Implemented with runtime restriction |
+| Section 4.1, Equation 5 | Provenance `Pi_W=<source,method,evidence,timestamp,version>`. | [`ProvenanceRecord`](../src/epm/models.py#L34), persisted with every policy and audit event. | [`test_context_and_provenance_cannot_be_empty`](../tests/test_formal_contracts.py#L8) and [`test_audit_record_preserves_request_policy_and_response`](../tests/test_relevance.py#L48). | Implemented and verified |
+| Section 4.2, Equation 6 | Unary relevance `Rel_prag(I,A,C)=Agg_C({(w_i,v_I(p_i))})`. | [`EpistemicPragmaticEngine.relevance`](../src/epm/engine.py#L39), policy-bound valuations, and [`aggregate`](../src/epm/aggregators.py). | [`test_two_systems_consume_same_entity_with_distinct_policies`](../tests/test_relevance.py#L17). | Implemented and verified |
+| Section 4.2, Equation 7 | Illustrative linear weighted sum. | [`weighted_sum`](../src/epm/aggregators.py#L43); [`weighted_average`](../src/epm/aggregators.py#L58) applies the normalized vectors used in the Ship illustration; [`rule_aware`](../src/epm/aggregators.py#L74) is an allowed `Agg_C` extension when separability fails. | [`test_linear_weighted_sum_preserves_the_equation_without_clipping`](../tests/test_formal_contracts.py#L66) and Ship score assertions at [`test_relevance.py`](../tests/test_relevance.py#L17). | Implemented and verified |
+| Section 4.2, Equation 8 | Binary contextual similarity using descriptor-specific `s_i`. | [`EpistemicPragmaticEngine.similarity`](../src/epm/engine.py#L111), [`ComparatorSpec`](../src/epm/models.py#L60), and [`compare`](../src/epm/comparators.py#L44). | [`test_binary_similarity_is_not_numerical_identity`](../tests/test_similarity.py#L10). | Implemented and verified |
+| Section 5, Equation 9 | Six Ship descriptors: material, structure, floating/navigation disposition, origin, historical value, and monument role. | Descriptor individuals in [`theseus_ontology.ttl`](../data/theseus_ontology.ttl#L68). | Exact set and heterogeneous OWL types checked in [`test_ontology_and_policies.py`](../tests/test_ontology_and_policies.py#L9). | Implemented and verified |
+| Section 5, Equation 10 | Sailor/navigation weights `[0.2,0.8,1.0,0.1,0.1,0.0]`. | [`navigation-v1.json`](../data/policies/navigation-v1.json#L17). | Exact vector and normalized result `0.918182` (about `0.92`) in [`test_ontology_and_policies.py`](../tests/test_ontology_and_policies.py#L44) and [`test_relevance.py`](../tests/test_relevance.py#L17). | Implemented and verified |
+| Section 5, Equation 11 | Historian/preservation weights `[0.9,0.4,0.1,1.0,1.0,0.9]`. | [`preservation-v1.json`](../data/policies/preservation-v1.json#L17). | Exact vector and normalized result `0.786047` (about `0.79`) in the same tests. | Implemented and verified |
+| Section 6.1, Equation 12 | Geographic weighted similarity; article example equals `0.86`. | The reusable kernel is [`weighted_sum`](../src/epm/aggregators.py#L43) plus descriptor comparators. | The article's `alpha` and similarity vectors are reproduced in [`test_article_examples.py`](../tests/test_article_examples.py#L6). | Kernel verified; domain package absent |
+| Section 6.1, Equation 13 | `score >= beta` supports contextual continuity, without numerical identity or guaranteed transitivity. | Threshold validation in [`PolicyRepository`](../src/epm/policies.py#L85) and the response decision in [`EpistemicPragmaticEngine.similarity`](../src/epm/engine.py#L167). | The article's `0.86 >= 0.85` example is checked in [`test_article_examples.py`](../tests/test_article_examples.py#L6); identity and transitivity boundaries are checked in [`test_similarity.py`](../tests/test_similarity.py#L10). | Implemented and verified |
+| Section 6.2, Equation 14 | Educational, intelligence-specific unary relevance and a profile assembled across `k`. | One dimension is supported by [`relevance`](../src/epm/engine.py#L39) and [`weighted_sum`](../src/epm/aggregators.py#L43). Multiple policies can represent distinct `k` dimensions. | The article supplies no educational numerical weights or observations to reproduce. No OntoMI ontology, educational policy set, or multi-dimension profile endpoint is bundled. | Implemented at operator level only |
+
+## Non-equation coverage
+
+| Article section | Repository coverage | Assessment |
 | --- | --- | --- |
-| Equation 1 | `S(I)={p_1,p_2,...,p_n}` is the finite schema of typed, ontologically anchored descriptors. | `data/theseus_ontology.ttl`, `scripts/create_theseus_ontology.py`, and `OntologyRepository`. |
-| Equation 2 | `W(A,C)=[w_1(A,C),...,w_n(A,C)]`. | The `weights` field in each JSON policy and `WeightingPolicy`. |
-| Equation 3 | `W(A,C)=W(A,<g,t,e,r,n>)`; every weight is conditioned by the structured context. | `Context` is stored with the vector in one immutable policy artifact. A context change requires a different policy or policy version. |
-| Equation 4 | `w_i(A,C) in [0,1]`. | `UnitFloat` validates every weight; all-zero vectors are rejected because normalized aggregation would be undefined. |
-| Equation 5 | `Pi_W=<source,method,evidence,timestamp,version>`. | `ProvenanceRecord` requires every component and rejects blank provenance. |
-| Equation 6 | `Rel_prag(I,A,C)=Agg_C({(w_i(A,C),v_I(p_i))}_{i=1}^n)`. | `EpistemicPragmaticEngine.relevance`, policy-bound valuations, and aggregation strategies. |
-| Equation 7 | `Rel_prag^lin=sum_i w_i(A,C)*v_I(p_i)`. | `weighted_sum` preserves the raw equation. `weighted_average` evaluates the same expression with normalized weights. `rule_aware` is used when the separability assumptions do not hold. |
-| Equation 8 | `Sim_prag(I',I'',A,C)=Agg_C({(w_i(A,C),s_i(v_I'(p_i),v_I''(p_i)))}_{i=1}^n)`. | `EpistemicPragmaticEngine.similarity` and one policy-bound `ComparatorSpec` per descriptor. |
-| Equation 9 | The ship schema contains material, structure, floating disposition, origin, historical value, and monument role. | The six typed descriptor individuals attached to `epm:TheseusShip`. |
-| Equation 10 | `C_nav` is safe navigation, the current operational episode, maritime operation, sailor/operator roles, and seaworthiness/safety norms. | `data/policies/navigation-v1.json`. |
-| Equation 11 | `C_hist` is historical preservation, a long-term horizon, a heritage setting, historian/curator roles, and authenticity/conservation norms. | `data/policies/preservation-v1.json`. |
-| Equation 12 | `W(A_sailor,C_nav)≈[0.2,0.8,1.0,0.1,0.1,0.0]`. | `navigation-v1`; the normalized illustration produces `0.918182`, approximately `0.92`. |
-| Equation 13 | `W(A_hist,C_hist)≈[0.9,0.4,0.1,1.0,1.0,0.9]`. | `preservation-v1`; the normalized illustration produces `0.786047`, approximately `0.79`. |
-| Equations 14-17 | Territorial-unit descriptors, an expert policy, structured `C_TSN`, and weighted descriptor-specific similarity. | Supported by the generic schema, valuation, comparison, and aggregation contracts. No territorial ontology or batch entity-resolution dataset is bundled. |
-| Equation 18 | `Sim_prag>=beta => ContextContinuitySupport(...)`. | `operational_continuity_supported`; threshold evaluation is rejected unless the score is normalized. `numerical_identity_claimed` is always `false`. |
-| Equations 19-22 | Educational descriptors, contextual evidence weighting, and unary profile construction. | Supported by normalized, ranged, and categorical valuation specifications. No educational ontology or recommendation dataset is bundled. |
-| Equation 23 | `<I,S(I),A,C,W(A,C),Pi_W,v,s,Agg_C>` is the general schema. | The request identifies `I` and observations; the ontology supplies `S(I)`; the selected policy supplies `A`, `C`, `W`, `Pi_W`, `v`, `s`, and `Agg_C`; the audit event preserves the complete execution. |
+| Sections 1-2 | Background, related work, and the conceptual-analytical method are summarized by the architecture and audit documents; they are not executable claims. | Not a software requirement |
+| Sections 3.1-3.2 | Agent, structured context, entity roles, stable ontology, external policies, and policy provenance are separate typed artifacts. Current role attribution stays in instance values rather than being changed by weights. | Implemented |
+| Figure 1 | Competing philosophical identity criteria are explanatory material; the API intentionally does not decide numerical identity. | Not a software requirement |
+| Figure 2 | The ontology-policy-evaluation-output separation is realized by the RDF ontology, JSON policies, engine, API, clients, and audit trail. | Implemented |
+| Section 6.3 and Table 1 | The code supports conceptual separation and policy traceability. Portability is demonstrated at the operator level, not by three complete domain deployments. Failure conditions are enforced for schema, value, policy, aggregation, and normalization errors. | Partially implemented; analytical claims only |
+| Section 7 | The article explicitly reserves weight elicitation/validation, richer context, governance, broader empirical studies, and operational effectiveness for future work. | Intentionally not implemented |
+| Appendix A | The repository contains source, documentation, examples, and automated tests for Equation 8 and links to the archived release. | Implemented |
 
-## Equation 6: unary relevance
+## Audit conclusion
 
-The relevance path performs the following operations:
+The core formal model (Equations 1-11 and the decision semantics illustrated by Equation 13) is represented coherently and is covered by automated tests, subject to the explicit `[0,1]` unary valuation and nonzero-policy restrictions above. Equation 12 is numerically reproduced through the generic kernel, but the geographic domain package is absent. Equation 14 is supported only as a reusable unary operator; the educational ontology, intelligence-specific policy collection, and profile orchestration are absent.
 
-1. validate that the observation record covers exactly `S(I)`;
-2. apply the policy's valuation function to obtain every `v_I(p_i)`;
-3. pair each value with `w_i(A,C)`;
-4. execute the policy's `Agg_C`;
-5. return the score, raw score, normalization status, and per-descriptor contributions.
-
-The API caller supplies observations, not mathematical policy. This prevents the same declared `A`, `C`, and `W(A,C)` from being combined with an unversioned aggregation rule.
-
-## Equations 8 and 18: similarity and continuity support
-
-The similarity path requires two complete records over the same `S(I)`. Each descriptor uses its declared comparison function `s_i`. The resulting score may support operational continuity only when it is normalized.
-
-The response deliberately separates:
-
-- `score`: contextual binary similarity;
-- `threshold`: the policy's `beta`;
-- `operational_continuity_supported`: the executable counterpart of `ContextContinuitySupport`;
-- `numerical_identity_claimed`: always `false`.
-
-The warning about non-transitivity follows the discussion after Equation 18. Longitudinal identity management still requires lineage, provenance, or global continuity constraints.
-
-## Context and agent interpretation
-
-The external consumer process is not automatically the formal agent `A`. The Navigation Operations System executes the policy associated with the sailor in `C_nav`; the Heritage Preservation System executes the policy associated with the historian in `C_hist`. This distinction keeps the systems as integration clients while preserving the article's illustrative agents and contexts.
-
-## Computational complexity
-
-The article states that the linear unary and single-pair binary operations are `O(n)` when descriptor access and each `s_i` are constant-time.
-
-The implementation preserves that bound with respect to descriptor count:
-
-- relevance valuation, weighting, aggregation, and contribution construction are linear in `n`;
-- single-pair similarity is linear in `n` under the article's constant-time-comparator assumption;
-- interaction-aware aggregation adds work proportional to the total number of descriptor references in its rules;
-- contributions remain in formal descriptor order and are not sorted.
-
-For comparators whose input size is not constant, the more precise similarity cost is:
-
-```text
-O(n + sum_i T(s_i) + total_rule_arity)
-```
-
-For example, string and set comparisons depend on string or collection size. The API evaluates one pair at a time. Candidate generation, indexing, `O(mn)` batch evaluation, and `O(m^2 n)` exhaustive entity resolution remain application-level concerns, as stated in Section 7.3.
-
-## Traceability
-
-Every JSONL audit event stores:
-
-- the request and observation records;
-- the complete versioned policy;
-- the response and contributions.
-
-Together these preserve every implemented component of Equation 23 and allow a result to be reproduced without relying on hidden caller settings.
-
-## Analytical adequacy criteria
-
-Section 3 evaluates the model through five analytical criteria. The implementation addresses them as follows:
-
-1. **Conceptual coherence:** separate models represent the entity schema, agent, context, weighting policy, provenance, valuation, comparison, aggregation, and task-specific output.
-2. **Construct separability:** RDF/OWL contains the stable reference layer; JSON policies contain the epistemic-pragmatic layer; requests contain current observations; responses contain task outputs.
-3. **Policy traceability:** versioned policy files and complete audit events expose every setting that affects a result.
-4. **Cross-domain applicability:** heterogeneous OWL descriptor types, multiple valuation modes, descriptor-specific comparators, and replaceable aggregators implement the general extension points.
-5. **Explicit failure conditions:** the service rejects missing or unknown descriptors, blank context or provenance, non-comparable values, inconsistent policy schemas, unknown rule descriptors, and unnormalized threshold scores.
-
-Passing these checks establishes internal and analytical consistency. It does not constitute empirical validation, predictive accuracy, or domain-level effectiveness.
-
-## Article boundary conditions
-
-The implementation does not claim:
-
-- a universal procedure for eliciting or validating weights;
-- empirical validity for the illustrative vectors;
-- a complete ontology of context;
-- automatic reconciliation of incompatible policies;
-- numerical identity from similarity;
-- transitive pairwise continuity;
-- complete numerical inference in OWL;
-- empirical runtime or scalability validation.
-
-These are boundaries stated by the article, not missing advertised capabilities.
-
-## Editorial ambiguity in Equation 20
-
-In the final PDF, the paragraph introducing the educational weighting vector points to an unresolved equation reference, while Equation 20 repeats the historical-preservation context tuple. The repository does not invent a missing educational vector. It implements the general unary schema from Equations 6, 22, and 23 and leaves domain-specific educational weights to a future validated policy.
+Accordingly, this repository is a **reference implementation of the formal architecture and Ship illustration**, not a complete implementation of every domain artifact or empirical study discussed in the article. That boundary matches the article's own statement that the proposal is propositional rather than a complete domain ontology, logical semantics, or empirically validated computational system.

@@ -19,16 +19,17 @@ Transform the previous scripts into a reusable platform with a stable ontology, 
 
 ## Formalization alignment
 
-- Equations 1 and 9: `S(I)` contains typed descriptor classes but no current or default observations.
-- Equation 3: each policy binds its vector to a complete `C=<g,t,e,r,n>`.
+- Equation 1: each policy binds its vector to a complete implementation of `C=<g,t,e,r_A,n>`.
+- Equations 2, 3, and 9: `S(I)` contains typed descriptors, while current `v_I(p_i)` values remain outside the ontology.
+- Equation 4: weights are bounded to `[0,1]` and cover the complete descriptor schema.
 - Equation 5: `Pi_W` requires source, method, evidence, timestamp, and version.
-- Equation 6: `v_I(p_i)` is produced from explicit request observations through versioned valuation rules.
+- Equation 6: unary `v_I(p_i)` is produced from explicit request observations through versioned valuation rules and passed to `Agg_C`.
 - Equation 7: raw weighted sums are preserved, while the published illustration uses normalized weights.
-- Equations 8 and 17: each binary descriptor has an explicit comparison function `s_i`.
-- Equations 10-13: the policies reproduce `C_nav`, `C_hist`, `A_sailor`, `A_hist`, and both illustrative vectors.
-- Equation 18: a threshold can only be applied to a normalized similarity score.
-- Equation 23: audit events preserve every formal component needed to reproduce an evaluation.
-- Section 7.3: unary and single-pair binary scoring remain linear in descriptor count under the article's comparator assumptions.
+- Equation 8: each binary descriptor has an explicit comparison function `s_i`; the response never claims numerical identity and warns about non-transitivity.
+- Equations 10-11: the policies reproduce both Ship weight vectors and the published normalized scores of approximately `0.92` and `0.79`.
+- Equations 12-13: an automated check reproduces the geographic example `0.86 >= 0.85`, while the domain ontology and dataset remain outside the repository.
+- Equation 14: the unary operator is reusable per intelligence dimension, but no educational ontology, policy collection, or profile endpoint is bundled.
+- Audit events preserve every implemented formal component needed to reproduce an evaluation.
 
 ## Two implemented consumers
 
@@ -38,7 +39,7 @@ Transform the previous scripts into a reusable platform with a stable ontology, 
 - executes the policy associated with the sailor in `C_nav`;
 - uses the same ship state and ontology;
 - prioritizes structure and the disposition to navigate;
-- demonstrates a joint requirement between descriptors.
+- demonstrates a joint requirement between descriptors;
 - keeps that requirement in the versioned navigation policy.
 
 ### Heritage Preservation System
@@ -58,6 +59,8 @@ The consumer process and the formal agent are deliberately distinct. A software 
 - automatic negotiation between policies;
 - a theory of numerical identity;
 - global transitivity of continuity;
-- complete execution of the calculation in OWL.
+- complete execution of the calculation in OWL;
+- geographic and educational domain packages;
+- orchestration of the multi-dimension educational profile in Equation 14.
 
 These items are documented as limitations and are not presented as implemented capabilities.

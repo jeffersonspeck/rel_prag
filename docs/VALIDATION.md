@@ -11,7 +11,7 @@ PYTHONPATH=src python scripts/run_local_demo.py
 Test-suite result:
 
 ```text
-15 passed
+17 passed
 ```
 
 A local Uvicorn server was also started, and both HTTP consumers were executed:
@@ -23,6 +23,6 @@ preservation-v1 -> unary_contextual_relevance
 
 Both systems used the same entity and descriptive state, but returned different values because they applied different contextual policies.
 
-The suite also checks the exact contexts, agents, vectors, and scores from Equations 10-13, rejects incomplete observations and empty provenance, enforces the normalized threshold decision in Equation 18, preserves formal descriptor order, and verifies that audit events retain the complete Equation 23 evaluation configuration.
+The suite checks the repository's structured contexts, the exact Equation 10-11 Ship vectors and published scores, and the Equation 12-13 geographic calculation. It also rejects incomplete observations and empty provenance, enforces normalized threshold decisions, preserves formal descriptor order, and verifies that audit events retain the complete evaluation configuration.
 
-The final PDF was reviewed both through text extraction and rendered pages 14-23. Equation numbering and the computational assumptions in Section 7.3 were checked against the rendered document.
+The supplied 14-page PDF was reviewed through full text extraction and rendered page images. Its SHA-256 is `7D659806C8989E74661B113818ACA16C70C8D946D3F1F5F523164288FA9FD9C0`. The review confirmed Equations 1-14 and also established that the supplied article has no Equations 15-23 and no Section 7.3.

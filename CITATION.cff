@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+message: >-
+  If you use this software, cite both the archived software release and the
+  article shown in preferred-citation.
+title: Epistemic-Pragmatic Model Platform
+type: software
+version: 1.1.0
+date-released: 2026-07-30
+authors:
+  - family-names: Speck
+    given-names: Jefferson Rodrigo
+    orcid: https://orcid.org/0009-0009-3964-9185
+repository-code: https://github.com/jeffersonspeck/rel_prag
+url: https://doi.org/10.5281/zenodo.21798675
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.21798675
+    description: Archived software release cited by the article
+preferred-citation:
+  type: conference-paper
+  title: The Ship of Theseus Paradox and Epistemic-Pragmatic Weighting in Ontological Modeling
+  authors:
+    - family-names: Speck
+      given-names: Jefferson Rodrigo
+      orcid: https://orcid.org/0009-0009-3964-9185
+    - family-names: Pereira
+      given-names: Roberto
+      orcid: https://orcid.org/0000-0003-3052-3016
+    - family-names: Boscarioli
+      given-names: Clodis
+      orcid: https://orcid.org/0000-0002-7110-2026
+    - family-names: Cassenote
+      given-names: Mariane Regina Sponchiado
+      orcid: https://orcid.org/0000-0003-0489-223X
+  collection-title: >-
+    Proceedings of the 19th Seminar on Ontology Research in Brazil (ONTOBRAS
+    2026) and 10th Doctoral and Masters Consortium on Ontologies (WTDO 2026)
+  year: 2026

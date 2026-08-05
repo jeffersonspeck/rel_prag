@@ -1,4 +1,4 @@
-"""RDF/OWL repository for S(I) in Equations 1 and 9."""
+"""RDF/OWL repository for S(I) in Equations 2 and 9."""
 
 from __future__ import annotations
 

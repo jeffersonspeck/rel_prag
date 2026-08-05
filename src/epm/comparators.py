@@ -1,4 +1,4 @@
-"""Descriptor-specific comparison functions s_i from Equations 8 and 17."""
+"""Descriptor-specific comparison functions s_i from article Equation 8."""
 
 from __future__ import annotations
 
